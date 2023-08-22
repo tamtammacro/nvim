@@ -1,7 +1,7 @@
 local vo = vim.o
 vo.number = true
---vo.background = "dark"
---vo.termguicolors = true
+vo.background = "dark"
+vo.termguicolors = true
 vo.tabstop = 4
 vo.softtabstop = 4
 vo.shiftwidth = 4
@@ -46,3 +46,9 @@ vim.opt.scrolloff = 8
 vim.opt.isfname:append("@-@")
 vim.opt.updatetime = 50
 --vim.opt.colorcolumn = "80"
+vim.mapleader = " "
+
+return {
+    lualine = true,
+    ["nvim-tree"] = true
+}
