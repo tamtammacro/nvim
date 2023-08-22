@@ -1,5 +1,5 @@
 -- The setup config table shows all available config options with their default values:
-local DISCORD_RPC_ENABLED = false 
+local DISCORD_RPC_ENABLED = false
 
 if DISCORD_RPC_ENABLED then
     require("presence"):setup({
