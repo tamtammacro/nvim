@@ -66,7 +66,6 @@ require "user.barbar"
 
 if options.lsp_trouble.enabled then
     require "user.trouble"
-    --vim.api.nvim_command(":noh")
 end
 
 if options["nvim-tree"].on_startup then 

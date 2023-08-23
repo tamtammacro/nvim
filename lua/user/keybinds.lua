@@ -20,5 +20,3 @@ if options["treesj"] then
         require('treesj').toggle({ split = { recursive = true } })
     end)
 end
-
-if options.trouble then require "user.trouble" end
