@@ -15,3 +15,4 @@ end
 
 vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
 vim.keymap.set("n","<Space>.",vim.cmd.ToggleTerm)
+print("added terminal")

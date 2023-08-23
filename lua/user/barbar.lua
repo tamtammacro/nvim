@@ -1,5 +1,3 @@
-local options = require "user.options"
-vim.g.barbar_auto_setup = options.tabs-- disable auto-setup
 
 require'barbar'.setup {
   -- WARN: do not copy everything below into your config!

@@ -51,24 +51,42 @@ vim.opt.updatetime = 50
 --vim.opt.colorcolumn = "80"
 vim.mapleader = " "
 
-for opt_name,state in pairs(options) do
-    if type(state) == "table" and state.enabled then
-        local ok,mod = pcall(require,opt_name)
-        if ok then mod.setup() end
-    elseif type(state) == "boolean" and state then
-        local ok,mod = pcall(require,opt_name)
-        if ok then mod.setup() end
+local function setup_states()
+    local is_table
+    local path
+    local is_enabled
+
+    local user_paths = {"toggle_term","trouble"}
+
+    local function is_element(t,e)
+        for _,v in pairs(t) do
+            if v == e then return true end
+        end
+    end
+
+    local function load_mod(opt_name,value)
+        is_table = type(value) == "table"
+        is_enabled = is_table and value.enabled or not is_table and value
+        path = is_table  and value.path or opt_name
+        if not is_enabled then return end
+
+        local dir_name = ""
+        if is_element(user_paths,path) then dir_name = "user." end
+
+        local is_ok,mod = pcall(require,dir_name..path)
+
+        if is_ok and type(mod) == "table" and mod.setup then mod.setup() end
+    end
+
+    for opt_name,obj in pairs(options) do
+        load_mod(opt_name,obj)
     end
 end
 
+setup_states()
 
-require "user.barbar"
+vim.g.barbar_auto_setup = false
 
-if options.lsp_trouble.enabled then
-    require "user.trouble"
-end
-
-if options["nvim-tree"].on_startup then 
+if options["nvim-tree"].on_startup then
     vim.cmd.NvimTreeOpen()
 end
-if options.terminal then require "user.toggle_term" end

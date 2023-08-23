@@ -11,9 +11,17 @@ return {
 
     lsp_trouble = {
         enabled = true,
-        on_startup = false
+        on_startup = false,
+        path = "trouble"
     },
 
-    terminal = true,
-    tabs = true
+    terminal = {
+        enabled = true,
+        path = "toggle_term"
+    },
+
+    tabs = {
+        enabled = true,
+        path = "barbar"
+    }
 }
