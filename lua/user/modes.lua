@@ -51,6 +51,25 @@ vim.opt.updatetime = 50
 --vim.opt.colorcolumn = "80"
 vim.mapleader = " "
 
-if options["nvim-tree"].on_startup then
-    print(vim.cmd.NvimTreeOpen())
+for opt_name,state in pairs(options) do
+    if type(state) == "table" and state.enabled then
+        local ok,mod = pcall(require,opt_name)
+        if ok then mod.setup() end
+    elseif type(state) == "boolean" and state then
+        local ok,mod = pcall(require,opt_name)
+        if ok then mod.setup() end
+    end
 end
+
+
+require "user.barbar"
+
+if options.lsp_trouble.enabled then
+    require "user.trouble"
+    --vim.api.nvim_command(":noh")
+end
+
+if options["nvim-tree"].on_startup then 
+    vim.cmd.NvimTreeOpen()
+end
+if options.terminal then require "user.toggle_term" end

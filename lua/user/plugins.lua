@@ -16,6 +16,12 @@ require("packer").startup(function(use)
     use("theprimeagen/refactoring.nvim")
     use("mbbill/undotree")
     use("tpope/vim-fugitive")
+    use {
+        'numToStr/Comment.nvim',
+        config = function()
+            require('Comment').setup()
+        end
+    }
     use({
       'Wansmer/treesj',
       requires = { 'nvim-treesitter' },
@@ -24,12 +30,17 @@ require("packer").startup(function(use)
       end,
     })
 
+    use {"akinsho/toggleterm.nvim", tag = '*', config = function()
+        require("toggleterm").setup()
+    end}
+
     -- visuals --
 	use {
 		'nvim-lualine/lualine.nvim',
 		requires = { 'kyazdani42/nvim-web-devicons', opt = true }
 	}
 
+    use 'romgrk/barbar.nvim'
     use 'nvim-tree/nvim-web-devicons'
 
     -- grep utils | telescope --
@@ -52,9 +63,10 @@ require("packer").startup(function(use)
     -- color schemes --
 	use "gruvbox-community/gruvbox"
     use { "catppuccin/nvim", as = "catppuccin" }
-	use "EdenEast/nightfox.nvim" 
+	use "EdenEast/nightfox.nvim"
 	use 'Mofiqul/vscode.nvim'
 	use 'folke/tokyonight.nvim'
+
     -- lsp -- 
 	use "hrsh7th/cmp-nvim-lsp"
 	use "hrsh7th/cmp-buffer"
@@ -83,6 +95,8 @@ require("packer").startup(function(use)
           {'rafamadriz/friendly-snippets'},
       }
     }
+
+    use "folke/trouble.nvim"
 
 	use {
 	  'nvim-tree/nvim-tree.lua',
