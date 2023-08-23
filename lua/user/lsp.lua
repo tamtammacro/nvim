@@ -1,6 +1,6 @@
 local servers = {"pyright","tsserver","rust_analyzer", "cssls","gopls"}
 
-local function onAttach(client, bufnr)
+local function on_attach(_, bufnr)
   local opts = {buffer = bufnr, remap = false}
 
   vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end, opts)
@@ -12,11 +12,11 @@ local function onAttach(client, bufnr)
   vim.keymap.set("n", "<leader>vca", function() vim.lsp.buf.code_action() end, opts)
   vim.keymap.set("n", "<leader>vrr", function() vim.lsp.buf.references() end, opts)
   vim.keymap.set("n", "<leader>vrn", function() vim.lsp.buf.rename() end, opts)
-  vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
+  vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts) -- function signature_help --
 end
 
 require('lspconfig').clangd.setup {
-    on_attach = onAttach,
+    on_attach = on_attach,
     cmd = {
         "clangd",
         "--background-index",
@@ -26,10 +26,8 @@ require('lspconfig').clangd.setup {
     filetypes = { "c", "cpp", "objc", "objcpp" },
 }
 
-for _,server_name in ipairs(servers) do 
-    require('lspconfig')[server_name].setup{
-        on_attach = onAttach
-    } 
+for _,server_name in ipairs(servers) do
+    require('lspconfig')[server_name].setup { on_attach = on_attach }
 end
 
 local lsp = require("lsp-zero")
@@ -70,10 +68,7 @@ lsp.set_preferences({
     }
 })
 
-
-
-lsp.on_attach(onAttach)
-
+lsp.on_attach(on_attach)
 lsp.setup()
 
 vim.diagnostic.config({

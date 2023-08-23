@@ -106,5 +106,7 @@ require("packer").startup(function(use)
     }
 end)
 
-require"mason".setup()
-
+do
+    local _ = require "mason"
+    if _ then _.setup() else print "Run :PackerSync" end
+end
