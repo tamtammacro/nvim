@@ -16,6 +16,13 @@ require("packer").startup(function(use)
     use("theprimeagen/refactoring.nvim")
     use("mbbill/undotree")
     use("tpope/vim-fugitive")
+    use({
+      'Wansmer/treesj',
+      requires = { 'nvim-treesitter' },
+      config = function()
+        require('treesj').setup({})
+      end,
+    })
 
     -- visuals --
 	use {
@@ -108,5 +115,5 @@ end)
 
 do
     local _ = require "mason"
-    if _ then _.setup() else print "Run :PackerSync" end
+    if _ then _.setup() else error "Run :PackerSync" end
 end

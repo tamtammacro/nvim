@@ -6,8 +6,14 @@ require "user.lsp"
 require "user.treesitter"
 require "user.keybinds"
 
-for mode_name,enabled in pairs(require "user.modes") do
-    if type(enabled) == "boolean" and enabled then require(mode_name).setup() end
+for opt_name,state in pairs(require "user.options") do
+    if type(state) == "table" and state.enabled then
+        require(opt_name).setup()
+    elseif type(state) == "boolean" and state then
+        require(opt_name).setup()
+    end
 end
+
+require "user.modes"
 
 vim.cmd.colorscheme(color_schemes[4])

@@ -1,4 +1,7 @@
+local options = require "user.options"
+
 local vo = vim.o
+
 vo.number = true
 vo.background = "dark"
 vo.termguicolors = true
@@ -48,7 +51,6 @@ vim.opt.updatetime = 50
 --vim.opt.colorcolumn = "80"
 vim.mapleader = " "
 
-return {
-    lualine = true,
-    ["nvim-tree"] = true
-}
+if options["nvim-tree"].on_startup then
+    print(vim.cmd.NvimTreeOpen())
+end
