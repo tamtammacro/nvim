@@ -3,11 +3,16 @@ return {
 
     ["nvim-tree"] = {
         enabled = true,
-        on_startup = true
+        on_startup = false
     },
 
     lualine = true,
     treesj = true,
+
+    support_images = {
+        enabled = true,
+        path = "hologram"
+    },
 
     lsp_trouble = {
         enabled = true,

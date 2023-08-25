@@ -10,5 +10,7 @@ require "user.lsp"
 require "user.treesitter"
 require "user.keybinds"
 require "user.modes"
+require "user.usercommands"
 
 vim.cmd.colorscheme(color_schemes[4])
+

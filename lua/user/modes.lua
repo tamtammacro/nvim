@@ -1,5 +1,7 @@
 local options = require "user.options"
 
+local user_paths = {"toggle_term","trouble"}
+
 local vo = vim.o
 
 vo.number = true
@@ -56,7 +58,6 @@ local function setup_states()
     local path
     local is_enabled
 
-    local user_paths = {"toggle_term","trouble"}
 
     local function is_element(t,e)
         for _,v in pairs(t) do

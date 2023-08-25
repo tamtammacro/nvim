@@ -1,3 +1,5 @@
+local utils = require "user.util_functions"
+
 do
     local telescope_builtin = require("telescope.builtin")
     vim.keymap.set("n","<Space>g",telescope_builtin.live_grep)
@@ -20,3 +22,6 @@ if options["treesj"] then
         require('treesj').toggle({ split = { recursive = true } })
     end)
 end
+
+vim.keymap.set("n","<Space>ll",utils.buf_cap_word)
+
