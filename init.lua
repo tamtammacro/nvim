@@ -13,4 +13,3 @@ require "user.modes"
 require "user.usercommands"
 
 vim.cmd.colorscheme(color_schemes[4])
-

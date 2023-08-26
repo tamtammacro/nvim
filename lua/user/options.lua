@@ -1,5 +1,10 @@
 return {
     lazy_plugins = false, -- package manager --
+    rose_user_commands = true,
+
+    rose_user_commands_info = {
+        prefix = "rose"
+    },
 
     ["nvim-tree"] = {
         enabled = true,

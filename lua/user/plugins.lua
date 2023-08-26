@@ -42,6 +42,7 @@ require("packer").startup(function(use)
 
     use 'romgrk/barbar.nvim'
     use 'nvim-tree/nvim-web-devicons'
+    use 'rcarriga/nvim-notify'
 
     -- grep utils | telescope --
 	use {
