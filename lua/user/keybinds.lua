@@ -5,7 +5,7 @@ keys.space = "<Space>"
 keys.leader = "<leader>"
 
 keybinds.telescope = {
-    live_grep = {key = keys.space.."lg"},
+    live_grep = {key = keys.space.."g"},
     find_files = {key = keys.space.."ff"},
 }
 
@@ -48,7 +48,7 @@ local options = require "user.options"
 vim.api.nvim_set_keymap("i","jk","<ESC>",{noremap = true})
 set_keymap("n","<ESC><ESC><ESC>",vim.cmd.noh)
 
-if options["nvim-tree"] then
+if options["nvim-tree"].enabled then
     vim.keymap.set(mrn(keybinds.nvim_tree.toggle.mode),keybinds.nvim_tree.toggle.key,vim.cmd.NvimTreeToggle)
 end
 
