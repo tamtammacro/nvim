@@ -1,4 +1,4 @@
-local options = require "user.options"
+local options = require "core.options"
 
 local user_paths = {"toggle_term","trouble"}
 

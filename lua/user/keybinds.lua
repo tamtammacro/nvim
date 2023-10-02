@@ -14,7 +14,7 @@ keybinds.file_manager = {
 }
 
 keybinds.nvim_tree = {
-    toggle = {key = keys.space.."ffm"}
+    toggle = {key = keys.space.."tt"}
 }
 
 keybinds.treesj = {
@@ -44,7 +44,7 @@ do
     set_keymap(mrn(keybinds.file_manager.netrw.mode),keybinds.file_manager.netrw.key,vim.cmd.Ex)
 end
 
-local options = require "user.options"
+local options = require "core.options"
 vim.api.nvim_set_keymap("i","jk","<ESC>",{noremap = true})
 set_keymap("n","<ESC><ESC><ESC>",vim.cmd.noh)
 

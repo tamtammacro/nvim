@@ -67,6 +67,7 @@ require("packer").startup(function(use)
 	use "EdenEast/nightfox.nvim"
 	use 'Mofiqul/vscode.nvim'
 	use 'folke/tokyonight.nvim'
+    use 'marko-cerovac/material.nvim'
 
     -- lsp -- 
 	use "hrsh7th/cmp-nvim-lsp"
