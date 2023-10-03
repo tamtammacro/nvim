@@ -1,5 +1,3 @@
-local options = require "core.options"
-
 local keybinds = {}
 
 local keys = {}
@@ -7,8 +5,12 @@ keys.space = "<Space>"
 keys.leader = "<leader>"
 
 keybinds.telescope = {
-    live_grep = {key = keys.space.."g"},
+    live_grep = {key = keys.space.."lg"},
     find_files = {key = keys.space.."ff"},
+}
+
+keybinds.git = {
+    git_window = {key = keys.space.."gw"},
 }
 
 keybinds.file_manager = {

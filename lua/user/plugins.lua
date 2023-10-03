@@ -15,7 +15,7 @@ require("packer").startup(function(use)
     use("theprimeagen/harpoon")
     use("theprimeagen/refactoring.nvim")
     use("mbbill/undotree")
-    use("tpope/vim-fugitive")
+    use 'romgrk/barbar.nvim'
     use {
         'numToStr/Comment.nvim',
         config = function()
@@ -29,7 +29,6 @@ require("packer").startup(function(use)
         require('treesj').setup({})
       end,
     })
-
     use {"akinsho/toggleterm.nvim", tag = '*', config = function()
         require("toggleterm").setup()
     end}
@@ -39,10 +38,22 @@ require("packer").startup(function(use)
 		'nvim-lualine/lualine.nvim',
 		requires = { 'kyazdani42/nvim-web-devicons', opt = true }
 	}
-
-    use 'romgrk/barbar.nvim'
     use 'nvim-tree/nvim-web-devicons'
     use 'rcarriga/nvim-notify'
+
+    -- git integration --
+    use("tpope/vim-fugitive")
+
+    use({
+    "lewis6991/gitsigns.nvim",
+    config = function()
+        require("gitsigns").setup()
+    end,
+    cond = function()
+        if vim.api.nvim_command_output("!git rev-parse --is-inside-work-tree") == true then
+            return true
+        end
+    end,})
 
     -- grep utils | telescope --
 	use {
@@ -70,6 +81,7 @@ require("packer").startup(function(use)
     use 'marko-cerovac/material.nvim'
 
     -- lsp -- 
+    use { 'codota/tabnine-nvim', run = "./dl_binaries.sh" }
 	use "hrsh7th/cmp-nvim-lsp"
 	use "hrsh7th/cmp-buffer"
 	use "hrsh7th/cmp-path"
@@ -131,7 +143,5 @@ require("packer").startup(function(use)
     }
 end)
 
-do
-    local _ = require "mason"
-    if _ then _.setup() else error "Run :PackerSync" end
-end
+local success,_ = pcall(require, "mason")
+if success then _.setup() else error "Run :PackerSync" end

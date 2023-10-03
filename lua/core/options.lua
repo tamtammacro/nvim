@@ -1,15 +1,26 @@
 local options = {
     want_lazy_plugins = false, -- package manager --
     want_godot_mode = true,
-    want_my_user_commands = true,
     want_default_keybinds = true,
     want_tree_sitter = true,
-    want_lualine = false,
+    want_lualine = true,
     want_treesj = true,
     want_builtin_terminal = true,
+    want_telescope = true,
+    want_git_intigration = true,
+
+    tabnine_info = {
+        show_on_lualine = true,
+        enabled = true,
+        path = "tabnine",
+        debounce_ms = 500
+    },
+
+    nodefaults_info = {path = "nodefault",enabled = true},
 
     my_user_commands_info = {
-        prefix = "my"
+        prefix = "my",
+        enabled = true
     },
 
     ["nvim-tree"] = {
@@ -23,7 +34,7 @@ local options = {
 
     color_scheme = {
         allow_custom = true,
-        name = "gruvbox",
+        name = "vscode",
         arg1 = "darker"
     },
 
@@ -44,7 +55,7 @@ local options = {
     },
 
     tabs = {
-        enabled = true,
+        enabled = false,
         path = "barbar"
     },
 

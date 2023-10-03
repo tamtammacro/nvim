@@ -11,9 +11,9 @@ vo.autoindent = true
 vo.mouse = "a"
 vo.cursorline = true
 vo.relativenumber = true
-vo.scrolloff = 8
+--vo.scrolloff = 8
 vo.numberwidth = 6
-vo.timeoutlen = 500
+-- vo.timeoutlen = 500
 vo.updatetime = 200
 vo.wrap = true
 vo.clipboard = "unnamedplus"
@@ -42,7 +42,7 @@ vim.opt.incsearch = true
 
 vim.opt.termguicolors = true
 
-vim.opt.scrolloff = 8
+-- vim.opt.scrolloff = 8
 --vim.opt.signcolumn = "yes"
 vim.opt.isfname:append("@-@")
 vim.opt.updatetime = 50
