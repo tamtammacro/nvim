@@ -43,6 +43,10 @@ keymaps.git = {
     git_window = {key = keys.space.."gw"},
 }
 
+keymaps.symbols = {
+    toggle = {key = keys.leader.."s"}
+}
+
 keymaps.file_explorer = {
     toggle = {key = keys.space.."fm"}
 }

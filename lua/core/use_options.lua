@@ -1,10 +1,6 @@
 local options = require "user.options"
 local already_initilized = false
 
-local autostart = {}
-autostart.user = {}
-autostart.core = {"nodefault","tabnine","noice","illuminate","oil","term"}
-
 local functions = {}
 
 local function is_element(t,e)
@@ -13,58 +9,55 @@ local function is_element(t,e)
     end
 end
 
-local execeptions = {"background","color_scheme"}
-local field_exceptions = {"path"}
+local function test_fields()
+    local query_exceptions = {"background","color_scheme","path","paths"}
 
-for opt_name in pairs(options) do
-    if type(options[opt_name]) == "table" and not is_element(execeptions,opt_name) then
-        if type(rawget(options,opt_name)) == "table" then
-            setmetatable(rawget(options,opt_name),{__index = function(self,field)
-                if is_element(field_exceptions,field) then return end
-
-                if rawget(self,field) == nil then
-                    return require("notify")(("Missing sub option: %s for %s"):format(field,opt_name),"error")
-                end
-                return rawget(self,field)
-            end})
+    for opt_name in pairs(options) do
+        if type(options[opt_name]) == "table" and not is_element(query_exceptions,opt_name) then
+            if type(rawget(options,opt_name)) == "table" then
+                setmetatable(rawget(options,opt_name),{__index = function(self,field)
+                    if is_element(query_exceptions,field) then return end
+                    if rawget(self,field) == nil then
+                        return require("notify")(("Missing sub option: %s for %s"):format(field,opt_name),"error")
+                    end
+                    return rawget(self,field)
+                end})
+            end
         end
     end
+
+    setmetatable(functions,{__index = function(_,key)
+        if rawget(options,key) == nil then
+            return require("notify")(("Missing 'core' option: %s"):format(key),"error")
+        end
+        return rawget(options,key)
+    end})
 end
 
-setmetatable(functions,{__index = function(_,key)
-    if rawget(options,key) == nil then
-        return require("notify")(("Missing 'core' option: %s"):format(key),"error")
-    end
-
-    return rawget(options,key)
-end})
-
-local function initialize_default_plugins()
+local function init_plugins()
     local is_table
     local path
     local is_enabled
 
-    local function load_mod(opt_name,value)
-        is_table = type(value) == "table"
-        is_enabled = is_table and value.enabled or not is_table and value
-        path = is_table  and value.path or opt_name
-        if not is_enabled then return end
-
-        local dir_name = ""
-
-        for key in pairs(autostart) do
-            if is_element(autostart[key],path) then dir_name = key.."." end
-        end
-
-        local full_path = dir_name..path
-        local is_ok,mod = pcall(require,full_path)
-
+    local function require_mod(filename)
+        local is_ok,mod = pcall(require,"core."..filename)
         if is_ok and type(mod) == "table" and mod.setup then mod.setup() end
     end
 
-    for opt_name,obj in pairs(options) do
-        load_mod(opt_name,obj)
+    local function load_mod(opt_name,value)
+        is_table = type(value) == "table"
+        is_enabled = is_table and value.enabled or not is_table and value
+        path = (is_table and (value.path or value.paths)) or opt_name
+        if not is_enabled then return end
+
+        if type(path) == "table" then
+            for _,file_name in ipairs(path) do require_mod(file_name) end
+        elseif is_table then
+            require_mod(path)
+        end
     end
+
+    for opt_name,obj in pairs(options) do load_mod(opt_name,obj) end
 end
 
 function functions:use_plugins()
@@ -73,14 +66,8 @@ function functions:use_plugins()
     local success,err = pcall(function()
         require "user.plugins"
 
-        vim.g.barbar_auto_setup = false
-
-        initialize_default_plugins()
-
-        if self.lsp.enabled then
-            require "core.cmp"
-            require "core.lsp"
-        end
+        test_fields()
+        init_plugins()
 
         if self.my_user_commands_info.enabled then
             require "user.usercommands"
@@ -92,10 +79,6 @@ function functions:use_plugins()
 
         if self.want_default_keybinds then
             require "core.use_keymaps"
-        end
-
-        if self.file_explorer.enabled and self.file_explorer.name == "oil" then
-            require "core.oil"
         end
 
         require('refactoring').setup({})
@@ -123,12 +106,12 @@ function functions:use_visuals()
             vim.cmd.NvimTreeOpen()
         end
 
-        if self.lua_line.enabled then
-            require "core.lualine"
-        end
-
         if self.want_highlighted_indentation then
             require "ibl".setup()
+        end
+
+        if self.want_highlighted_colors then
+            require 'colorizer'.setup()
         end
     end)
 
@@ -139,8 +122,13 @@ function functions:use_visuals()
     vim.cmd [[highlight IndentBlanklineContextSpaceChar guifg=#FF0000 gui=nocombine]]
     vim.cmd [[highlight IndentBlanklineContextStart guifg=#FF0000 gui=nocombine]]
 
-    require 'colorizer'.setup()
-    require("symbols-outline").setup()
+    if options.want_symbols_outlined then
+        require("symbols-outline").setup()
+    end
+
+    if options.want_leap then
+        require('leap').add_default_mappings()
+    end
 
     if not success and err then require("notify")(err,"error") end
 end

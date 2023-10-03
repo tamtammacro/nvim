@@ -6,6 +6,9 @@ local options = {
     want_telescope = true,
     want_git_intigration = true,
     want_highlighted_indentation = true,
+    want_highlighted_colors = true,
+    want_symbols_outlined = true,
+    want_leap = true,
 
     noice = {
         enabled = true,
@@ -53,7 +56,7 @@ local options = {
     },
 
     support_images = {
-        enabled = true,
+        enabled = false,
         path = "hologram"
     },
 
@@ -75,11 +78,13 @@ local options = {
 
     file_explorer = {
         enabled = true,
-        name = "oil"
+        name = "oil",
+        path = "oil"
     },
 
     lsp = {
         enabled = true,
+        paths = {"lsp","cmp"}
     }
 }
 

@@ -17,6 +17,7 @@ require("packer").startup(function(use)
             {"nvim-treesitter/nvim-treesitter"}
         }
     }
+    use "ggandor/leap.nvim"
 	use 'jiangmiao/auto-pairs'
 	use 'tpope/vim-surround'
     use("theprimeagen/harpoon")
