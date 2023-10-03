@@ -39,15 +39,34 @@ local function init_plugins()
     local path
     local is_enabled
 
-    local function require_mod(filename)
-        local is_ok,mod = pcall(require,"core."..filename)
-        if is_ok and type(mod) == "table" and mod.setup then mod.setup() end
+    local is_ok
+    local mod
+
+    local function setup_mod(filename)
+        is_ok,mod = pcall(require,filename)
+
+        if is_ok and type(mod) == "table" and mod.setup then
+            mod.setup()
+        end
     end
 
-    local function load_mod(opt_name,value)
-        is_table = type(value) == "table"
-        is_enabled = is_table and value.enabled or not is_table and value
-        path = (is_table and (value.path or value.paths)) or opt_name
+    local function require_mod(filename)
+        setup_mod("core."..filename)
+
+        if not is_ok then
+            setup_mod(filename)
+
+            if not is_ok then
+                require "notify"(("ERROR WHILE LOADING PLUGIN: %s"):format(filename),"eror")
+            end
+        end
+    end
+
+    local function load_mod(opt_name,data)
+        is_table = type(data) == "table"
+        is_enabled = is_table and data.enabled or not is_table and data
+        path = (is_table and (data.path or data.paths)) or opt_name
+
         if not is_enabled then return end
 
         if type(path) == "table" then
@@ -56,7 +75,6 @@ local function init_plugins()
             require_mod(path)
         end
     end
-
     for opt_name,obj in pairs(options) do load_mod(opt_name,obj) end
 end
 

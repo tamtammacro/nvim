@@ -1,5 +1,7 @@
 local options = require "user.options"
 
+if not options.lua_line.enabled then return end
+
 local lualine = require('lualine')
 
 if options.lua_line.which == "evil" then

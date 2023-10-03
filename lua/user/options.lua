@@ -27,7 +27,7 @@ local options = {
     },
 
     tabnine_info = {
-        show_on_lualine = true,
+        show_on_lualine = false,
         enabled = true,
         path = "tabnine",
         debounce_ms = 500
@@ -42,7 +42,8 @@ local options = {
 
     ["nvim-tree"] = {
         enabled = true,
-        on_startup = false
+        on_startup = false,
+        path = "nvim-tree"
     },
 
     background = {
@@ -68,7 +69,7 @@ local options = {
 
     terminal = {
         enabled = true,
-        path = "toggle_term"
+        path = "term"
     },
 
     tabs = {
