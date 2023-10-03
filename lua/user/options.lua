@@ -1,7 +1,6 @@
 local options = {
     want_default_keybinds = true,
     want_tree_sitter = true,
-    want_lualine = true,
     want_treesj = true,
     want_builtin_terminal = true,
     want_telescope = true,
@@ -18,6 +17,12 @@ local options = {
         path = "illuminate"
     },
 
+    lua_line = {
+        enabled = true,
+        path = "lualine",
+        which = "evil"
+    },
+
     tabnine_info = {
         show_on_lualine = true,
         enabled = true,
@@ -29,7 +34,7 @@ local options = {
 
     my_user_commands_info = {
         prefix = "my",
-        enabled = true
+        enabled = false
     },
 
     ["nvim-tree"] = {
@@ -38,7 +43,7 @@ local options = {
     },
 
     background = {
-        is_transparent = false,
+        transparent = false,
     },
 
     color_scheme = {
@@ -74,7 +79,7 @@ local options = {
     },
 
     lsp = {
-        enabled = true
+        enabled = true,
     }
 }
 

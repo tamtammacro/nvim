@@ -1,4 +1,4 @@
-local options = require "core.options"
+local options = require "user.options"
 
 require('tabnine').setup({
   disable_auto_comment=true,

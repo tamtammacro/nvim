@@ -1,9 +1,9 @@
-local options = require "core.options"
+local options = require "user.options"
 local already_initilized = false
 
 local autostart = {}
-autostart.user = {"trouble"}
-autostart.core = {"nodefault","tabnine","noice","illuminate","oil"}
+autostart.user = {}
+autostart.core = {"nodefault","tabnine","noice","illuminate","oil","term"}
 
 local functions = {}
 
@@ -17,7 +17,7 @@ local execeptions = {"background","color_scheme"}
 local field_exceptions = {"path"}
 
 for opt_name in pairs(options) do
-    if not is_element(execeptions,opt_name) then
+    if type(options[opt_name]) == "table" and not is_element(execeptions,opt_name) then
         if type(rawget(options,opt_name)) == "table" then
             setmetatable(rawget(options,opt_name),{__index = function(self,field)
                 if is_element(field_exceptions,field) then return end
@@ -71,7 +71,6 @@ function functions:use_plugins()
     if already_initilized then return end
 
     local success,err = pcall(function()
-        --if self.want_lazy_plugins then require "user.lazyplugins" else require "user.plugins" end
         require "user.plugins"
 
         vim.g.barbar_auto_setup = false
@@ -98,10 +97,12 @@ function functions:use_plugins()
         if self.file_explorer.enabled and self.file_explorer.name == "oil" then
             require "core.oil"
         end
+
+        require('refactoring').setup({})
     end)
 
     if not success and type(err) == "string" then
-        require("notify")(("Error while trying to 'use_plugins', with message: %s"):format(err),"error")
+        require("notify")(("Error with 'use_plugins': %s"):format(err),"error")
     end
 
     already_initilized = true
@@ -114,7 +115,7 @@ function functions:use_visuals()
             if (self.color_scheme.name == "material") then vim.g.material_style = self.color_scheme.arg1 end
         end
 
-        if self.background.is_transparent then
+        if self.background.transparent then
             vim.cmd["highlight"]("Normal guibg=none")
         end
 
@@ -122,8 +123,8 @@ function functions:use_visuals()
             vim.cmd.NvimTreeOpen()
         end
 
-        if self.want_lualine then
-            require "core.lualine".setup()
+        if self.lua_line.enabled then
+            require "core.lualine"
         end
 
         if self.want_highlighted_indentation then
@@ -137,9 +138,11 @@ function functions:use_visuals()
     vim.cmd [[highlight IndentBlanklineSpaceCharBlankline guifg=#FF0000 gui=nocombine]]
     vim.cmd [[highlight IndentBlanklineContextSpaceChar guifg=#FF0000 gui=nocombine]]
     vim.cmd [[highlight IndentBlanklineContextStart guifg=#FF0000 gui=nocombine]]
-    require 'colorizer'.setup()
 
-    if not success and err then print(err) end
+    require 'colorizer'.setup()
+    require("symbols-outline").setup()
+
+    if not success and err then require("notify")(err,"error") end
 end
 
 return functions

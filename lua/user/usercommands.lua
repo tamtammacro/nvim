@@ -1,6 +1,6 @@
 local strings = require "user.utils.strings"
 local functions = require "user.util_functions"
-local options = require "core.options"
+local options = require "user.options"
 
 if not options.my_user_commands then return end
 

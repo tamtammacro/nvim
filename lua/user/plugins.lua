@@ -10,10 +10,17 @@ require("packer").startup(function(use)
 
     -- basic functionality --
 	use "mg979/vim-visual-multi"
+    use {
+        "ThePrimeagen/refactoring.nvim",
+        requires = {
+            {"nvim-lua/plenary.nvim"},
+            {"nvim-treesitter/nvim-treesitter"}
+        }
+    }
 	use 'jiangmiao/auto-pairs'
 	use 'tpope/vim-surround'
     use("theprimeagen/harpoon")
-    use("theprimeagen/refactoring.nvim")
+    use 'simrat39/symbols-outline.nvim'
     use("mbbill/undotree")
     use {
       'phaazon/hop.nvim',
@@ -58,6 +65,7 @@ require("packer").startup(function(use)
 	}
     use 'nvim-tree/nvim-web-devicons'
     use 'NvChad/nvim-colorizer.lua'
+    use "uga-rosa/ccc.nvim"
     use 'rcarriga/nvim-notify'
     use "folke/noice.nvim"
     use "MunifTanjim/nui.nvim"
@@ -156,8 +164,8 @@ require("packer").startup(function(use)
 	  tag = 'nightly' -- optional, updated every week. (see issue #1193)
 	}
 
-    -- discord rpc --
-    use 'andweeb/presence.nvim'
+    -- -- discord rpc --
+    -- use 'andweeb/presence.nvim'
 
     -- file manager --
 	use 'prichrd/netrw.nvim'
