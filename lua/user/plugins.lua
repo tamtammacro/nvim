@@ -15,7 +15,25 @@ require("packer").startup(function(use)
     use("theprimeagen/harpoon")
     use("theprimeagen/refactoring.nvim")
     use("mbbill/undotree")
+    use {
+      'phaazon/hop.nvim',
+      branch = 'v2', -- optional but strongly recommended
+      config = function()
+        -- you can configure Hop the way you like here; see :h hop-config
+        require'hop'.setup { keys = 'etovxqpdygfblzhckisuran' }
+      end
+    }
+    use {
+      'rmagatti/goto-preview',
+      config = function()
+        require('goto-preview').setup {}
+      end
+    }
     use 'romgrk/barbar.nvim'
+    use {'akinsho/bufferline.nvim', tag = "*", requires = 'nvim-tree/nvim-web-devicons'}
+    use {
+      'stevearc/oil.nvim'
+    }
     use {
         'numToStr/Comment.nvim',
         config = function()
@@ -39,7 +57,25 @@ require("packer").startup(function(use)
 		requires = { 'kyazdani42/nvim-web-devicons', opt = true }
 	}
     use 'nvim-tree/nvim-web-devicons'
+    use 'NvChad/nvim-colorizer.lua'
     use 'rcarriga/nvim-notify'
+    use "folke/noice.nvim"
+    use "MunifTanjim/nui.nvim"
+    use "RRethy/vim-illuminate"
+    use "lukas-reineke/indent-blankline.nvim"
+
+    use({
+      "utilyre/barbecue.nvim",
+      tag = "*",
+      requires = {
+        "SmiteshP/nvim-navic",
+        "nvim-tree/nvim-web-devicons", -- optional dependency
+      },
+      after = "nvim-web-devicons", -- keep this if you're using NvChad
+      config = function()
+        require("barbecue").setup()
+      end,
+    })
 
     -- git integration --
     use("tpope/vim-fugitive")

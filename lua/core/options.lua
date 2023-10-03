@@ -1,6 +1,4 @@
 local options = {
-    want_lazy_plugins = false, -- package manager --
-    want_godot_mode = true,
     want_default_keybinds = true,
     want_tree_sitter = true,
     want_lualine = true,
@@ -8,6 +6,17 @@ local options = {
     want_builtin_terminal = true,
     want_telescope = true,
     want_git_intigration = true,
+    want_highlighted_indentation = true,
+
+    noice = {
+        enabled = true,
+        path = "noice"
+    },
+
+    illuminate = {
+        enabled = true,
+        path = "illuminate"
+    },
 
     tabnine_info = {
         show_on_lualine = true,
@@ -24,7 +33,7 @@ local options = {
     },
 
     ["nvim-tree"] = {
-        enabled = false,
+        enabled = true,
         on_startup = false
     },
 
@@ -34,7 +43,7 @@ local options = {
 
     color_scheme = {
         allow_custom = true,
-        name = "vscode",
+        name = "tokyonight-night",
         arg1 = "darker"
     },
 
@@ -45,7 +54,7 @@ local options = {
 
     lsp_trouble = {
         enabled = true,
-        on_startup = false,
+        on_startup = true,
         path = "trouble"
     },
 
@@ -55,8 +64,13 @@ local options = {
     },
 
     tabs = {
-        enabled = false,
+        enabled = true,
         path = "barbar"
+    },
+
+    file_explorer = {
+        enabled = true,
+        name = "oil"
     },
 
     lsp = {

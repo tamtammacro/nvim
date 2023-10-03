@@ -20,4 +20,4 @@ vim.keymap.set("n", "<leader>xd", function() trouble.open("document_diagnostics"
 vim.keymap.set("n", "<leader>xq", function() trouble.open("quickfix") end)
 vim.keymap.set("n", "<leader>xl", function() trouble.open("loclist") end)
 vim.keymap.set("n", "gR", function() trouble.open("lsp_references") end)
-vim.keymap.set("n","<Space>t",vim.cmd.TroubleToggle)
+--vim.keymap.set("n","<Space>t",vim.cmd.TroubleToggle)

@@ -2,15 +2,13 @@ local options = require "core.options"
 
 if not options.want_default_keybinds then return end
 
-local keybinds = require "user.keybinds"
+local keybinds = require "user.keymaps"
 
 local function mrn(mode)
     return mode or "n"
 end
 
-local function set_keymap(mode,key,callback)
-    vim.keymap.set(mode,key,callback)
-end
+local set_keymap = vim.keymap.set
 
 vim.api.nvim_set_keymap("i","jk","<ESC>",{noremap = true})
 set_keymap(mrn(),"<ESC><ESC><ESC>",vim.cmd.noh)
@@ -24,7 +22,13 @@ local success,err = pcall(function()
         set_keymap(mrn(),keybinds.telescope.find_files.key,_.find_files)
     end
 
-    set_keymap(mrn(),keybinds.file_manager.netrw.key,vim.cmd.Ex)
+    if options.file_explorer.enabled then
+        if options.file_explorer.name == "netrw" then
+            set_keymap(mrn(),keybinds.file_explorer.toggle.key,vim.cmd.Ex)
+        else
+            set_keymap(mrn(),keybinds.file_explorer.toggle.key,vim.cmd.Oil)
+        end
+    end
 
     if options.want_git_intigration then
         set_keymap(mrn(),keybinds.git.git_window.key,function()
@@ -52,6 +56,22 @@ local success,err = pcall(function()
         set_keymap(mrn(),keybinds.terminal.toggle.key,vim.cmd.ToggleTerm)
         require "user.term"
     end
+
+    if options.lsp_trouble.enabled then
+        local trouble = require "trouble"
+
+        local keys = keybinds.lsp_trouble
+
+        --set_keymap(mrn(), keys.open.key, function() trouble.open() end)
+        set_keymap(mrn(), keys.workspace_diagnostics.key, function() trouble.open("workspace_diagnostics") end)
+        set_keymap(mrn(), keys.document_diagnostics.key, function() trouble.open("document_diagnostics") end)
+        set_keymap(mrn(), keys.quick_fix.key, function() trouble.open("quickfix") end)
+        set_keymap(mrn(), keys.locklist.key, function() trouble.open("loclist") end)
+        set_keymap(mrn(), keys.lsp_reference.key, function() trouble.open("lsp_references") end)
+        set_keymap(mrn(),keys.toggle.key,vim.cmd.TroubleToggle)
+    end
+
+    vim.keymap.set(mrn(), keybinds.goto.goto_preview.key, "<cmd>lua require('goto-preview').goto_preview_definition()<CR>", {noremap=true})
 end)
 
 if not success and err then

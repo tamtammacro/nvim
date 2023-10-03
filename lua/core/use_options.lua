@@ -3,7 +3,7 @@ local already_initilized = false
 
 local autostart = {}
 autostart.user = {"trouble"}
-autostart.core = {"nodefault","tabnine"}
+autostart.core = {"nodefault","tabnine","noice","illuminate","oil"}
 
 local functions = {}
 
@@ -71,7 +71,8 @@ function functions:use_plugins()
     if already_initilized then return end
 
     local success,err = pcall(function()
-        if self.want_lazy_plugins then require "user.lazyplugins" else require "user.plugins" end
+        --if self.want_lazy_plugins then require "user.lazyplugins" else require "user.plugins" end
+        require "user.plugins"
 
         vim.g.barbar_auto_setup = false
 
@@ -91,11 +92,15 @@ function functions:use_plugins()
         end
 
         if self.want_default_keybinds then
-            require "core.use_keybinds"
+            require "core.use_keymaps"
+        end
+
+        if self.file_explorer.enabled and self.file_explorer.name == "oil" then
+            require "core.oil"
         end
     end)
 
-    if not success and err then
+    if not success and type(err) == "string" then
         require("notify")(("Error while trying to 'use_plugins', with message: %s"):format(err),"error")
     end
 
@@ -118,9 +123,22 @@ function functions:use_visuals()
         end
 
         if self.want_lualine then
-            require "lualine".setup()
+            require "core.lualine".setup()
+        end
+
+        if self.want_highlighted_indentation then
+            require "ibl".setup()
         end
     end)
+
+    vim.cmd [[highlight IndentBlanklineContextChar guifg=#C3251C gui=nocombine]]
+    vim.cmd [[highlight IndentBlanklineChar guifg=#FF0000 gui=nocombine]]
+    vim.cmd [[highlight IndentBlanklineSpaceChar guifg=#FF0000 gui=nocombine]]
+    vim.cmd [[highlight IndentBlanklineSpaceCharBlankline guifg=#FF0000 gui=nocombine]]
+    vim.cmd [[highlight IndentBlanklineContextSpaceChar guifg=#FF0000 gui=nocombine]]
+    vim.cmd [[highlight IndentBlanklineContextStart guifg=#FF0000 gui=nocombine]]
+    require 'colorizer'.setup()
+
     if not success and err then print(err) end
 end
 
