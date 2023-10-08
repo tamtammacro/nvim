@@ -1,13 +1,11 @@
 local options = require "user.options"
-local already_initilized = false
+
+local already_using_plugins
+local already_using_visuals
 
 local functions = {}
 
-local function is_element(t,e)
-    for _,v in pairs(t) do
-        if v == e then return true end
-    end
-end
+local function is_element(t,e) for _,v in pairs(t) do if v == e then return true end end end
 
 local function test_fields()
     local query_exceptions = {"background","color_scheme","path","paths"}
@@ -79,7 +77,7 @@ local function init_plugins()
 end
 
 function functions:use_plugins()
-    if already_initilized then return end
+    if already_using_plugins then return print"no chain calls use plugins" end
 
     local success,err = pcall(function()
         require "user.plugins"
@@ -106,14 +104,18 @@ function functions:use_plugins()
         require("notify")(("Error with 'use_plugins': %s"):format(err),"error")
     end
 
-    already_initilized = true
+    already_using_plugins = true
+
+    return self
 end
 
 function functions:use_visuals()
+    if already_using_visuals then return print"no chain calls use visuals" end
+
     local success,err = pcall(function()
         if self.color_scheme.allow_custom then
             vim.cmd.colorscheme(self.color_scheme.name)
-            if (self.color_scheme.name == "material") then vim.g.material_style = self.color_scheme.arg1 end
+            if (self.color_scheme.name == "material") then vim.g.material_style = self.color_scheme.arg end
         end
 
         if self.background.transparent then
@@ -149,6 +151,10 @@ function functions:use_visuals()
     end
 
     if not success and err then require("notify")(err,"error") end
+
+    already_using_visuals = true
+
+    return self
 end
 
 return functions

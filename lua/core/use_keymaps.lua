@@ -3,7 +3,7 @@ local options = require "user.options"
 if not options.want_default_keybinds then return end
 
 local keymaps = require "user.keymaps"
-local utils = require "user.util_functions"
+local utils = require "user.myfunctions"
 
 local function set_keymap(obj,func,args)
     xpcall(function()
@@ -21,7 +21,7 @@ local success,err = pcall(function()
     end
 
     if options.file_explorer.enabled then
-        if options.file_explorer.name == "netrw" then
+        if options.file_explorer.path == "netrw" then
             set_keymap(keymaps.file_explorer.toggle,vim.cmd.Ex)
         else
             set_keymap(keymaps.file_explorer.toggle,vim.cmd.Oil)

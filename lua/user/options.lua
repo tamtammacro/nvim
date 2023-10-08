@@ -16,7 +16,7 @@ local options = {
     },
 
     illuminate = {
-        enabled = false,
+        enabled = true,
         path = "illuminate"
     },
 
@@ -53,17 +53,11 @@ local options = {
     color_scheme = {
         allow_custom = true,
         name = "gruvbox",
-        arg1 = "darker"
-    },
-
-    support_images = {
-        enabled = false,
-        path = "hologram"
+        arg = "darker"
     },
 
     lsp_trouble = {
         enabled = true,
-        on_startup = true,
         path = "trouble"
     },
 
@@ -79,7 +73,6 @@ local options = {
 
     file_explorer = {
         enabled = true,
-        name = "oil",
         path = "oil"
     },
 

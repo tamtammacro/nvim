@@ -19,7 +19,11 @@ require("packer").startup(function(use)
         }
     }
     use "ggandor/leap.nvim"
-	use 'jiangmiao/auto-pairs'
+	--use 'jiangmiao/auto-pairs'
+    use {
+        "windwp/nvim-autopairs",
+        config = function() require("nvim-autopairs").setup {} end
+    }
 	use 'tpope/vim-surround'
     use("theprimeagen/harpoon")
     use 'simrat39/symbols-outline.nvim'
