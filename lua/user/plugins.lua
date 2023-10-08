@@ -10,6 +10,7 @@ require("packer").startup(function(use)
 
     -- basic functionality --
 	use "mg979/vim-visual-multi"
+
     use {
         "ThePrimeagen/refactoring.nvim",
         requires = {

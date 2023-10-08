@@ -11,12 +11,12 @@ local options = {
     want_leap = true,
 
     noice = {
-        enabled = true,
+        enabled = false,
         path = "noice"
     },
 
     illuminate = {
-        enabled = true,
+        enabled = false,
         path = "illuminate"
     },
 
@@ -52,7 +52,7 @@ local options = {
 
     color_scheme = {
         allow_custom = true,
-        name = "tokyonight-night",
+        name = "gruvbox",
         arg1 = "darker"
     },
 
@@ -73,7 +73,7 @@ local options = {
     },
 
     tabs = {
-        enabled = true,
+        enabled = false,
         path = "barbar"
     },
 
