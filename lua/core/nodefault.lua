@@ -50,3 +50,6 @@ vim.opt.updatetime = 50
 vim.mapleader = " "
 
 vim.g.barbar_auto_setup = false
+
+vim.g.loaded_netrwPlugin = 1
+vim.g.loaded_netrw = 1

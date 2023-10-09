@@ -2,24 +2,36 @@ local options = require "user.options"
 
 local already_using_plugins
 local already_using_visuals
+local debug_should_test_fields
 
 local functions = {}
 
-local function is_element(t,e) for _,v in pairs(t) do if v == e then return true end end end
+local function is_element(t,e)
+    local i = 1
+    local v = t[i]
+
+    while v ~= nil do
+        if v == e then return true end
+        i = i + 1
+        v = t[i]
+    end
+end
 
 local function test_fields()
-    local query_exceptions = {"background","color_scheme","path","paths","defer"}
+    local query_exceptions = {"background","color_scheme","path","paths","defer","which"}
 
-    for opt_name in pairs(options) do
-        if type(options[opt_name]) == "table" and not is_element(query_exceptions,opt_name) then
-            if type(rawget(options,opt_name)) == "table" then
-                setmetatable(rawget(options,opt_name),{__index = function(self,field)
-                    if is_element(query_exceptions,field) then return end
-                    if rawget(self,field) == nil then
-                        return require("notify")(("Missing sub option: %s for %s"):format(field,opt_name),"error")
-                    end
-                    return rawget(self,field)
-                end})
+    if debug_should_test_fields then
+        for opt_name in pairs(options) do
+            if type(options[opt_name]) == "table" and not is_element(query_exceptions,opt_name) then
+                if type(rawget(options,opt_name)) == "table" then
+                    setmetatable(rawget(options,opt_name),{__index = function(self,field)
+                        if is_element(query_exceptions,field) then return end
+                        if rawget(self,field) == nil then
+                            return require("notify")(("Missing sub option: %s for %s"):format(field,opt_name),"error")
+                        end
+                        return rawget(self,field)
+                    end})
+                end
             end
         end
     end
@@ -49,10 +61,9 @@ local function init_plugins()
 
         if not is_ok then
             setup_mod(filename)
-
-            if not is_ok then
-                require "notify"(("ERROR WHILE LOADING PLUGIN: %s"):format(filename),"eror")
-            end
+            -- if not is_ok then
+            --     require "notify"(("ERROR WHILE LOADING PLUGIN: %s"):format(filename),"eror")
+            -- end
         end
     end
 
@@ -73,7 +84,10 @@ local function init_plugins()
             if defer then
                 vim.defer_fn(function()
                     require_mod(path)
-                    if path == "alpha" then vim.cmd.Alpha() end
+                    if path == "alpha" and not vim.v.argv[3] then vim.cmd.Alpha()
+                    elseif path == "colorizer" then
+                        vim.cmd.ColorizerAttachToBuffer()
+                    end
                 end,defer * 1000)
             else
                 require_mod(path)
@@ -86,25 +100,32 @@ end
 function functions:use_plugins()
     if already_using_plugins then return print"no chain calls use plugins" end
 
-    local success,err = pcall(function()
+    require "core.nodefault"
+
+    if not options.plugins.enabled then return end
+
+    test_fields()
+
+    local function init()
         require "user.plugins"
 
-        test_fields()
         init_plugins()
-
-        if self.my_user_commands_info.enabled then
-            require "user.usercommands"
-        end
-
-        if self.want_tree_sitter then
-            require "core.treesitter"
-        end
 
         if self.want_default_keybinds then
             require "core.use_keymaps"
         end
 
-        require('refactoring').setup({})
+        if not vim.v.argv[3] then
+            if options.startup_screen.enabled then vim.cmd.Alpha() end
+        end
+    end
+
+    local success,err = pcall(function()
+        if options.plugins.defer then
+            vim.defer_fn(init,options.plugins.defer * 1000)
+        else
+            init()
+        end
     end)
 
     if not success and type(err) == "string" then
@@ -132,14 +153,6 @@ function functions:use_visuals()
         if self["nvim-tree"].on_startup then
             vim.cmd.NvimTreeOpen()
         end
-
-        if self.want_highlighted_indentation then
-            require "ibl".setup()
-        end
-
-        if self.want_highlighted_colors then
-            require 'colorizer'.setup()
-        end
     end)
 
     vim.cmd [[highlight IndentBlanklineContextChar guifg=#C3251C gui=nocombine]]
@@ -148,10 +161,6 @@ function functions:use_visuals()
     vim.cmd [[highlight IndentBlanklineSpaceCharBlankline guifg=#FF0000 gui=nocombine]]
     vim.cmd [[highlight IndentBlanklineContextSpaceChar guifg=#FF0000 gui=nocombine]]
     vim.cmd [[highlight IndentBlanklineContextStart guifg=#FF0000 gui=nocombine]]
-
-    if options.want_symbols_outlined then
-        require("symbols-outline").setup()
-    end
 
     if options.want_leap then
         require('leap').add_default_mappings()

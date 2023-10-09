@@ -28,7 +28,7 @@ local success,err = pcall(function()
         end
     end
 
-    if options.want_git_intigration then
+    if options.git.enabled then
         set_keymap(keymaps.git.git_window,function()
             vim.cmd.Git()
         end)
@@ -38,7 +38,7 @@ local success,err = pcall(function()
         set_keymap(keymaps.nvim_tree.toggle,vim.cmd.NvimTreeToggle)
     end
 
-    if options.want_treesj then
+    if options.treesj.enabled then
         local treesj = require "treesj"
         local opts = { split = { recursive = true } }
 
@@ -52,7 +52,7 @@ local success,err = pcall(function()
         set_keymap(keymaps.my_commands.buf_cap_word,utils.buf_cap_word)
     end
 
-    if options.want_builtin_terminal then
+    if options.terminal.enabled then
         set_keymap(keymaps.terminal.toggle,vim.cmd.ToggleTerm)
     end
 
@@ -70,7 +70,7 @@ local success,err = pcall(function()
 
     set_keymap(keymaps.goto.goto_preview, "<cmd>lua require('goto-preview').goto_preview_definition()<CR>", {noremap=true})
 
-    if options.want_symbols_outlined then
+    if options.symbols_outline.enabled then
         set_keymap(keymaps.symbols.toggle,vim.cmd.SymbolsOutline)
     end
 end)
