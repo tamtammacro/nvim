@@ -8,7 +8,7 @@ local functions = {}
 local function is_element(t,e) for _,v in pairs(t) do if v == e then return true end end end
 
 local function test_fields()
-    local query_exceptions = {"background","color_scheme","path","paths"}
+    local query_exceptions = {"background","color_scheme","path","paths","defer"}
 
     for opt_name in pairs(options) do
         if type(options[opt_name]) == "table" and not is_element(query_exceptions,opt_name) then
@@ -33,10 +33,6 @@ local function test_fields()
 end
 
 local function init_plugins()
-    local is_table
-    local path
-    local is_enabled
-
     local is_ok
     local mod
 
@@ -61,16 +57,27 @@ local function init_plugins()
     end
 
     local function load_mod(opt_name,data)
-        is_table = type(data) == "table"
-        is_enabled = is_table and data.enabled or not is_table and data
-        path = (is_table and (data.path or data.paths)) or opt_name
+        local is_table = type(data) == "table"
+        local is_enabled = is_table and data.enabled or not is_table and data
+        local defer = is_table and data.defer
+        local path = (is_table and (data.path or data.paths)) or opt_name
 
+        if not path then return end
         if not is_enabled then return end
 
         if type(path) == "table" then
-            for _,file_name in ipairs(path) do require_mod(file_name) end
+            vim.defer_fn(function()
+                for _,file_name in ipairs(path) do require_mod(file_name) end
+            end,(defer and defer * 1000 or 0))
         elseif is_table then
-            require_mod(path)
+            if defer then
+                vim.defer_fn(function()
+                    require_mod(path)
+                    if path == "alpha" then vim.cmd.Alpha() end
+                end,defer * 1000)
+            else
+                require_mod(path)
+            end
         end
     end
     for opt_name,obj in pairs(options) do load_mod(opt_name,obj) end

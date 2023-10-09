@@ -12,25 +12,36 @@ local options = {
 
     noice = {
         enabled = false,
-        path = "noice"
+        path = "noice",
+        defer = 1,
     },
 
     illuminate = {
         enabled = true,
-        path = "illuminate"
+        path = "illuminate",
+        defer = 1,
     },
 
     lua_line = {
         enabled = true,
         path = "lualine",
-        which = "evil"
+        which = "evil",
+        defer = 0.5
+    },
+
+    startup_screen = {
+       enabled = true,
+       path = "alpha",
+       which = "",
+       defer = 2
     },
 
     tabnine_info = {
         show_on_lualine = false,
         enabled = true,
         path = "tabnine",
-        debounce_ms = 500
+        debounce_ms = 500,
+        defer = 2
     },
 
     nodefaults_info = {path = "nodefault",enabled = true},
@@ -43,7 +54,8 @@ local options = {
     ["nvim-tree"] = {
         enabled = true,
         on_startup = false,
-        path = "nvim-tree"
+        path = "nvim-tree",
+        defer = 1
     },
 
     background = {
@@ -52,18 +64,20 @@ local options = {
 
     color_scheme = {
         allow_custom = true,
-        name = "gruvbox",
+        name = "tokyonight-night",
         arg = "darker"
     },
 
     lsp_trouble = {
         enabled = true,
-        path = "trouble"
+        path = "trouble",
+        defer = 1
     },
 
     terminal = {
         enabled = true,
-        path = "term"
+        path = "term",
+        defer = 1
     },
 
     tabs = {
@@ -78,7 +92,8 @@ local options = {
 
     lsp = {
         enabled = true,
-        paths = {"lsp","cmp"}
+        paths = {"lsp","cmp"},
+        defer = 1
     }
 }
 
