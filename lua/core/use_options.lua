@@ -84,12 +84,16 @@ local function init_plugins()
             if defer then
                 vim.defer_fn(function()
                     require_mod(path)
-                    if path == "alpha" and not vim.v.argv[3] then vim.cmd.Alpha()
+                    if path == "alpha" and not vim.v.argv[3] then
+                        vim.cmd.Alpha()
                     elseif path == "colorizer" then
                         vim.cmd.ColorizerAttachToBuffer()
                     end
                 end,defer * 1000)
             else
+                if path == "alpha" and not vim.v.argv[3] and options.plugins.defer then
+                    vim.defer_fn(vim.cmd.Alpha,options.plugins.defer)
+                end
                 require_mod(path)
             end
         end
@@ -115,10 +119,6 @@ function functions:use_plugins()
 
         if self.want_default_keybinds then
             require "core.use_keymaps"
-        end
-
-        if not vim.v.argv[3] then
-            if options.startup_screen.enabled then vim.cmd.Alpha() end
         end
     end
 

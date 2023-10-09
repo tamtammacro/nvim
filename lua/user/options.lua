@@ -5,7 +5,7 @@ local options = {
 
     plugins = {
         enabled = true,
-        defer = .5
+        --defer = .5
     },
 
     git = {
