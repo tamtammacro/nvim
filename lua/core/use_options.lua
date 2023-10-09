@@ -100,7 +100,9 @@ end
 function functions:use_plugins()
     if already_using_plugins then return print"no chain calls use plugins" end
 
-    require "core.nodefault"
+    local nodefault = require "core.nodefault"
+
+    if not nodefault.up_to_date then nodefault.init() end
 
     if not options.plugins.enabled then return end
 
@@ -140,6 +142,11 @@ end
 function functions:use_visuals()
     if already_using_visuals then return print"no chain calls use visuals" end
 
+    local nodefault = require "core.nodefault"
+    if not nodefault.up_to_date then nodefault.init()end
+
+    if not options.plugins.enabled then return end
+
     local success,err = pcall(function()
         if self.color_scheme.allow_custom then
             vim.cmd.colorscheme(self.color_scheme.name)
@@ -166,7 +173,7 @@ function functions:use_visuals()
         require('leap').add_default_mappings()
     end
 
-    if not success and err then require("notify")(err,"error") end
+    if not success and err and already_using_plugins then require("notify")(err,"error") end
 
     already_using_visuals = true
 

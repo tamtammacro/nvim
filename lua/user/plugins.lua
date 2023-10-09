@@ -93,17 +93,7 @@ require("packer").startup(function(use)
 
     -- git integration --
     use("tpope/vim-fugitive")
-
-    use({
-    "lewis6991/gitsigns.nvim",
-    config = function()
-        require("gitsigns").setup()
-    end,
-    cond = function()
-        if vim.api.nvim_command_output("!git rev-parse --is-inside-work-tree") == true then
-            return true
-        end
-    end,})
+    use "lewis6991/gitsigns.nvim"
 
     -- grep utils | telescope --
 	use {

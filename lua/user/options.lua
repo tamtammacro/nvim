@@ -10,6 +10,7 @@ local options = {
 
     git = {
         enabled = true,
+        paths = {"gitsigns"}
     },
 
     noice = {
