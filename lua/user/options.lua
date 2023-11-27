@@ -1,11 +1,13 @@
+local DEFAULT_DEFER_TIME = 1
+
 local options = {
     want_default_keybinds = true,
     want_telescope = true,
     want_leap = true,
+    deferring_enabled = true,
 
     plugins = {
         enabled = true,
-        --defer = .5
     },
 
     git = {
@@ -16,7 +18,7 @@ local options = {
     noice = {
         enabled = false,
         path = "noice",
-        defer = 1,
+        defer = DEFAULT_DEFER_TIME,
     },
 
     refractoring = {
@@ -27,25 +29,25 @@ local options = {
     highlighted_indentation = {
         enabled = true,
         path = "ibl",
-        defer = 1
+        defer = .25
     },
 
     highlighted_colors = {
         enabled = true,
         path = "colorizer",
-        defer = 1,
+        defer = DEFAULT_DEFER_TIME,
     },
 
     symbols_outline = {
         enabled = true,
         path = "symbols-outline",
-        defer = 1
+        defer = .5
     },
 
     illuminate = {
         enabled = true,
         path = "illuminate",
-        defer = 1,
+        defer = .5,
     },
 
     lua_line = {
@@ -57,7 +59,7 @@ local options = {
     tree_sitter = {
         enabled = true,
         path = "treesitter",
-        defer = 2
+        defer = .25
     },
 
     treesj = {
@@ -74,7 +76,7 @@ local options = {
         enabled = true,
         path = "tabnine",
         debounce_ms = 500,
-        defer = 2
+        defer = DEFAULT_DEFER_TIME 
     },
 
     my_user_commands_info = {
@@ -86,7 +88,7 @@ local options = {
         enabled = true,
         on_startup = false,
         path = "nvim-tree",
-        defer = 1
+        defer = DEFAULT_DEFER_TIME
     },
 
     background = {
@@ -102,13 +104,13 @@ local options = {
     lsp_trouble = {
         enabled = true,
         path = "trouble",
-        defer = 1
+        defer = DEFER_DEFAULT
     },
 
     terminal = {
         enabled = true,
         path = "term",
-        defer = 1
+        defer = DEFAULT_DEFER_TIME
     },
 
     tabs = {
@@ -124,7 +126,7 @@ local options = {
     lsp = {
         enabled = true,
         paths = {"lsp","cmp"},
-        defer = 1
+        defer = DEFFAULT_DEFER_TIME
     }
 }
 

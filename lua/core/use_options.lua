@@ -1,12 +1,17 @@
 local options = require "user.options"
 
-local already_using_plugins
-local already_using_visuals
-local debug_should_test_fields
+local function new_hash(...)
+    local t = {}
+    
+    for _,element in ipairs({...}) do
+        t[element] = true
+    end
 
-local functions = {}
+    return t
+end
 
-local function is_element(t,e)
+
+local function _is_element(t,e)
     local i = 1
     local v = t[i]
 
@@ -17,15 +22,25 @@ local function is_element(t,e)
     end
 end
 
-local function test_fields()
-    local query_exceptions = {"background","color_scheme","path","paths","defer","which"}
+local function contains(t,e)
+    return t[e]
+end
 
-    if debug_should_test_fields then
+local DEBUG_MODE_ENABLED = false
+local INDENTBLANKLINE_BACKGROUNDCOLOR = 0xFF0000
+local DEBUG_QUERY_EXCEPTIONS = new_hash("background","color_scheme","path","paths","defer","which")
+local INDENT_BLANK_LINE_LIST = {"IndentBlanklineContextChar","IndentBlanklineChar","IndentBlanklineSpaceChar","IndentBlanklineSpaceCharBlankline","IndentBlanklineContextSpaceChar","IndentBlanklineContextStart"}
+local FALLBACK_FUNC = {alpha = "Alpha",colorizer="ColorizerAttachToBuffer"}
+
+local functions = {}
+
+local function test_for_issues()
+    if DEBUG_MODE_ENABLED then
         for opt_name in pairs(options) do
-            if type(options[opt_name]) == "table" and not is_element(query_exceptions,opt_name) then
+            if type(options[opt_name]) == "table" and not contains(DEBUG_QUERY_EXCEPTIONS,opt_name) then
                 if type(rawget(options,opt_name)) == "table" then
                     setmetatable(rawget(options,opt_name),{__index = function(self,field)
-                        if is_element(query_exceptions,field) then return end
+                        if contains(DEBUG_QUERY_EXCEPTIONS,field) then return end
                         if rawget(self,field) == nil then
                             return require("notify")(("Missing sub option: %s for %s"):format(field,opt_name),"error")
                         end
@@ -61,16 +76,13 @@ local function init_plugins()
 
         if not is_ok then
             setup_mod(filename)
-            -- if not is_ok then
-            --     require "notify"(("ERROR WHILE LOADING PLUGIN: %s"):format(filename),"eror")
-            -- end
         end
     end
 
     local function load_mod(opt_name,data)
         local is_table = type(data) == "table"
         local is_enabled = is_table and data.enabled or not is_table and data
-        local defer = is_table and data.defer
+        local defer = is_table and data.defer and options.deferring_enabled and data.defer * 1000 or 0
         local path = (is_table and (data.path or data.paths)) or opt_name
 
         if not path then return end
@@ -79,20 +91,20 @@ local function init_plugins()
         if type(path) == "table" then
             vim.defer_fn(function()
                 for _,file_name in ipairs(path) do require_mod(file_name) end
-            end,(defer and defer * 1000 or 0))
+            end,(defer and defer))
         elseif is_table then
+            local func_name = FALLBACK_FUNC[path]
+
             if defer then
                 vim.defer_fn(function()
                     require_mod(path)
-                    if path == "alpha" and not vim.v.argv[3] then
-                        vim.cmd.Alpha()
-                    elseif path == "colorizer" then
-                        vim.cmd.ColorizerAttachToBuffer()
+                    if func_name and vim.cmd[func_name] then
+                        vim.cmd[func_name]()
                     end
-                end,defer * 1000)
+                end,defer)
             else
-                if path == "alpha" and not vim.v.argv[3] and options.plugins.defer then
-                    vim.defer_fn(vim.cmd.Alpha,options.plugins.defer)
+                if func_name and not vim.v.argv[3] and options.plugins.defer then
+                    vim.defer_fn(vim.cmd[func_name],options.deferring_enabled and options.plugins.defer or 0)
                 end
                 require_mod(path)
             end
@@ -102,15 +114,13 @@ local function init_plugins()
 end
 
 function functions:use_plugins()
-    if already_using_plugins then return print"no chain calls use plugins" end
-
     local nodefault = require "core.nodefault"
 
     if not nodefault.up_to_date then nodefault.init() end
 
     if not options.plugins.enabled then return end
 
-    test_fields()
+    test_for_issues()
 
     local function init()
         require "user.plugins"
@@ -134,14 +144,10 @@ function functions:use_plugins()
         require("notify")(("Error with 'use_plugins': %s"):format(err),"error")
     end
 
-    already_using_plugins = true
-
     return self
 end
 
 function functions:use_visuals()
-    if already_using_visuals then return print"no chain calls use visuals" end
-
     local nodefault = require "core.nodefault"
     if not nodefault.up_to_date then nodefault.init()end
 
@@ -162,20 +168,16 @@ function functions:use_visuals()
         end
     end)
 
-    vim.cmd [[highlight IndentBlanklineContextChar guifg=#C3251C gui=nocombine]]
-    vim.cmd [[highlight IndentBlanklineChar guifg=#FF0000 gui=nocombine]]
-    vim.cmd [[highlight IndentBlanklineSpaceChar guifg=#FF0000 gui=nocombine]]
-    vim.cmd [[highlight IndentBlanklineSpaceCharBlankline guifg=#FF0000 gui=nocombine]]
-    vim.cmd [[highlight IndentBlanklineContextSpaceChar guifg=#FF0000 gui=nocombine]]
-    vim.cmd [[highlight IndentBlanklineContextStart guifg=#FF0000 gui=nocombine]]
+
+    for _,indent_name in ipairs(INDENT_BLANK_LINE_LIST) do
+        vim.cmd("highlight "..indent_name .." guifg="..INDENTBLANKLINE_BACKGROUNDCOLOR.." gui=nocombine")
+    end
 
     if options.want_leap then
         require('leap').add_default_mappings()
     end
 
-    if not success and err and already_using_plugins then require("notify")(err,"error") end
-
-    already_using_visuals = true
+    if not success and err then require("notify")(err,"error") end
 
     return self
 end
