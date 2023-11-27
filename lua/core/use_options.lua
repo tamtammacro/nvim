@@ -38,15 +38,11 @@ local function test_for_issues()
     if DEBUG_MODE_ENABLED then
         for opt_name in pairs(options) do
             if type(options[opt_name]) == "table" and not contains(DEBUG_QUERY_EXCEPTIONS,opt_name) then
-                if type(rawget(options,opt_name)) == "table" then
-                    setmetatable(rawget(options,opt_name),{__index = function(self,field)
-                        if contains(DEBUG_QUERY_EXCEPTIONS,field) then return end
-                        if rawget(self,field) == nil then
-                            return require("notify")(("Missing sub option: %s for %s"):format(field,opt_name),"error")
-                        end
-                        return rawget(self,field)
-                    end})
-                end
+                setmetatable(rawget(options,opt_name),{__index = function(self,field)
+                    if contains(DEBUG_QUERY_EXCEPTIONS,field) then return end
+                    if rawget(self,field) == nil then return require("notify")(("Missing sub option: %s for %s"):format(field,opt_name),"error") end
+                    return rawget(self,field)
+                end})
             end
         end
     end
@@ -98,7 +94,7 @@ local function init_plugins()
             if defer then
                 vim.defer_fn(function()
                     require_mod(path)
-                    if func_name and vim.cmd[func_name] then
+                    if func_name and vim.cmd[func_name] and not vim.v.argv[3] then
                         vim.cmd[func_name]()
                     end
                 end,defer)
@@ -110,6 +106,7 @@ local function init_plugins()
             end
         end
     end
+
     for opt_name,obj in pairs(options) do load_mod(opt_name,obj) end
 end
 
