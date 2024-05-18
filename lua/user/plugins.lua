@@ -15,11 +15,9 @@ require("packer").startup(function(use)
         "ThePrimeagen/refactoring.nvim",
         requires = {
             {"nvim-lua/plenary.nvim"},
-            {"nvim-treesitter/nvim-treesitter"}
         }
     }
 
-    use "ggandor/leap.nvim"
 	use 'jiangmiao/auto-pairs'
 
     use {
@@ -61,11 +59,11 @@ require("packer").startup(function(use)
 
     use({
       'Wansmer/treesj',
-      requires = { 'nvim-treesitter' },
       config = function()
         require('treesj').setup({})
       end,
     })
+
     use {"akinsho/toggleterm.nvim", tag = '*', config = function()
         require("toggleterm").setup()
     end}
@@ -157,7 +155,7 @@ require("packer").startup(function(use)
 	use {
 	  'nvim-tree/nvim-tree.lua',
 	  requires = {
-		'nvim-tree/nvim-web-devicons', -- optional, for file icons
+		'nvim-tree/nvim-web-devicons',
 	  },
 	}
 
@@ -166,17 +164,22 @@ require("packer").startup(function(use)
 
     -- file manager --
 	use 'prichrd/netrw.nvim'
-    -- tree sitter --
-     use {
-         'nvim-treesitter/nvim-treesitter',
-         run = function()
-             require('nvim-treesitter.install').update({ with_sync = true })()
-         end
-     }
 
-     use("nvim-treesitter/playground")
-     use("nvim-treesitter/nvim-treesitter-context")
-    --
+    -- tree sitter --
+     -- use {
+     --     'nvim-treesitter/nvim-treesitter',
+     --     run = function()
+     --         xpcall(function()
+     --             require('nvim-treesitter.install').update({ with_sync = true })()
+     --         end,function(error)
+     --            print(error)
+     --         end)
+     --     end
+     -- }
+     --
+     -- use("nvim-treesitter/playground")
+     -- use("nvim-treesitter/nvim-treesitter-context")
+
     use {
         'olivercederborg/poimandres.nvim',
         config = function()

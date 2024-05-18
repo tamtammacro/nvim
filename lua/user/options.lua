@@ -1,19 +1,12 @@
-local DEFAULT_DEFER_TIME = 0
-
 local options = {
     plugins = {
-        deferring_enabled = true,
-        enabled = true
+        enabled = true,
+        deferring_enabled = false
     },
 
     telescope = {
         enabled = true,
         path = "telescope"
-    },
-
-    leap_ = {
-        enabled = false,
-        path = "leap"
     },
 
     git = {
@@ -52,7 +45,7 @@ local options = {
     },
 
     lua_line = {
-        enabled = false,
+        enabled = true,
         path = "lualine",
         which = "evil",
     },
@@ -85,8 +78,9 @@ local options = {
 
     ["nvim-tree"] = {
         enabled = true,
-        on_startup = false,
-        path = "nvim-tree",
+        on_startup = true,
+        side = "right",
+        path = "nvim-tree"
     },
 
     background = {
@@ -95,7 +89,7 @@ local options = {
 
     color_scheme = {
         allow_custom = true,
-        name = "gruvbox",
+        name = "tokyonight-night",
         style = "darker"
     },
 

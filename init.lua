@@ -1,2 +1,6 @@
 require "core.basic_config"
-require "core.load_plugins":use_plugins():use_visuals()
+local plugin_opts = require "core.load_plugins" 
+
+if plugin_opts:use_plugins() then
+    plugin_opts:use_visuals()
+end

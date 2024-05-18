@@ -80,11 +80,11 @@ local function init_plugins()
 end
 
 function functions:use_plugins()
-    if not options.plugins.enabled then return end
+    if not options.plugins.enabled then return nil end
 
     local function init()
         require "user.plugins"
-        init_plugins()
+        xpcall(init_plugins,function(error) notify(error,"error") end)
         require "core.load_keymaps"
     end
 
@@ -104,7 +104,7 @@ function functions:use_plugins()
 end
 
 function functions:use_visuals()
-    if not options.plugins.enabled then return end
+    if not options.plugins.enabled then return nil end
 
     local success,err = pcall(function()
         if self.color_scheme.allow_custom then
@@ -116,17 +116,21 @@ function functions:use_visuals()
             vim.cmd["highlight"]("Normal guibg=none")
         end
 
-        if self["nvim-tree"].on_startup then
-            vim.cmd.NvimTreeOpen()
+        local nvim_tree_opts = self["nvim-tree"]
+
+        if nvim_tree_opts.enabled then
+            require("nvim-tree").setup{view = {side = nvim_tree_opts.side}}
+
+            if nvim_tree_opts.on_startup then
+                local main_window = vim.api.nvim_get_current_win()
+                vim.cmd.NvimTreeOpen()
+                vim.defer_fn(function() vim.api.nvim_set_current_win(main_window) end,50)
+            end
         end
     end)
 
     for _,indent_name in ipairs(INDENT_BLANK_LINE_LIST) do
         vim.cmd("highlight "..indent_name .." guifg="..INDENT_BLANKLINE_BACKGROUND_COLOR.." gui=nocombine")
-    end
-
-    if options.leap_.enabled then
-        require('leap').add_default_mappings()
     end
 
     if not success and err then notify(err,"error") end
