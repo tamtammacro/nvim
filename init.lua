@@ -1,4 +1,2 @@
-local opts = require "core.use_options"
-
-opts:use_plugins()
-opts:use_visuals()
+require "core.basic_config"
+require "core.load_plugins":use_plugins():use_visuals()

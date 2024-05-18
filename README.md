@@ -1,7 +1,7 @@
-# my-nvim-config
+# nvim-config
 
 Install packer<br />
 https://github.com/wbthomason/packer.nvim
 
-Install plugins<br />
+Then install the plugins with<br />
 :PackerSync

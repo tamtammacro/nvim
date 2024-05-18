@@ -18,8 +18,10 @@ require("packer").startup(function(use)
             {"nvim-treesitter/nvim-treesitter"}
         }
     }
+
     use "ggandor/leap.nvim"
-	--use 'jiangmiao/auto-pairs'
+	use 'jiangmiao/auto-pairs'
+
     use {
         "windwp/nvim-autopairs",
         config = function() require("nvim-autopairs").setup {} end
@@ -42,17 +44,21 @@ require("packer").startup(function(use)
         require('goto-preview').setup {}
       end
     }
+
     use 'romgrk/barbar.nvim'
     use {'akinsho/bufferline.nvim', tag = "*", requires = 'nvim-tree/nvim-web-devicons'}
+
     use {
       'stevearc/oil.nvim'
     }
+
     use {
         'numToStr/Comment.nvim',
         config = function()
             require('Comment').setup()
         end
     }
+
     use({
       'Wansmer/treesj',
       requires = { 'nvim-treesitter' },
@@ -79,16 +85,16 @@ require("packer").startup(function(use)
     use "lukas-reineke/indent-blankline.nvim"
 
     use({
-      "utilyre/barbecue.nvim",
-      tag = "*",
-      requires = {
-        "SmiteshP/nvim-navic",
-        "nvim-tree/nvim-web-devicons", -- optional dependency
-      },
-      after = "nvim-web-devicons", -- keep this if you're using NvChad
-      config = function()
-        require("barbecue").setup()
-      end,
+        "utilyre/barbecue.nvim",
+        tag = "*",
+        requires = {
+            "SmiteshP/nvim-navic",
+            "nvim-tree/nvim-web-devicons",
+        },
+        after = "nvim-web-devicons", -- keep this if you're using NvChad
+        config = function()
+            require("barbecue").setup()
+        end,
     })
 
     -- git integration --
@@ -98,7 +104,7 @@ require("packer").startup(function(use)
     -- grep utils | telescope --
 	use {
 	  'nvim-telescope/telescope.nvim',
-	  tag = '0.1.1',
+	  tag = '0.1.4',
 	  requires = { {'nvim-lua/plenary.nvim'} }
 	}
 	use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
@@ -118,7 +124,6 @@ require("packer").startup(function(use)
     use 'marko-cerovac/material.nvim'
 
     -- lsp -- 
-    use { 'codota/tabnine-nvim', run = "./dl_binaries.sh" }
 	use "hrsh7th/cmp-nvim-lsp"
 	use "hrsh7th/cmp-buffer"
 	use "hrsh7th/cmp-path"
@@ -154,7 +159,6 @@ require("packer").startup(function(use)
 	  requires = {
 		'nvim-tree/nvim-web-devicons', -- optional, for file icons
 	  },
-	  tag = 'nightly' -- optional, updated every week. (see issue #1193)
 	}
 
     -- -- discord rpc --
@@ -163,15 +167,16 @@ require("packer").startup(function(use)
     -- file manager --
 	use 'prichrd/netrw.nvim'
     -- tree sitter --
-    use {
-        'nvim-treesitter/nvim-treesitter',
-        run = function()
-            require('nvim-treesitter.install').update({ with_sync = true })()
-        end
-    }
-    use("nvim-treesitter/playground")
-    use("nvim-treesitter/nvim-treesitter-context")
+     use {
+         'nvim-treesitter/nvim-treesitter',
+         run = function()
+             require('nvim-treesitter.install').update({ with_sync = true })()
+         end
+     }
 
+     use("nvim-treesitter/playground")
+     use("nvim-treesitter/nvim-treesitter-context")
+    --
     use {
         'olivercederborg/poimandres.nvim',
         config = function()

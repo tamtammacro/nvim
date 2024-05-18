@@ -1,7 +1,5 @@
 local options = require "user.options"
 
-if not options.want_default_keybinds then return end
-
 local keymaps = require "user.keymaps"
 local utils = require "user.myfunctions"
 
@@ -14,7 +12,7 @@ local function set_keymap(obj,func,args)
 end
 
 local success,err = pcall(function()
-    if options.want_telescope then
+    if options.telescope.enabled then
         local builtin = require("telescope.builtin")
         set_keymap(keymaps.telescope.live_grep,builtin.live_grep)
         set_keymap(keymaps.telescope.find_files,builtin.find_files)
@@ -77,7 +75,7 @@ end)
 
 if not success and err then
     local starting_index = select(2,err:find("field"))
-    if not starting_index then return --[[ print "Failed to get error index"  ]]end
+    if not starting_index then return end
     local invalid_keybind_name = err:sub(starting_index+1,#err)
     require("notify")(("Failed to set keybind:%s"):format(invalid_keybind_name))
 end

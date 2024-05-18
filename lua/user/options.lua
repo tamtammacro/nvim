@@ -1,13 +1,19 @@
-local DEFAULT_DEFER_TIME = 1
+local DEFAULT_DEFER_TIME = 0
 
 local options = {
-    want_default_keybinds = true,
-    want_telescope = true,
-    want_leap = true,
-    deferring_enabled = true,
-
     plugins = {
+        deferring_enabled = true,
+        enabled = true
+    },
+
+    telescope = {
         enabled = true,
+        path = "telescope"
+    },
+
+    leap_ = {
+        enabled = false,
+        path = "leap"
     },
 
     git = {
@@ -18,7 +24,6 @@ local options = {
     noice = {
         enabled = false,
         path = "noice",
-        defer = DEFAULT_DEFER_TIME,
     },
 
     refractoring = {
@@ -29,29 +34,25 @@ local options = {
     highlighted_indentation = {
         enabled = true,
         path = "ibl",
-        defer = .25
     },
 
     highlighted_colors = {
         enabled = true,
         path = "colorizer",
-        defer = DEFAULT_DEFER_TIME,
     },
 
     symbols_outline = {
         enabled = true,
         path = "symbols-outline",
-        defer = .5
     },
 
     illuminate = {
         enabled = true,
         path = "illuminate",
-        defer = .5,
     },
 
     lua_line = {
-        enabled = true,
+        enabled = false,
         path = "lualine",
         which = "evil",
     },
@@ -59,11 +60,10 @@ local options = {
     tree_sitter = {
         enabled = true,
         path = "treesitter",
-        defer = .25
     },
 
     treesj = {
-        enabled = true,
+        enabled = false,
     },
 
     startup_screen = {
@@ -76,7 +76,6 @@ local options = {
         enabled = true,
         path = "tabnine",
         debounce_ms = 500,
-        defer = DEFAULT_DEFER_TIME 
     },
 
     my_user_commands_info = {
@@ -88,7 +87,6 @@ local options = {
         enabled = true,
         on_startup = false,
         path = "nvim-tree",
-        defer = DEFAULT_DEFER_TIME
     },
 
     background = {
@@ -97,20 +95,18 @@ local options = {
 
     color_scheme = {
         allow_custom = true,
-        name = "tokyonight-night",
-        arg = "darker"
+        name = "gruvbox",
+        style = "darker"
     },
 
     lsp_trouble = {
         enabled = true,
         path = "trouble",
-        defer = DEFER_DEFAULT
     },
 
     terminal = {
         enabled = true,
         path = "term",
-        defer = DEFAULT_DEFER_TIME
     },
 
     tabs = {
@@ -126,7 +122,6 @@ local options = {
     lsp = {
         enabled = true,
         paths = {"lsp","cmp"},
-        defer = DEFFAULT_DEFER_TIME
     }
 }
 
