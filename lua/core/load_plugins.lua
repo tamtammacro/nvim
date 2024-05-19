@@ -1,13 +1,12 @@
 local options = require "user.options"
-local notify = require"notify"
+local notify = require "notify"
 
 local INDENT_BLANKLINE_BACKGROUND_COLOR = 0xFF0000
 local INDENT_BLANK_LINE_LIST = {"IndentBlanklineContextChar","IndentBlanklineChar","IndentBlanklineSpaceChar","IndentBlanklineSpaceCharBlankline","IndentBlanklineContextSpaceChar","IndentBlanklineContextStart"}
 local FALLBACK_FUNC = {alpha = "Alpha",colorizer="ColorizerAttachToBuffer"}
 
-local functions = setmetatable({},{__index = function(_self,key)
+local functions = setmetatable({},{__index = function(_,key)
     if not rawget(options,key) then return notify(("Missing 'core' option: %s"):format(key),"error") end
-
     return rawget(options,key)
 end})
 
@@ -37,19 +36,20 @@ local function init_plugins()
         end
     end
 
-    local function require_sub_mods(path)
-        for _,file_name in ipairs(path) do require_mod(file_name) end
+    local function require_sub_mods(p_path)
+        for _,file_name in ipairs(p_path) do require_mod(file_name) end
     end
 
-    local function load_mod(opt_name,data)
+    local function load_mod(plugin_name,data)
         is_table = type(data) == "table"
         is_enabled = is_table and data.enabled or not is_table and data
-        defer = is_table and data.defer and options.plugins.deferring_enabled and data.defer * 1000 or 0
-        path = (is_table and (data.path or data.paths)) or opt_name
-        is_multi_path = type(path) == "table"
 
-        if not path then return end
         if not is_enabled then return end
+        path = (is_table and (data.path or data.paths)) or plugin_name
+        if not path then return end
+
+        defer = is_table and data.defer and options.plugins.deferring_enabled and data.defer * 1000 or 0
+        is_multi_path = type(path) == "table"
 
         if is_multi_path then
             if defer > 0 then
@@ -76,7 +76,7 @@ local function init_plugins()
         end
     end
 
-    for opt_name,obj in pairs(options) do load_mod(opt_name,obj) end
+    for plugin_name,obj in pairs(options) do load_mod(plugin_name,obj) end
 end
 
 function functions:use_plugins()
@@ -108,24 +108,24 @@ function functions:use_visuals()
 
     local success,err = pcall(function()
         if self.color_scheme.allow_custom then
-            vim.cmd.colorscheme(self.color_scheme.name)
+            local theme_name = self.color_scheme.style and #self.color_scheme.style > 0 and self.color_scheme.name.."-"..self.color_scheme.style or self.color_scheme.name
+            local success = pcall(vim.cmd.colorscheme,theme_name)
+
+            if not success then
+                notify("Could not find color scheme: "..theme_name,"warning")
+                local error_message
+                success,error_message = pcall(vim.cmd.colorscheme,self.color_scheme.name)
+
+                if not success then
+                    notify(error_message,"error")
+                end
+            end
+
             if (self.color_scheme.name == "material") then vim.g.material_style = self.color_scheme.style end
         end
 
         if self.background.transparent then
             vim.cmd["highlight"]("Normal guibg=none")
-        end
-
-        local nvim_tree_opts = self["nvim-tree"]
-
-        if nvim_tree_opts.enabled then
-            require("nvim-tree").setup{view = {side = nvim_tree_opts.side}}
-
-            if nvim_tree_opts.on_startup then
-                local main_window = vim.api.nvim_get_current_win()
-                vim.cmd.NvimTreeOpen()
-                vim.defer_fn(function() vim.api.nvim_set_current_win(main_window) end,50)
-            end
         end
     end)
 

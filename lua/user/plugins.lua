@@ -152,12 +152,7 @@ require("packer").startup(function(use)
 
     use "folke/trouble.nvim"
 
-	use {
-	  'nvim-tree/nvim-tree.lua',
-	  requires = {
-		'nvim-tree/nvim-web-devicons',
-	  },
-	}
+	use 'nvim-tree/nvim-tree.lua'
 
     -- -- discord rpc --
     -- use 'andweeb/presence.nvim'

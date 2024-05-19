@@ -15,7 +15,7 @@ local options = {
     },
 
     noice = {
-        enabled = false,
+        enabled = true,
         path = "noice",
     },
 
@@ -45,7 +45,7 @@ local options = {
     },
 
     lua_line = {
-        enabled = true,
+        enabled = false,
         path = "lualine",
         which = "evil",
     },
@@ -53,6 +53,11 @@ local options = {
     tree_sitter = {
         enabled = true,
         path = "treesitter",
+    },
+
+    webdev_icons = {
+        enabled = true,
+        path = "webdev_icons"
     },
 
     treesj = {
@@ -78,9 +83,11 @@ local options = {
 
     ["nvim-tree"] = {
         enabled = true,
-        on_startup = true,
-        side = "right",
-        path = "nvim-tree"
+        on_startup = false,
+        side = "left",
+        path = "nvim_tree",
+        width = 20,
+        adaptive_size = true
     },
 
     background = {
@@ -89,8 +96,8 @@ local options = {
 
     color_scheme = {
         allow_custom = true,
-        name = "tokyonight-night",
-        style = "darker"
+        name = "tokyonight",
+        style="night"
     },
 
     lsp_trouble = {
@@ -104,7 +111,7 @@ local options = {
     },
 
     tabs = {
-        enabled = false,
+        enabled = true,
         path = "barbar"
     },
 

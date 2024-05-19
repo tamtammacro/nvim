@@ -5,7 +5,7 @@ keys.space = "<Space>"
 keys.leader = "<leader>"
 
 keys.control = "C"
-keys.alt = "cmd"
+keys.alt = "<ALT>"
 
 function keys.format(what,k)
     local formatted_str = ("<%s-"):format(what)
