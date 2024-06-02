@@ -155,7 +155,7 @@ require("packer").startup(function(use)
 	use 'nvim-tree/nvim-tree.lua'
 
     -- -- discord rpc --
-    -- use 'andweeb/presence.nvim'
+    use 'andweeb/presence.nvim'
 
     -- file manager --
 	use 'prichrd/netrw.nvim'

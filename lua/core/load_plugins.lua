@@ -80,12 +80,11 @@ local function init_plugins()
 end
 
 function functions:use_plugins()
-    if not options.plugins.enabled then return nil end
+    if not options.plugins.enabled then return end
 
     local function init()
         require "user.plugins"
         xpcall(init_plugins,function(error) notify(error,"error") end)
-        require "core.load_keymaps"
     end
 
     local success,err = pcall(function()
@@ -100,11 +99,11 @@ function functions:use_plugins()
         notify(("Error with 'use_plugins': %s"):format(err),"error")
     end
 
-    return self
+    require "core.load_keymaps"
 end
 
 function functions:use_visuals()
-    if not options.plugins.enabled then return nil end
+    if not options.plugins.enabled then return end
 
     local success,err = pcall(function()
         if self.color_scheme.allow_custom then
@@ -134,8 +133,6 @@ function functions:use_visuals()
     end
 
     if not success and err then notify(err,"error") end
-
-    return self
 end
 
 return functions

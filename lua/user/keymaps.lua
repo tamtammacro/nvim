@@ -1,71 +1,46 @@
 local keymaps = {}
+local options = require "user.options"
 
-local keys = {}
-keys.space = "<Space>"
-keys.leader = "<leader>"
+local SPACE = "<Space>"
+local LEADER = "<leader>"
 
-keys.control = "C"
-keys.alt = "<ALT>"
-
-function keys.format(what,k)
-    local formatted_str = ("<%s-"):format(what)
-
-    for index = 1,#k do
-        formatted_str = formatted_str..k:sub(index,index)
-
-        if index ~= #k then
-            formatted_str = formatted_str.."-"
-        end
-    end
-
-    return formatted_str..">"
-end
-
+-- Curently broken, multi-argument function --
 keymaps.lsp_trouble = {
-    toggle = {key = keys.leader.."xx"},
-    workspace_diagnostics = {key = keys.leader.."xw"},
-    document_diagnostics = {key = keys.leader.."xd"},
-    quick_fix = {key = keys.leader.."xq"},
-    locklist = {key = keys.leader.."xl"},
-    lsp_reference = {key = keys.leader.."gR"},
+    toggle = {key = LEADER.."xx"},
+    workspace_diagnostics = {key = LEADER.."xw",cmd="open"},
+    document_diagnostics = {key = LEADER.."xd",cmd="open"},
+    quick_fix = {key = LEADER.."xq",cmd="open"},
+    locklist = {key = LEADER.."xl",cmd="open"},
+    lsp_references = {key = LEADER.."gR",cmd="open"},
 }
 
 keymaps.goto = {
-    goto_preview = {key = "gp"}
+    goto_preview = {key = "gp",cmd="goto_preview_definition"}
 }
 
 keymaps.telescope = {
-    live_grep = {key = keys.space.."lg"},
-    find_files = {key = keys.space.."ff"},
+    live_grep = {key = SPACE.."lg"},
+    find_files = {key = SPACE.."ff"},
 }
 
 keymaps.git = {
-    git_window = {key = keys.space.."gw"},
+    git_window = {key = SPACE.."gw",cmd="v.Git"},
 }
 
-keymaps.symbols = {
-    toggle = {key = keys.leader.."s"}
+keymaps.symbols_outline = {
+    toggle = {key = LEADER.."s",cmd="v.SymbolsOutline"}
 }
 
 keymaps.file_explorer = {
-    toggle = {key = keys.space.."fm"}
+    toggle = {key = SPACE.."fm",cmd=options.file_explorer.path == "netrw" and "v.Ex" or "v.Oil"}
 }
 
-keymaps.nvim_tree = {
-    toggle = {key = keys.leader.."e"}
-}
-
-keymaps.treesj = {
-    toggle = {key = keys.leader.."m"},
-    toggle_split = {key = keys.leader.."M"}
-}
-
-keymaps.my_commands = {
-    buf_cap_word = {key = keys.leader.."ll"}
+keymaps["nvim-tree"] = {
+    toggle = {key = LEADER.."e",cmd="v.NvimTreeToggle"}
 }
 
 keymaps.terminal = {
-    toggle = {key = keys.space.."."}
+    toggle = {key = SPACE..".",cmd="v.ToggleTerm"}
 }
 
 return keymaps

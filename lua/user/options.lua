@@ -6,7 +6,7 @@ local options = {
 
     telescope = {
         enabled = true,
-        path = "telescope"
+        path = "telescope.builtin"
     },
 
     git = {
@@ -14,8 +14,13 @@ local options = {
         paths = {"gitsigns"}
     },
 
-    noice = {
+    goto = {
         enabled = true,
+        path = "goto-preview"
+    },
+
+    noice = {
+        enabled = false,
         path = "noice",
     },
 
@@ -45,9 +50,8 @@ local options = {
     },
 
     lua_line = {
-        enabled = false,
+        enabled = true,
         path = "lualine",
-        which = "evil",
     },
 
     tree_sitter = {
@@ -96,8 +100,7 @@ local options = {
 
     color_scheme = {
         allow_custom = true,
-        name = "tokyonight",
-        style="night"
+        name = "gruvbox",
     },
 
     lsp_trouble = {
