@@ -3,7 +3,7 @@ local options = require "options"
 local presence,neocord
 local success
 
-if not options.discord.style then
+if not options.discord.style == "presence" then
     success,presence = pcall(require,"presence")
     if success then return print "Discord 'presence' is not installed" end
 
@@ -30,7 +30,7 @@ if not options.discord.style then
         workspace_text      = "Working on %s",            -- Format string rendered when in a git repository (either string or function(project_name: string|nil, filename: string): string)
         line_number_text    = "Line %s out of %s",        -- Format string rendered when `enable_line_number` is set to true (either string or function(line_number: number, line_count: number): string)
     })
-else
+elseif options.discord.style == "neocord" then
     success,neocord = pcall(require,"neocord")
     if not success then return print "Neocord is not installed" end
 

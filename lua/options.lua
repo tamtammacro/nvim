@@ -19,6 +19,10 @@ local options = {
         module = "goto-preview"
     },
 
+    split_controls = {
+        enabled = true
+    },
+
     noice = {
         enabled = false,
         module = "noice",
@@ -76,18 +80,13 @@ local options = {
     },
 
     tabnine_info = {
-        show_on_lualine = false,
+        show_on_status_line = false,
         enabled = true,
         module = "tabnine",
         debounce_ms = 500,
     },
 
-    my_user_commands_info = {
-        prefix = "my",
-        enabled = false
-    },
-
-    ["nvim_tree"] = {
+    nvim_tree = {
         enabled = true,
         on_startup = false,
         side = "left",
@@ -97,18 +96,15 @@ local options = {
     },
 
     discord = {
-        enabled = true,
+        enabled = false,
         module = "discord_presence",
-        style = true -- temp value --
+        style = "neocord"
     },
 
-    background = {
+    theme = {
+        enabled = true,
+        name = "tokyonight-night",
         transparent = false,
-    },
-
-    color_scheme = {
-        allow_custom = true,
-        name = "gruvbox",
     },
 
     lsp_trouble = {

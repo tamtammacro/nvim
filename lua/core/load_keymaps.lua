@@ -1,9 +1,7 @@
-local module = {}
+local module_export = {}
 local options = require "options"
 local keymaps = require "keymaps"
 
-local VIM_COMMAND_PREFIX = "v."
-local LUA_COMMAND_PREFIX = "l."
 local modules = {}
 
 local mod
@@ -16,8 +14,10 @@ local function set_keymap(obj,func,opts,args)
     opts = opts or {}
     opts.desc = obj.desc or "Unknown"
 
+    local command = type(func) == "string" and func:match("^"..keymaps.EDITOR_COMMAND_PREFIX) and func:sub(#keymaps.EDITOR_COMMAND_PREFIX+1,#func)
+
     xpcall(function()
-        vim.keymap.set(obj.mode or "n",obj.key,function()
+        vim.keymap.set(obj.mode or "n",obj.key,command or function()
             if type(func) == "string" then
                 loadstring(func)()
             else
@@ -31,7 +31,7 @@ local function set_keymap(obj,func,opts,args)
 end
 
 -- TODO: add keymap target category --
-function module.load_keymaps(target,external_opts)
+function module_export.load_keymaps(_,external_opts)
     local function load_module(t)
         mod = modules[t.category_name] or select(2,pcall(require,t.module))
         mod_ok = type(mod) == "table"
@@ -42,28 +42,34 @@ function module.load_keymaps(target,external_opts)
 
         if mod_ok and rawget(mod,t.action_name) then
             set_keymap(t.data,rawget(mod,t.action_name),t.opts)
-        elseif mod_ok and t.data.cmd and not t.data.cmd:match("^"..VIM_COMMAND_PREFIX) and mod[t.data.cmd] then
+        elseif mod_ok and t.data.cmd and not t.data.cmd:match("^"..keymaps.VIM_COMMAND_PREFIX) and mod[t.data.cmd] then
             set_keymap(t.data,mod[t.data.cmd],t.opts,t.action_name)
         end
     end
 
     for category_name, keymap_category_table in pairs(keymaps) do
-        for action_name,data in pairs(keymap_category_table) do
-            if options[category_name] ~= nil and options[category_name].enabled then
-                if options[category_name].module then
-                    load_module({category_name = category_name,data = data,action_name = action_name,module = options[category_name].module,opts = external_opts})
-                elseif options[category_name].modules then
-                    for _,module in ipairs(options[category_name].modules) do
-                        load_module({category_name = category_name,data = data,action_name = action_name,module = module,opts = external_opts})
+        if type(keymap_category_table) == "table" then
+            for action_name,data in pairs(keymap_category_table) do
+                if options[category_name] ~= nil and options[category_name].enabled then
+                    if options[category_name].module then
+                        load_module({category_name = category_name,data = data,action_name = action_name,module = options[category_name].module,opts = external_opts})
+                    elseif options[category_name].modules then
+                        for _,module in ipairs(options[category_name].modules) do
+                            load_module({category_name = category_name,data = data,action_name = action_name,module = module,opts = external_opts})
+                        end
                     end
-                end
 
-                if data.cmd and data.cmd:match("^"..VIM_COMMAND_PREFIX) then
-                    set_keymap(data,vim.cmd[data.cmd:sub(#VIM_COMMAND_PREFIX+1,#data.cmd)])
-                end
+                    if data.cmd and data.cmd:match("^"..keymaps.VIM_COMMAND_PREFIX) then
+                        set_keymap(data,vim.cmd[data.cmd:sub(#keymaps.VIM_COMMAND_PREFIX+1,#data.cmd)])
+                    end
 
-                if data.cmd and data.cmd:match("^"..LUA_COMMAND_PREFIX) then
-                    set_keymap(data,data.cmd:sub(#LUA_COMMAND_PREFIX+1,#data.cmd))
+                    if data.cmd and data.cmd:match("^"..keymaps.LUA_COMMAND_PREFIX) then
+                        set_keymap(data,data.cmd:sub(#keymaps.LUA_COMMAND_PREFIX+1,#data.cmd))
+                    end
+
+                    if data.cmd and data.cmd:match("^"..keymaps.EDITOR_COMMAND_PREFIX) then
+                        set_keymap(data,data.cmd)
+                    end
                 end
             end
         end
@@ -71,4 +77,4 @@ function module.load_keymaps(target,external_opts)
 end
 
 
-return module
+return module_export

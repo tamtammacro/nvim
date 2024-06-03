@@ -110,8 +110,8 @@ function functions:use_visuals()
     if not options.plugins.enabled then return end
 
     local success,err = pcall(function()
-        if self.color_scheme.allow_custom then
-            local theme_name = self.color_scheme.style and #self.color_scheme.style > 0 and self.color_scheme.name.."-"..self.color_scheme.style or self.color_scheme.name
+        if self.theme.enabled then
+            local theme_name = self.theme.style and #self.theme.style > 0 and self.theme.name.."-"..self.theme.style or self.theme.name
             local success = pcall(vim.cmd.colorscheme,theme_name)
 
             if not success then
@@ -124,10 +124,10 @@ function functions:use_visuals()
                 end
             end
 
-            if (self.color_scheme.name == "material") then vim.g.material_style = self.color_scheme.style end
+            if (self.theme.name == "material") then vim.g.material_style = self.theme.style end
         end
 
-        if self.background.transparent then
+        if self.theme.transparent then
             vim.cmd["highlight"]("Normal guibg=none")
         end
     end)

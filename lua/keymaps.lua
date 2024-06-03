@@ -4,17 +4,29 @@ local options = require "options"
 local SPACE = "<Space>"
 local LEADER = "<leader>"
 
+local ALT = function(key)
+    return "<M-"..key..">"
+end
+
+local C = "c."
+local L = "l."
+local E = "e."
+
+keymaps.VIM_COMMAND_PREFIX = C
+keymaps.LUA_COMMAND_PREFIX = L
+keymaps.EDITOR_COMMAND_PREFIX = E
+
 keymaps.lsp_trouble = {
-    toggle = {key = LEADER.."xx",cmd="v.TroubleToggle"},
+    toggle = {key = LEADER.."xx",cmd=C.."TroubleToggle"},
     workspace_diagnostics = {key = LEADER.."xw",cmd="open"},
     document_diagnostics = {key = LEADER.."xd",cmd="open"},
-    quick_fix = {key = LEADER.."xq",cmd="v.Trouble quick_fix"},
+    quick_fix = {key = LEADER.."xq",cmd=C.."Trouble quick_fix"},
     locklist = {key = LEADER.."xl",cmd="open"},
     lsp_references = {key = LEADER.."gR",cmd="open"},
 }
 
 keymaps.goto = {
-    goto_preview = { key = "gp", cmd="goto_preview_definition",desc = "goto preview" },
+    goto_preview = { key = "gp", cmd="goto_preview_definition",desc = "goto signature preview" },
 }
 
 keymaps.telescope = {
@@ -27,55 +39,47 @@ keymaps.telescope = {
 }
 
 keymaps.lsp = {
-    signature = {key = nil,desc="lsp help signature",mode="i",cmd="l.vim.lsp.buf.signature_help()"},
-    defination = {key = "gd",desc="goto symbol defination",cmd="l.vim.lsp.buf.definition()"},
-    goto_next = {key = "[d",cmd="l.vim.diagnostic.goto_next()"},
-    goto_prev = {key = "]d",cmd = "l.vim.diagnostic.goto_prev()"},
-    code_action = {key=LEADER.."vca",cmd="l.vim.lsp.buf.code_action()"},
-    references = {key=LEADER.."vrr",cmd="l.vim.lsp.buf.references()"},
-    rename = {key = LEADER.."vrn",cmd="l.vim.lsp.buf.rename()"},
-    open_float = {key = LEADER.."vd",cmd="l.vim.diagnostic.open_float()"},
-    workspace_symbol = {key = LEADER.."vws",cmd="l.vim.lsp.buf.workspace_symbol()"},
-    hover = {key = SPACE.."h",cmd="l.vim.lsp.buf.hover()"},
+    signature = {key = nil,desc="lsp help signature",mode="i",cmd = L.."vim.lsp.buf.signature_help()"},
+    defination = {key = "gd",desc="goto symbol defination",cmd = L.."vim.lsp.buf.definition()"},
+    goto_next = {key = "[d",cmd = L.."vim.diagnostic.goto_next()"},
+    goto_prev = {key = "]d",cmd = L.."vim.diagnostic.goto_prev()"},
+    code_action = {key=LEADER.."vca",cmd = L.."vim.lsp.buf.code_action()"},
+    references = {key=SPACE.."kr",cmd = L.."vim.lsp.buf.references()"},
+    rename = {key = SPACE.."rr",cmd = L.."vim.lsp.buf.rename()"}, -- f2 key does the same action -- 
+    open_float = {key = LEADER.."vd",cmd=L.."vim.diagnostic.open_float()"},
+    workspace_symbol = {key = LEADER.."kf",cmd=L.."vim.lsp.buf.workspace_symbol()"},
+    hover = {key = SPACE.."h",cmd=L.."vim.lsp.buf.hover()",desc = "symbol information (hover)"},
 }
 
 keymaps.git = {
-    git_window = { key = SPACE.."gw", cmd="v.Git", desc="git window" },
+    git_window = { key = SPACE.."gw", cmd=C.."Git", desc="git window" },
 }
 
 keymaps.symbols_outline = {
-    toggle = {key = LEADER.."s",cmd="v.SymbolsOutline",desc="symbols outline"}
+    toggle = {key = LEADER.."s",cmd=C.."SymbolsOutline",desc="symbols outline"}
 }
 
 keymaps.file_explorer = {
-    toggle = {key = SPACE.."fm",cmd=options.file_explorer.path == "netrw" and "v.Ex" or "v.Oil",desc = "file manager"}
+    toggle = {key = SPACE.."fm",cmd=options.file_explorer.path == "netrw" and C.."Ex" or C.."Oil",desc = "file manager"}
 }
 
 keymaps.treesj = {
-    toggle = {key = LEADER.."m",cmd="v.TSJToggle",desc="treesj"}
+    toggle = {key = LEADER.."m",cmd=C.."TSJToggle",desc="treesj"}
 }
 
 keymaps["nvim_tree"] = {
-    toggle = {key = SPACE.."1",cmd="v.NvimTreeToggle",desc = "nvim-tree"}
+    toggle = {key = ALT("1"),cmd=C.."NvimTreeToggle",desc = "toggle nvim-tree"}
 }
 
 keymaps.terminal = {
-    toggle = {key = SPACE..".",cmd="v.ToggleTerm",desc="terminal"}
+    toggle = {key = ALT("3"),cmd=C.."ToggleTerm",desc="open terminal"}
 }
 
-local set = vim.keymap.set
-
-set("n", "<c-j>", "<c-w><c-j>")
-set("n", "<c-k>", "<c-w><c-k>")
-set("n", "<c-l>", "<c-w><c-l>")
-set("n", "<c-h>", "<c-w><c-h>")
-
-set("n", "<M-,>", "<c-w>5<")
-set("n", "<M-.>", "<c-w>5>")
-set("n", "<M-t>", "<C-W>+")
-set("n", "<M-s>", "<C-W>-")
-
-set("n", "<leader>x", "<cmd>.lua<CR>", { desc = "Execute the current line" })
-set("n", "<leader><leader>x", "<cmd>source %<CR>", { desc = "Execute the current file" })
+keymaps.split_controls = {
+    set_size_left = {key = ALT(","),cmd = E.."<c-w>5<",desc = "appends split view size to the left"},
+    set_size_right = {key = ALT("."),cmd = E.."<c-w>5>",desc = "appends split view size to the right"},
+    set_size_up = {key = ALT("t"),cmd = E.."<C-W>+",desc = "appends split view size upwards"},
+    set_size_down = {key = ALT("t"),cmd = E.."<C-W>-",desc = "appends split view size downwards"}
+}
 
 return keymaps

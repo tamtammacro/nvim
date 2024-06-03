@@ -4,12 +4,11 @@ local lspconfig
 success,lspconfig = pcall(require,"lspconfig")
 if not success then return print "lspconfig is not installed" end
 
-local keymap_loader = require("core.load_keymaps")
+--local keymap_loader = require("core.load_keymaps")
 local servers = {"pyright","tsserver","rust_analyzer", "cssls","gopls"}
 
 local function on_attach(_, bufnr)
-  local opts = {buffer = bufnr, remap = false}
-  keymap_loader.load_keymaps("lsp",opts)
+  --local opts = {buffer = bufnr, remap = false}
 end
 
 lspconfig.clangd.setup {
