@@ -172,17 +172,13 @@ require("packer").startup(function(use)
 	use 'nvim-tree/nvim-tree.lua'
 
     -- tree sitter --
-     -- use {
-     --     'nvim-treesitter/nvim-treesitter',
-     --     run = function()
-     --         xpcall(function()
-     --             require('nvim-treesitter.install').update({ with_sync = true })()
-     --         end,function(error)
-     --            print(error)
-     --         end)
-     --     end
-     -- }
-     --
+    -- use {
+    --     'nvim-treesitter/nvim-treesitter',
+    --     run = function()
+    --         local ts_update = require('nvim-treesitter.install').update({ with_sync = true })
+    --         ts_update()
+    --     end,
+    -- }
      -- use("nvim-treesitter/playground")
      -- use("nvim-treesitter/nvim-treesitter-context")
 

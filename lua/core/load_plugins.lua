@@ -99,7 +99,9 @@ function functions:use_plugins()
         notify(("Error with 'use_plugins': %s"):format(err),"error")
     end
 
-    require "core.load_keymaps"
+    xpcall(function()
+        require("core.load_keymaps").load_keymaps()
+    end,print)
 end
 
 function functions:use_visuals()

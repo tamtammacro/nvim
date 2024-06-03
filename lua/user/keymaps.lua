@@ -3,7 +3,6 @@ local options = require "user.options"
 
 local SPACE = "<Space>"
 local LEADER = "<leader>"
-local CONTROL = "C-"
 
 keymaps.lsp_trouble = {
     toggle = {key = LEADER.."xx",cmd="v.TroubleToggle"},
@@ -25,6 +24,19 @@ keymaps.telescope = {
     oldfiles = {key = SPACE.."fo", desc = "find old files"},
     grep_string = {key = SPACE.."fw"},
     keymaps = {key = SPACE.."km", desc = "show key maps"}
+}
+
+keymaps.lsp = {
+    signature = {key = SPACE.."hs",desc="lsp help signature",mode="i",cmd="l.vim.lsp.buf.signature_help()"},
+    defination = {key = "gd",desc="goto symbol defination",cmd="l.vim.lsp.buf.definition()"},
+    goto_next = {key = "[d",cmd="l.vim.diagnostic.goto_next()"},
+    goto_prev = {key = "]d",cmd = "l.vim.diagnostic.goto_prev()"},
+    code_action = {key=LEADER.."vca",cmd="l.vim.lsp.buf.code_action()"},
+    references = {key=LEADER.."vrr",cmd="l.vim.lsp.buf.references()"},
+    rename = {key = LEADER.."vrn",cmd="l.vim.lsp.buf.rename()"},
+    open_float = {key = LEADER.."vd",cmd="l.vim.diagnostic.open_float()"},
+    workspace_symbol = {key = LEADER.."vws",cmd="l.vim.lsp.buf.workspace_symbol()"},
+    hover = {key = SPACE.."h",cmd="l.vim.lsp.buf.hover()"},
 }
 
 keymaps.git = {

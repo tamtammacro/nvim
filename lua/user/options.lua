@@ -20,7 +20,7 @@ local options = {
     },
 
     noice = {
-        enabled = true,
+        enabled = false,
         module = "noice",
     },
 
@@ -100,7 +100,7 @@ local options = {
 
     color_scheme = {
         allow_custom = true,
-        name = "gruvbox",
+        name = "tokyonight-night",
     },
 
     lsp_trouble = {
