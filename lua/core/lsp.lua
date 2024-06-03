@@ -21,7 +21,6 @@ require('lspconfig').clangd.setup {
         "clangd",
         "--background-index",
         "--suggest-missing-includes",
-        -- "--compile-commands-dir=/home/localuser/test/build",
     },
     filetypes = { "c", "cpp", "objc", "objcpp" },
 }
@@ -73,4 +72,27 @@ lsp.setup()
 
 vim.diagnostic.config({
     virtual_text = true
+})
+
+-- `/` cmdline setup.
+cmp.setup.cmdline("/", {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = {
+    { name = "buffer" },
+  },
+})
+
+-- `:` cmdline setup.
+cmp.setup.cmdline(":", {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = cmp.config.sources({
+    { name = "path" },
+  }, {
+    {
+      name = "cmdline",
+      option = {
+        ignore_cmds = { "Man", "!" },
+      },
+    },
+  }),
 })

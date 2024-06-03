@@ -45,7 +45,7 @@ local function init_plugins()
         is_enabled = is_table and data.enabled or not is_table and data
 
         if not is_enabled then return end
-        path = (is_table and (data.path or data.paths)) or plugin_name
+        path = (is_table and (data.module or data.modules)) or plugin_name
         if not path then return end
 
         defer = is_table and data.defer and options.plugins.deferring_enabled and data.defer * 1000 or 0

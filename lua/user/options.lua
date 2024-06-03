@@ -6,77 +6,77 @@ local options = {
 
     telescope = {
         enabled = true,
-        path = "telescope.builtin"
+        modules = {"telescope.builtin","telescope_config"}
     },
 
     git = {
         enabled = true,
-        paths = {"gitsigns"}
+        modules = {"gitsigns"}
     },
 
     goto = {
         enabled = true,
-        path = "goto-preview"
+        module = "goto-preview"
     },
 
     noice = {
-        enabled = false,
-        path = "noice",
+        enabled = true,
+        module = "noice",
     },
 
     refractoring = {
         enabled = true,
-        path = "refractoring",
+        module = "refractoring",
     },
 
     highlighted_indentation = {
         enabled = true,
-        path = "ibl",
+        module = "ibl",
     },
 
     highlighted_colors = {
         enabled = true,
-        path = "colorizer",
+        module = "colorizer",
     },
 
     symbols_outline = {
         enabled = true,
-        path = "symbols-outline",
+        module = "symbols-outline",
     },
 
     illuminate = {
         enabled = true,
-        path = "illuminate",
+        module = "illuminate",
     },
 
     lua_line = {
-        enabled = true,
-        path = "lualine",
+        enabled = false,
+        module = "lualine",
     },
 
     tree_sitter = {
         enabled = true,
-        path = "treesitter",
+        module = "treesitter",
     },
 
     webdev_icons = {
         enabled = true,
-        path = "webdev_icons"
+        module = "webdev_icons"
     },
 
     treesj = {
-        enabled = false,
+        enabled = true,
     },
 
     startup_screen = {
        enabled = true,
-       path = "alpha",
+       module = "alpha",
     },
 
     tabnine_info = {
         show_on_lualine = false,
         enabled = true,
-        path = "tabnine",
+        module = "tabnine",
         debounce_ms = 500,
     },
 
@@ -104,28 +104,28 @@ local options = {
     },
 
     lsp_trouble = {
-        enabled = true,
-        path = "trouble",
+        enabled = false,
+        module = "trouble",
     },
 
     terminal = {
         enabled = true,
-        path = "term",
+        module = "term",
     },
 
     tabs = {
         enabled = true,
-        path = "barbar"
+        module = "barbar"
     },
 
     file_explorer = {
         enabled = true,
-        path = "oil"
+        module = "oil"
     },
 
     lsp = {
         enabled = true,
-        paths = {"lsp","cmp"},
+        modules = {"lsp","cmp"},
     }
 }
 
