@@ -1,4 +1,8 @@
-require("oil").setup({
+local success,oil = pcall(require,"oil")
+
+if not success then return print "oil is not installed" end
+
+oil.setup({
   -- Oil will take over directory buffers (e.g. `vim .` or `:e src/`)
   -- Set to false if you still want to use netrw.
   default_file_explorer = true,

@@ -1,3 +1,9 @@
+local success
+local lspconfig
+
+success,lspconfig = pcall(require,"lspconfig")
+if not success then return print "lspconfig is not installed" end
+
 local keymap_loader = require("core.load_keymaps")
 local servers = {"pyright","tsserver","rust_analyzer", "cssls","gopls"}
 
@@ -6,7 +12,7 @@ local function on_attach(_, bufnr)
   keymap_loader.load_keymaps("lsp",opts)
 end
 
-require('lspconfig').clangd.setup {
+lspconfig.clangd.setup {
     on_attach = on_attach,
     cmd = {
         "clangd",
@@ -20,7 +26,10 @@ for _,server_name in ipairs(servers) do
     require('lspconfig')[server_name].setup { on_attach = on_attach }
 end
 
-local lsp = require("lsp-zero")
+local lsp
+success,lsp = pcall(require,"lsp-zero")
+
+if not success then return print "lsp zero is not installed" end
 
 lsp.preset("recommended")
 
@@ -31,7 +40,12 @@ lsp.ensure_installed({
 
 lsp.nvim_workspace()
 
-local cmp = require('cmp')
+local cmp
+
+success,cmp = pcall(require,'cmp')
+
+if not success then return print "cmp is not installed" end
+
 local cmp_select = {behavior = cmp.SelectBehavior.Select}
 local cmp_mappings = lsp.defaults.cmp_mappings({
   ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),

@@ -1,4 +1,8 @@
-require'barbar'.setup {
+local success,barbar = pcall(require,"barbar")
+
+if not success then return print "barbar is not installed" end
+
+barbar.setup {
   -- WARN: do not copy everything below into your config!
   --       It is just an example of what configuration options there are.
   --       The defaults are suitable for most people.

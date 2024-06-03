@@ -49,9 +49,11 @@ local options = {
         module = "illuminate",
     },
 
-    lua_line = {
-        enabled = false,
-        module = "lualine",
+    status_line = {
+        enabled = true,
+        module = "status_line",
+        style = "evil",
+        name = "lualine"
     },
 
     tree_sitter = {
@@ -85,7 +87,7 @@ local options = {
         enabled = false
     },
 
-    ["nvim-tree"] = {
+    ["nvim_tree"] = {
         enabled = true,
         on_startup = false,
         side = "left",
@@ -94,13 +96,19 @@ local options = {
         adaptive_size = true
     },
 
+    discord = {
+        enabled = true,
+        module = "discord_presence",
+        style = true -- temp value --
+    },
+
     background = {
         transparent = false,
     },
 
     color_scheme = {
         allow_custom = true,
-        name = "tokyonight-night",
+        name = "gruvbox",
     },
 
     lsp_trouble = {
@@ -114,7 +122,7 @@ local options = {
     },
 
     tabs = {
-        enabled = true,
+        enabled = false,
         module = "barbar"
     },
 

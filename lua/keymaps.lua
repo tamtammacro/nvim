@@ -1,5 +1,5 @@
 local keymaps = {}
-local options = require "user.options"
+local options = require "options"
 
 local SPACE = "<Space>"
 local LEADER = "<leader>"
@@ -27,7 +27,7 @@ keymaps.telescope = {
 }
 
 keymaps.lsp = {
-    signature = {key = SPACE.."hs",desc="lsp help signature",mode="i",cmd="l.vim.lsp.buf.signature_help()"},
+    signature = {key = nil,desc="lsp help signature",mode="i",cmd="l.vim.lsp.buf.signature_help()"},
     defination = {key = "gd",desc="goto symbol defination",cmd="l.vim.lsp.buf.definition()"},
     goto_next = {key = "[d",cmd="l.vim.diagnostic.goto_next()"},
     goto_prev = {key = "]d",cmd = "l.vim.diagnostic.goto_prev()"},
@@ -55,7 +55,7 @@ keymaps.treesj = {
     toggle = {key = LEADER.."m",cmd="v.TSJToggle",desc="treesj"}
 }
 
-keymaps["nvim-tree"] = {
+keymaps["nvim_tree"] = {
     toggle = {key = SPACE.."1",cmd="v.NvimTreeToggle",desc = "nvim-tree"}
 }
 

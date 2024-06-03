@@ -18,13 +18,11 @@ require("packer").startup(function(use)
         }
     }
 
-	use 'jiangmiao/auto-pairs'
-
     use {
         "windwp/nvim-autopairs",
         config = function() require("nvim-autopairs").setup {} end
     }
-	--use 'tpope/vim-surround'
+
     use({
         "kylechui/nvim-surround",
         tag = "*", -- Use for stability; omit to use `main` branch for the latest features
@@ -82,6 +80,7 @@ require("packer").startup(function(use)
 		'nvim-lualine/lualine.nvim',
 		requires = { 'kyazdani42/nvim-web-devicons', opt = true }
 	}
+    use 'tamton-aquib/staline.nvim'
     use 'nvim-tree/nvim-web-devicons'
     use 'NvChad/nvim-colorizer.lua'
     use "uga-rosa/ccc.nvim"
@@ -165,22 +164,27 @@ require("packer").startup(function(use)
     }
 
     -- -- discord rpc --
-    use 'andweeb/presence.nvim'
+    --use 'andweeb/presence.nvim'
+    use 'IogaMaster/neocord'
 
     -- file manager --
 	use 'prichrd/netrw.nvim'
 	use 'nvim-tree/nvim-tree.lua'
 
     -- tree sitter --
-    -- use {
-    --     'nvim-treesitter/nvim-treesitter',
-    --     run = function()
-    --         local ts_update = require('nvim-treesitter.install').update({ with_sync = true })
-    --         ts_update()
-    --     end,
-    -- }
-     -- use("nvim-treesitter/playground")
-     -- use("nvim-treesitter/nvim-treesitter-context")
+    if vim.loop.os_uname().sysname ~= "Windows_NT" then
+        use {
+            'nvim-treesitter/nvim-treesitter',
+            run = function()
+                local ts_update = require('nvim-treesitter.install')
+                ts_update.compilers = { "clang" }
+                ts_update.prefer_git = false
+                ts_update.update({ with_sync = true })
+            end,
+        }
+        use("nvim-treesitter/playground")
+        use("nvim-treesitter/nvim-treesitter-context")
+    end
 
     use {
         'olivercederborg/poimandres.nvim',

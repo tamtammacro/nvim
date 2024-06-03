@@ -1,5 +1,7 @@
-local options = require "user.options"
-local notify = require "notify"
+local options = require "options"
+local notify_ok,notify = pcall(require,"notify")
+
+if not notify_ok then return print "Could not load plugins: missing notify" end
 
 local INDENT_BLANKLINE_BACKGROUND_COLOR = 0xFF0000
 local INDENT_BLANK_LINE_LIST = {"IndentBlanklineContextChar","IndentBlanklineChar","IndentBlanklineSpaceChar","IndentBlanklineSpaceCharBlankline","IndentBlanklineContextSpaceChar","IndentBlanklineContextStart"}
@@ -83,7 +85,7 @@ function functions:use_plugins()
     if not options.plugins.enabled then return end
 
     local function init()
-        require "user.plugins"
+        require "plugins"
         xpcall(init_plugins,function(error) notify(error,"error") end)
     end
 

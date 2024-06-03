@@ -1,6 +1,6 @@
 local module = {}
-local options = require "user.options"
-local keymaps = require "user.keymaps"
+local options = require "options"
+local keymaps = require "keymaps"
 
 local VIM_COMMAND_PREFIX = "v."
 local LUA_COMMAND_PREFIX = "l."
@@ -10,6 +10,7 @@ local mod
 local mod_ok
 
 local function set_keymap(obj,func,opts,args)
+    if obj.key == nil then return end
     if not func then return print "Something went wrong: function reference is nil for set_keymap" end
 
     opts = opts or {}

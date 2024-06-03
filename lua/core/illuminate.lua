@@ -1,4 +1,8 @@
-require('illuminate').configure({
+local success,illuminate = pcall(require,"illuminate")
+
+if not success then return print "illuminate is not installed" end
+
+illuminate.configure({
     -- providers: provider used to get references in the buffer, ordered by priority
     providers = {
         'lsp',
