@@ -1,11 +1,10 @@
 # nvim-config
 
-Install packer<br />
+Install packer (optional) <br />
 https://github.com/wbthomason/packer.nvim
 
-Then install the plugins with<br />
+Then install the packer plugins with<br />
 :PackerSync<br />
-<br />
 
 Dependancies:<br />
-ripgrep,grep,clang,fd,unzip,gzip,wget
+ripgrep,clang,fd,unzip,gzip,wget
