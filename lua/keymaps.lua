@@ -3,9 +3,14 @@ local options = require "options"
 
 local SPACE = "<Space>"
 local LEADER = "<leader>"
+local ENTER = "<CR>"
 
 local ALT = function(key)
     return "<M-"..key..">"
+end
+
+local CONTROL = function(key)
+    return "<C-"..key..">"
 end
 
 local C = "c."
@@ -40,15 +45,22 @@ keymaps.telescope = {
 
 keymaps.lsp = {
     signature = {key = nil,desc="lsp help signature",mode="i",cmd = L.."vim.lsp.buf.signature_help()"},
-    defination = {key = "gd",desc="goto symbol defination",cmd = L.."vim.lsp.buf.definition()"},
+    code_action = {key=SPACE..ENTER,cmd = L.."vim.lsp.buf.code_action()",desc = "code action"},
+
+    goto_defination = {key = "gd",desc="goto symbol defination",cmd = L.."vim.lsp.buf.definition()"},
+    goto_defination_2 = {key = CONTROL("b"),desc="goto symbol defination, Intellij idea",cmd = L.."vim.lsp.buf.definition()"},
+
     goto_next = {key = "[d",cmd = L.."vim.diagnostic.goto_next()"},
     goto_prev = {key = "]d",cmd = L.."vim.diagnostic.goto_prev()"},
-    code_action = {key=LEADER.."vca",cmd = L.."vim.lsp.buf.code_action()"},
     references = {key=SPACE.."kr",cmd = L.."vim.lsp.buf.references()"},
     rename = {key = SPACE.."rr",cmd = L.."vim.lsp.buf.rename()"}, -- f2 key does the same action -- 
     open_float = {key = LEADER.."vd",cmd=L.."vim.diagnostic.open_float()"},
     workspace_symbol = {key = LEADER.."kf",cmd=L.."vim.lsp.buf.workspace_symbol()"},
-    hover = {key = SPACE.."h",cmd=L.."vim.lsp.buf.hover()",desc = "symbol information (hover)"},
+    hover = {key = SPACE.."q",cmd=L.."vim.lsp.buf.hover()",desc = "symbol information (hover)"},
+}
+
+keymaps.conform = {
+    format = { key = SPACE.."fd", cmd=L.."vim.lsp.buf.format()", desc="format document" },
 }
 
 keymaps.git = {
@@ -56,7 +68,7 @@ keymaps.git = {
 }
 
 keymaps.symbols_outline = {
-    toggle = {key = LEADER.."s",cmd=C.."SymbolsOutline",desc="symbols outline"}
+    toggle = {key = ALT("7"),cmd=C.."SymbolsOutline",desc="symbols outline"}
 }
 
 keymaps.file_explorer = {
@@ -67,12 +79,12 @@ keymaps.treesj = {
     toggle = {key = LEADER.."m",cmd=C.."TSJToggle",desc="treesj"}
 }
 
-keymaps["nvim_tree"] = {
+keymaps.nvim_tree = {
     toggle = {key = ALT("1"),cmd=C.."NvimTreeToggle",desc = "toggle nvim-tree"}
 }
 
 keymaps.terminal = {
-    toggle = {key = ALT("3"),cmd=C.."ToggleTerm",desc="open terminal"}
+    toggle = {key = nil,cmd=C.."ToggleTerm",desc="open terminal"}
 }
 
 keymaps.split_controls = {

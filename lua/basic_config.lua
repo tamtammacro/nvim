@@ -1,12 +1,14 @@
 local vo = vim.o
 
+local SHIFT_TAB_SPACE = 4
+
 xpcall(function()
     vo.number = true
     vo.background = "dark"
     vo.termguicolors = true
-    vo.tabstop = 4
-    vo.softtabstop = 4
-    vo.shiftwidth = 4
+    vo.tabstop = SHIFT_TAB_SPACE
+    vo.softtabstop = SHIFT_TAB_SPACE
+    vo.shiftwidth = SHIFT_TAB_SPACE
     vo.smarttab = true
     vo.autoindent = true
     vo.mouse = "a"
@@ -24,9 +26,9 @@ xpcall(function()
     vim.opt.nu = true
     vim.opt.relativenumber = true
 
-    vim.opt.tabstop = 4
-    vim.opt.softtabstop = 4
-    vim.opt.shiftwidth = 4
+    vim.opt.tabstop = SHIFT_TAB_SPACE
+    vim.opt.softtabstop = SHIFT_TAB_SPACE
+    vim.opt.shiftwidth = SHIFT_TAB_SPACE
     vim.opt.expandtab = true
 
     vim.opt.smartindent = true

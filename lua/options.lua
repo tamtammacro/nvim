@@ -33,14 +33,19 @@ local options = {
         module = "refractoring",
     },
 
-    highlighted_indentation = {
+    highlight_indentation = {
         enabled = true,
         module = "ibl",
     },
 
-    highlighted_colors = {
+    colorizer = {
         enabled = true,
         module = "colorizer",
+    },
+
+    auto_tag = {
+        enabled = true,
+        module = "auto_tag"
     },
 
     symbols_outline = {
@@ -56,7 +61,7 @@ local options = {
     status_line = {
         enabled = true,
         module = "status_line",
-        style = "evil",
+        style = "",
         name = "lualine"
     },
 
@@ -79,31 +84,34 @@ local options = {
        module = "alpha",
     },
 
-    tabnine_info = {
-        show_on_status_line = false,
+    conform = {
         enabled = true,
-        module = "tabnine",
-        debounce_ms = 500,
+        module = "conform"
     },
 
     nvim_tree = {
         enabled = true,
-        on_startup = false,
+        on_startup = true,
         side = "left",
         path = "nvim_tree",
-        width = 20,
+        width = 30,
         adaptive_size = true
     },
 
     discord = {
-        enabled = true,
+        enabled = false,
         module = "discord_presence",
         style = "neocord"
     },
 
+    godot = {
+        enabled = false,
+        module = "godot"
+    },
+
     theme = {
         enabled = true,
-        name = "tokyonight-night",
+        name = "rose-pine",
         transparent = false,
     },
 
@@ -118,7 +126,7 @@ local options = {
     },
 
     tabs = {
-        enabled = false,
+        enabled = true,
         module = "barbar"
     },
 
