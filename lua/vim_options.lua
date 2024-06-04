@@ -21,10 +21,20 @@ xpcall(function()
     vo.wrap = true
     vo.clipboard = "unnamedplus"
 
+    vim.o.foldcolumn = '1' -- '0' is not bad
+    vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
+    vim.o.foldlevelstart = 99
+    vim.o.foldenable = true
+
     vim.opt.guicursor = ""
+    vim.opt.inccommand = "split"
+    vim.opt.signcolumn = "yes"
+    vim.opt.splitbelow = true
+    vim.opt.splitright = true
 
     vim.opt.nu = true
     vim.opt.relativenumber = true
+    vim.opt.number = true
 
     vim.opt.tabstop = SHIFT_TAB_SPACE
     vim.opt.softtabstop = SHIFT_TAB_SPACE

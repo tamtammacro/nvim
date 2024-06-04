@@ -5,15 +5,15 @@ if not success then return end
 config.setup {
     -- A list of parser names, or "all" (the five listed parsers should always be installed)
     --ensure_installed = { "c","go", "lua", "vim", "vimdoc", "query" },
-    rainbow = {
-        enable = true,
-        -- list of languages you want to disable the plugin for
-        disable = { 'jsx', 'cpp' },
-        -- Which query to use for finding delimiters
-        query = 'rainbow-parens',
-        -- Highlight the entire buffer all at once
-        strategy = require('ts-rainbow').strategy.global,
-    },
+    -- rainbow = {
+    --     enable = true,
+    --     -- list of languages you want to disable the plugin for
+    --     disable = { 'jsx', 'cpp' },
+    --     -- Which query to use for finding delimiters
+    --     query = 'rainbow-parens',
+    --     -- Highlight the entire buffer all at once
+    --     strategy = require('ts-rainbow').strategy.global,
+    -- },
 
     autotag = { enable = true },
 
@@ -22,7 +22,7 @@ config.setup {
 
     -- Automatically install missing parsers when entering buffer
     -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-    auto_install = false,
+    auto_install = true,
 
     -- List of parsers to ignore installing (for "all")
     ignore_install = { "javascript" },

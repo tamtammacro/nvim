@@ -12,6 +12,8 @@ local function set_keymap(obj,func,opts,args)
     if not func then return print "Something went wrong: function reference is nil for set_keymap" end
 
     opts = opts or {}
+    opts.noremap = true
+    opts.silent = true
     opts.desc = obj.desc or "Unknown"
 
     local command = type(func) == "string" and func:match("^"..keymaps.EDITOR_COMMAND_PREFIX) and func:sub(#keymaps.EDITOR_COMMAND_PREFIX+1,#func)

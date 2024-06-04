@@ -23,6 +23,15 @@ local options = {
         enabled = true
     },
 
+    ufo = {
+        enabled = true,
+        module = "ufo"
+    },
+
+    undotree = {
+        enabled = true,
+    },
+
     noice = {
         enabled = false,
         module = "noice",
@@ -62,7 +71,7 @@ local options = {
         enabled = true,
         module = "status_line",
         style = "",
-        name = "lualine"
+        name = "lualine",
     },
 
     tree_sitter = {
@@ -91,17 +100,19 @@ local options = {
 
     nvim_tree = {
         enabled = true,
-        on_startup = true,
+        on_startup = false,
         side = "left",
         path = "nvim_tree",
         width = 30,
-        adaptive_size = true
+        adaptive_size = true,
+        show_dotfiles = true,
+        show_gitignore = false,
     },
 
     discord = {
         enabled = false,
         module = "discord_presence",
-        style = "neocord"
+        style = "presence"
     },
 
     godot = {
@@ -111,7 +122,7 @@ local options = {
 
     theme = {
         enabled = true,
-        name = "rose-pine",
+        name = "vscode",
         transparent = false,
     },
 

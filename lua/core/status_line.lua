@@ -1,4 +1,5 @@
 local options = require "options"
+local DELAY = 2000
 
 if options.status_line.name == "lualine" then
     local success,lualine = pcall(require,'lualine')
@@ -221,8 +222,13 @@ if options.status_line.name == "lualine" then
           padding = { left = 1 },
         }
 
-        return lualine.setup(config)
-    end
 
-    lualine.setup()
+        vim.defer_fn(function()
+            lualine.setup(config)
+        end,options.noice.enabled and DELAY or 0)
+        return
+    end
+    vim.defer_fn(function()
+        lualine.setup({})
+    end,options.noice.enabled and DELAY or 0)
 end

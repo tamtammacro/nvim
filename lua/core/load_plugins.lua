@@ -140,7 +140,7 @@ local function use_visuals()
 end
 
 function exports.init(plugin_manager)
-    require "basic_config"
+    require "vim_options"
     use_plugins(plugin_manager)
     use_visuals()
 end

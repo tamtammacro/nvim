@@ -14,15 +14,7 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 local plugins = {
-    "rcarriga/nvim-notify",
-
-    -- mason --
-    {
-        "williamboman/mason.nvim",
-        run = ":MasonUpdate"
-    },
-
-    -- basic functionality --
+    -- functionality --
     "mg979/vim-visual-multi",
 
     {
@@ -38,11 +30,15 @@ local plugins = {
     },
 
     "windwp/nvim-ts-autotag",
+    { "folke/neodev.nvim",       opts = {} },
 
     {
         "windwp/nvim-autopairs",
         config = true
     },
+
+    "mbbill/undotree",
+    "nvim-pack/nvim-spectre",
 
     {
         "kylechui/nvim-surround",
@@ -93,7 +89,7 @@ local plugins = {
         end,
     },
 
-    { 'akinsho/toggleterm.nvim', version = "*", config = true },
+    { 'akinsho/toggleterm.nvim',                  version = "*", config = true },
 
     -- visuals --
     {
@@ -101,6 +97,27 @@ local plugins = {
         dependancies = { 'kyazdani42/nvim-web-devicons', opt = true }
     },
 
+    "kevinhwang91/promise-async",
+    "kevinhwang91/nvim-ufo",
+
+    "rcarriga/nvim-notify",
+    {
+        "anuvyklack/pretty-fold.nvim",
+        config = function()
+            require('pretty-fold').setup {
+                keep_indentation = false,
+                fill_char = '━',
+                sections = {
+                    left = {
+                        '━ ', function() return string.rep('*', vim.v.foldlevel) end, ' ━┫', 'content', '┣'
+                    },
+                    right = {
+                        '┫ ', 'number_of_folded_lines', ': ', 'percentage', ' ┣━━',
+                    }
+                }
+            }
+        end
+    },
     'tamton-aquib/staline.nvim',
     'nvim-tree/nvim-web-devicons',
     "HiPhish/nvim-ts-rainbow2",
@@ -127,6 +144,8 @@ local plugins = {
     -- git integration --
     "tpope/vim-fugitive",
     "lewis6991/gitsigns.nvim",
+    "f-person/git-blame.nvim",
+    "sindrets/diffview.nvim",
 
     -- telescope --
     'nvim-lua/plenary.nvim',
@@ -157,8 +176,17 @@ local plugins = {
     'Mofiqul/vscode.nvim',
     'folke/tokyonight.nvim',
     'marko-cerovac/material.nvim',
+    {
+        "water-sucks/darkrose.nvim",
+        lazy = false,
+        priority = 1000,
+    },
 
     -- lsp --
+    {
+        "williamboman/mason.nvim",
+        run = ":MasonUpdate"
+    },
     "hrsh7th/cmp-nvim-lsp",
     "hrsh7th/cmp-buffer",
     "hrsh7th/cmp-path",
@@ -171,7 +199,7 @@ local plugins = {
         "neovim/nvim-lspconfig",
     },
 
-    { "folke/trouble.nvim" },
+    { "folke/trouble.nvim", opts = {}, cmd = "Trouble" },
 
     {
         'VonHeikemen/lsp-zero.nvim',
@@ -196,7 +224,8 @@ local plugins = {
     },
 
     -- -- discord rpc --
-    'IogaMaster/neocord',
+    --'IogaMaster/neocord',
+    --"andweeb/presence.nvim",
 
     -- file manager --
     'prichrd/netrw.nvim',
