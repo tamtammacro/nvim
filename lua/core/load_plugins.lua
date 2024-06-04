@@ -1,3 +1,4 @@
+local exports = {}
 local options = require "options"
 local notify_ok,notify = pcall(require,"notify")
 
@@ -6,11 +7,6 @@ if not notify_ok then return print "Could not load plugins: missing notify" end
 local INDENT_BLANKLINE_BACKGROUND_COLOR = 0xFF0000
 local INDENT_BLANK_LINE_LIST = {"IndentBlanklineContextChar","IndentBlanklineChar","IndentBlanklineSpaceChar","IndentBlanklineSpaceCharBlankline","IndentBlanklineContextSpaceChar","IndentBlanklineContextStart"}
 local FALLBACK_FUNC = {alpha = "Alpha",colorizer="ColorizerAttachToBuffer"}
-
-local functions = setmetatable({},{__index = function(_,key)
-    if not rawget(options,key) then return notify(("Missing 'core' option: %s"):format(key),"error") end
-    return rawget(options,key)
-end})
 
 local function init_plugins()
     local is_ok
@@ -81,11 +77,15 @@ local function init_plugins()
     for plugin_name,obj in pairs(options) do load_mod(plugin_name,obj) end
 end
 
-function functions:use_plugins()
+local function use_plugins(plugin_manager)
     if not options.plugins.enabled then return end
 
     local function init()
-        require "plugins"
+        if plugin_manager == "packer" then
+            require "packer_plugins"
+        else
+            require "plugins"
+        end
         xpcall(init_plugins,function(error) notify(error,"error") end)
     end
 
@@ -106,28 +106,28 @@ function functions:use_plugins()
     end,print)
 end
 
-function functions:use_visuals()
+local function use_visuals()
     if not options.plugins.enabled then return end
 
     local success,err = pcall(function()
-        if self.theme.enabled then
-            local theme_name = self.theme.style and #self.theme.style > 0 and self.theme.name.."-"..self.theme.style or self.theme.name
+        if options.theme.enabled then
+            local theme_name = options.theme.style and #options.theme.style > 0 and options.theme.name.."-"..options.theme.style or options.theme.name
             local success = pcall(vim.cmd.colorscheme,theme_name)
 
             if not success then
                 notify("Could not find color scheme: "..theme_name,"warning")
                 local error_message
-                success,error_message = pcall(vim.cmd.colorscheme,self.color_scheme.name)
+                success,error_message = pcall(vim.cmd.colorscheme,options.color_scheme.name)
 
                 if not success then
                     notify(error_message,"error")
                 end
             end
 
-            if (self.theme.name == "material") then vim.g.material_style = self.theme.style end
+            if (options.theme.name == "material") then vim.g.material_style = options.theme.style end
         end
 
-        if self.theme.transparent then
+        if options.theme.transparent then
             vim.cmd["highlight"]("Normal guibg=none")
         end
     end)
@@ -139,4 +139,10 @@ function functions:use_visuals()
     if not success and err then notify(err,"error") end
 end
 
-return functions
+function exports.init(plugin_manager)
+    require "basic_config"
+    use_plugins(plugin_manager)
+    use_visuals()
+end
+
+return exports

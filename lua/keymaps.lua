@@ -79,7 +79,7 @@ keymaps.split_controls = {
     set_size_left = {key = ALT(","),cmd = E.."<c-w>5<",desc = "appends split view size to the left"},
     set_size_right = {key = ALT("."),cmd = E.."<c-w>5>",desc = "appends split view size to the right"},
     set_size_up = {key = ALT("t"),cmd = E.."<C-W>+",desc = "appends split view size upwards"},
-    set_size_down = {key = ALT("t"),cmd = E.."<C-W>-",desc = "appends split view size downwards"}
+    set_size_down = {key = ALT("s"),cmd = E.."<C-W>-",desc = "appends split view size downwards"}
 }
 
 return keymaps

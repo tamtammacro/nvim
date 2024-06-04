@@ -1,150 +1,168 @@
-require("packer").startup(function(use)
-    -- main plugin manager --
-	use "wbthomason/packer.nvim"
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
+    vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+    })
+end
+
+vim.opt.rtp:prepend(lazypath)
+
+local plugins = {
+    "rcarriga/nvim-notify",
 
     -- mason --
-	use {
+	{
 		"williamboman/mason.nvim",
 		run = ":MasonUpdate" -- :MasonUpdate updates registry contents
-	}
+	},
 
     -- basic functionality --
-	use "mg979/vim-visual-multi"
+	"mg979/vim-visual-multi",
 
-    use {
+    {
         "ThePrimeagen/refactoring.nvim",
-        requires = {
+        dependancies = {
             {"nvim-lua/plenary.nvim"},
         }
-    }
+    },
 
-    use {
+    {
         "windwp/nvim-autopairs",
         config = function() require("nvim-autopairs").setup {} end
-    }
+    },
 
-    use({
+    {
         "kylechui/nvim-surround",
-        tag = "*", -- Use for stability; omit to use `main` branch for the latest features
+        version = "*", -- Use for stability; omit to use `main` branch for the latest features
+        event = "VeryLazy",
         config = function()
             require("nvim-surround").setup({
                 -- Configuration here, or leave empty to use defaults
             })
         end
-    })
-    use("theprimeagen/harpoon")
-    use 'simrat39/symbols-outline.nvim'
-    use("mbbill/undotree")
-    use {
+    },
+
+    "theprimeagen/harpoon",
+    'simrat39/symbols-outline.nvim',
+    "mbbill/undotree",
+    {
       'phaazon/hop.nvim',
       branch = 'v2', -- optional but strongly recommended
       config = function()
         -- you can configure Hop the way you like here; see :h hop-config
         require'hop'.setup { keys = 'etovxqpdygfblzhckisuran' }
       end
-    }
-    use {
+    },
+    {
       'rmagatti/goto-preview',
       config = function()
         require('goto-preview').setup {}
       end
-    }
+    },
 
-    use 'romgrk/barbar.nvim'
-    use {'akinsho/bufferline.nvim', tag = "*", requires = 'nvim-tree/nvim-web-devicons'}
+    -- 'romgrk/barbar.nvim',
 
-    use {
-      'stevearc/oil.nvim'
-    }
+    {'akinsho/bufferline.nvim', version = "*", dependencies = 'nvim-tree/nvim-web-devicons'},
 
-    use {
+
+    {
         'numToStr/Comment.nvim',
         config = function()
             require('Comment').setup()
         end
-    }
+    },
 
-    use({
+    {
       'Wansmer/treesj',
       config = function()
         require('treesj').setup({})
       end,
-    })
+    },
 
-    use {"akinsho/toggleterm.nvim", tag = '*', config = function()
-        require("toggleterm").setup()
-    end}
+    {'akinsho/toggleterm.nvim', version = "*", config = true},
 
     -- visuals --
-	use {
+	{
 		'nvim-lualine/lualine.nvim',
-		requires = { 'kyazdani42/nvim-web-devicons', opt = true }
-	}
-    use 'tamton-aquib/staline.nvim'
-    use 'nvim-tree/nvim-web-devicons'
-    use 'NvChad/nvim-colorizer.lua'
-    use "uga-rosa/ccc.nvim"
-    use 'rcarriga/nvim-notify'
-    use "folke/noice.nvim"
-    use "MunifTanjim/nui.nvim"
-    use "RRethy/vim-illuminate"
-    use "lukas-reineke/indent-blankline.nvim"
+		dependancies = { 'kyazdani42/nvim-web-devicons', opt = true }
+	},
 
-    use({
-        "utilyre/barbecue.nvim",
-        tag = "*",
-        requires = {
-            "SmiteshP/nvim-navic",
-            "nvim-tree/nvim-web-devicons",
-        },
-        after = "nvim-web-devicons", -- keep this if you're using NvChad
-        config = function()
-            require("barbecue").setup()
-        end,
-    })
+    'tamton-aquib/staline.nvim',
+    'nvim-tree/nvim-web-devicons',
+    'NvChad/nvim-colorizer.lua',
+    "uga-rosa/ccc.nvim",
+    'rcarriga/nvim-notify',
+    "folke/noice.nvim",
+    "MunifTanjim/nui.nvim",
+    "RRethy/vim-illuminate",
+    "lukas-reineke/indent-blankline.nvim",
+
+    {
+      "utilyre/barbecue.nvim",
+      name = "barbecue",
+      version = "*",
+      dependencies = {
+        "SmiteshP/nvim-navic",
+        "nvim-tree/nvim-web-devicons", -- optional dependency
+      },
+      opts = {
+        -- configurations go here
+      },
+    },
 
     -- git integration --
-    use("tpope/vim-fugitive")
-    use "lewis6991/gitsigns.nvim"
+    "tpope/vim-fugitive",
+    "lewis6991/gitsigns.nvim",
 
     -- telescope --
-	use {
+    'nvim-lua/plenary.nvim',
+	{
 	  'nvim-telescope/telescope.nvim',
 	  tag = '0.1.6',
-	  requires = { {'nvim-lua/plenary.nvim'} }
-	}
-	use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
-    use {'nvim-telescope/telescope-ui-select.nvim' }
+	},
+
+	{ 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' },
+    {'nvim-telescope/telescope-ui-select.nvim' },
 
     -- icons --
-	use {
+	{
 		'goolord/alpha-nvim',
-		requires = { 'nvim-tree/nvim-web-devicons' }
-	}
+		dependancies = { 'nvim-tree/nvim-web-devicons' }
+	},
 
     -- color schemes --
-	use "gruvbox-community/gruvbox"
-    use { "catppuccin/nvim", as = "catppuccin" }
-	use "EdenEast/nightfox.nvim"
-	use 'Mofiqul/vscode.nvim'
-	use 'folke/tokyonight.nvim'
-    use 'marko-cerovac/material.nvim'
+	"gruvbox-community/gruvbox",
+    { "catppuccin/nvim", as = "catppuccin" },
+	"EdenEast/nightfox.nvim",
+	'Mofiqul/vscode.nvim',
+	'folke/tokyonight.nvim',
+    'marko-cerovac/material.nvim',
 
     -- lsp -- 
-	use "hrsh7th/cmp-nvim-lsp"
-	use "hrsh7th/cmp-buffer"
-	use "hrsh7th/cmp-path"
-	use "hrsh7th/cmp-cmdline"
-	use "neovim/nvim-lspconfig"
-    use {
+	"hrsh7th/cmp-nvim-lsp",
+	"hrsh7th/cmp-buffer",
+	"hrsh7th/cmp-path",
+	"hrsh7th/cmp-cmdline",
+	"neovim/nvim-lspconfig",
+
+    {
+        "williamboman/mason.nvim",
+        "williamboman/mason-lspconfig.nvim",
+        "neovim/nvim-lspconfig",
+    },
+
+    { "folke/trouble.nvim" },
+
+    {
       'VonHeikemen/lsp-zero.nvim',
       branch = 'v1.x',
-      requires = {
-        -- LSP Support
-        {'neovim/nvim-lspconfig'},
-        {'williamboman/mason.nvim'},
-        {'williamboman/mason-lspconfig.nvim'},
-        { "folke/trouble.nvim" },
+      dependancies = {
 
         -- Autocompletion
         {'hrsh7th/nvim-cmp'},
@@ -161,38 +179,38 @@ require("packer").startup(function(use)
         {'hrsh7th/cmp-vsnip'},
         {'hrsh7th/vim-vsnip'}
       }
-    }
+    },
 
     -- -- discord rpc --
-    --use 'andweeb/presence.nvim'
-    use 'IogaMaster/neocord'
+    'IogaMaster/neocord',
 
     -- file manager --
-	use 'prichrd/netrw.nvim'
-	use 'nvim-tree/nvim-tree.lua'
+	'prichrd/netrw.nvim',
+    'stevearc/oil.nvim',
+	'nvim-tree/nvim-tree.lua',
 
     -- tree sitter --
-    if vim.loop.os_uname().sysname ~= "Windows_NT" then
-        use {
-            'nvim-treesitter/nvim-treesitter',
-            run = function()
-                local ts_update = require('nvim-treesitter.install')
-                ts_update.compilers = { "clang" }
-                ts_update.prefer_git = false
-                ts_update.update({ with_sync = true })
-            end,
-        }
-        use("nvim-treesitter/playground")
-        use("nvim-treesitter/nvim-treesitter-context")
-    end
+    -- {
+    --     'nvim-treesitter/nvim-treesitter',
+    --     run = function()
+    --         local ts_update = require('nvim-treesitter.install')
+    --         ts_update.compilers = { "clang" }
+    --         ts_update.prefer_git = false
+    --         ts_update.update({ with_sync = true })
+    --     end,
+    -- },
+    --
+    -- "nvim-treesitter/playground",
+    -- "nvim-treesitter/nvim-treesitter-context",
 
-    use {
+    {
         'olivercederborg/poimandres.nvim',
         config = function()
             require('poimandres').setup {}
         end
     }
-end)
+}
 
-local success,_ = pcall(require, "mason")
-if success then _.setup() else error "Run :PackerSync" end
+local opts = {}
+
+require("lazy").setup(plugins, opts)

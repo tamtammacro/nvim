@@ -1,5 +1,6 @@
 local options = require "options"
 local nvim_tree_opts = options["nvim_tree"]
+
 local success,nvim_tree = pcall(require,"nvim-tree")
 
 if not success then return print "nvim-tree is not installed" end

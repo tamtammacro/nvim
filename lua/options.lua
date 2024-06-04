@@ -96,7 +96,7 @@ local options = {
     },
 
     discord = {
-        enabled = false,
+        enabled = true,
         module = "discord_presence",
         style = "neocord"
     },
