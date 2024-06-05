@@ -126,8 +126,8 @@ keymaps.split_controls = {
     switch_split_left = {key = CONTROL("h"),cmd = E.."<c-w><c-h>",desc = "set split view to the left"},
     switch_split_right = {key = CONTROL("l"),cmd = E.."<c-w><c-l>",desc = "set split view to the right"},
 
-    switch_split_up = {key = CONTROL("j"),cmd = E.."<c-w><c-j>",desc = "set split view upwards"},
-    switch_split_down = {key = CONTROL("k"),cmd = E.."<c-w><c-k>",desc = "set split view downwards"},
+    switch_split_up = {key = CONTROL("k"),cmd = E.."<c-w><c-k>",desc = "set split view upwards"},
+    switch_split_down = {key = CONTROL("j"),cmd = E.."<c-w><c-j>",desc = "set split view downwards"},
 
     open_split = {key = CONTROL("s"),cmd=C.."split",desc="open split"},
     open_vsplit = {key = ALT("s"),cmd=C.."vsplit",desc="open vsplit"}
