@@ -30,7 +30,8 @@ local plugins = {
     },
 
     "windwp/nvim-ts-autotag",
-    { "folke/neodev.nvim",       opts = {} },
+
+    { "folke/neodev.nvim", opts = {} },
 
     {
         "windwp/nvim-autopairs",
@@ -39,6 +40,44 @@ local plugins = {
 
     "mbbill/undotree",
     "nvim-pack/nvim-spectre",
+
+    {
+      "folke/twilight.nvim",
+      opts = {
+      }
+    },
+
+    {
+        "iamcco/markdown-preview.nvim",
+        cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+        ft = { "markdown" },
+        build = function() vim.fn["mkdp#util#install"]() end,
+    },
+    {
+        "epwalsh/obsidian.nvim",
+        version = "*",
+        lazy = true,
+        ft = "markdown",
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+        },
+        opts = {
+            workspaces = {
+                {
+                    name = "personal",
+                    path = "~/vaults/personal",
+                },
+                {
+                    name = "work",
+                    path = "~/vaults/work",
+                },
+            },
+        },
+    },
+    {
+        "folke/zen-mode.nvim",
+        opts = {}
+    },
 
     {
         "kylechui/nvim-surround",
@@ -85,7 +124,7 @@ local plugins = {
     {
         'Wansmer/treesj',
         config = function()
-            require('treesj').setup({})
+            require('treesj').setup({use_default_keymaps = false})
         end,
     },
 
@@ -130,16 +169,16 @@ local plugins = {
     "RRethy/vim-illuminate",
     "lukas-reineke/indent-blankline.nvim",
 
-    {
-        "utilyre/barbecue.nvim",
-        name = "barbecue",
-        version = "*",
-        dependencies = {
-            "SmiteshP/nvim-navic",
-            "nvim-tree/nvim-web-devicons",
-        },
-        opts = {},
-    },
+    -- {
+    --     "utilyre/barbecue.nvim",
+    --     name = "barbecue",
+    --     version = "*",
+    --     dependencies = {
+    --         "SmiteshP/nvim-navic",
+    --         "nvim-tree/nvim-web-devicons",
+    --     },
+    --     opts = {},
+    -- },
 
     -- git integration --
     "tpope/vim-fugitive",

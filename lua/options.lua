@@ -19,6 +19,11 @@ local options = {
         module = "goto-preview"
     },
 
+    my_quick_actions = {
+        enabled = true,
+        module = "my_quick_actions"
+    },
+
     split_controls = {
         enabled = true
     },
@@ -33,7 +38,7 @@ local options = {
     },
 
     noice = {
-        enabled = false,
+        enabled = true,
         module = "noice",
     },
 
@@ -102,7 +107,7 @@ local options = {
         enabled = true,
         on_startup = false,
         side = "left",
-        path = "nvim_tree",
+        module = "nvim_tree",
         width = 30,
         adaptive_size = true,
         show_dotfiles = true,
@@ -112,7 +117,7 @@ local options = {
     discord = {
         enabled = false,
         module = "discord_presence",
-        style = "presence"
+        style = "presence",
     },
 
     godot = {

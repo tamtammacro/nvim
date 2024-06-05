@@ -38,6 +38,11 @@ function module_export.load_keymaps(_,external_opts)
         mod = modules[t.category_name] or select(2,pcall(require,t.module))
         mod_ok = type(mod) == "table"
 
+        if not mod_ok then
+            mod = modules[t.category_name] or select(2,pcall(require,"core."..t.module))
+            mod_ok = type(mod) == "table"
+        end
+
         if mod_ok and not modules[t.category_name] then
             modules[t.category_name] = mod
         end

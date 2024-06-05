@@ -45,7 +45,11 @@ keymaps.lsp_trouble = {
 }
 
 keymaps.goto = {
-    preview = { key = "gp", cmd="goto_preview_definition",desc = "goto signature preview" },
+    preview = {
+        key = "gp",
+        cmd="goto_preview_definition",
+        desc = "goto signature preview",
+    },
 }
 
 keymaps.telescope = {
@@ -54,7 +58,8 @@ keymaps.telescope = {
     lsp_document_symbols = {key = SPACE_S.."fs", desc = "find lsp symbols"},
     oldfiles = {key = SPACE_S.."fo", desc = "find old files"},
     grep_string = {key = SPACE_S.."fw"},
-    keymaps = {key = SPACE_S.."km", desc = "show key maps"}
+    buffers = {key = SPACE_S.."fb",desc = "show key maps"},
+    keymaps = {key = ALT("8"),desc = "show key maps"},
 }
 
 keymaps.lsp = {
@@ -67,15 +72,15 @@ keymaps.lsp = {
 
     goto_next = {key = SPACE_S.."d.",cmd = L.."vim.diagnostic.goto_next()"},
     goto_prev = {key = SPACE_S.."d,",cmd = L.."vim.diagnostic.goto_prev()"},
-    references = {key=SPACE_S.."kr",cmd = L.."vim.lsp.buf.references()"},
     rename = {key = SPACE_S.."rr",cmd = L.."vim.lsp.buf.rename()"}, -- f2 key does the same action -- 
     open_float = {key = LEADER_S.."vd",cmd=L.."vim.diagnostic.open_float()"},
-    workspace_symbol = {key = LEADER_S.."kf",cmd=L.."vim.lsp.buf.workspace_symbol()"},
+    workspace_symbol = {key = nil,cmd=L.."vim.lsp.buf.workspace_symbol()"},
     hover = {key = SPACE_S.."kq",cmd=L.."vim.lsp.buf.hover()",desc = "symbol information (hover)"},
+    references = {key=SPACE_S.."kr",cmd = L.."vim.lsp.buf.references()"},
 }
 
 keymaps.undotree = {
-    toggle = {key = ALT("4"),cmd=C.."UndotreeToggle",desc="undo tree toggle"}
+    toggle = {key = ALT("5"),cmd=C.."UndotreeToggle",desc="undo tree toggle"}
 }
 
 keymaps.conform = {
@@ -96,15 +101,16 @@ keymaps.file_explorer = {
 }
 
 keymaps.treesj = {
-    toggle = {
-        key = SPACE_S.."f",
-        cmd=C.."TSJToggle",
-        desc="treesj",
-    }
+    join = { key = SPACE_S.."k{", cmd=C.."TSJJoin", desc="treesj join" },
+    split = { key = SPACE_S.."k}", cmd=C.."TSJSplit", desc="treesj split" }
+}
+
+keymaps.my_quick_actions = {
+    config = { key = LEADER_S..".", cmd="goto_config" },
 }
 
 keymaps.nvim_tree = {
-    toggle = {key = ALT("1"),cmd=C.."NvimTreeToggle",desc = "toggle nvim-tree"}
+    toggle = { key = ALT("1"), cmd=C.."NvimTreeToggle", desc = "toggle nvim-tree" }
 }
 
 keymaps.terminal = {
@@ -114,11 +120,17 @@ keymaps.terminal = {
 keymaps.split_controls = {
     set_size_left = {key = ALT(","),cmd = E.."<c-w>5<",desc = "appends split view size to the left"},
     set_size_right = {key = ALT("."),cmd = E.."<c-w>5>",desc = "appends split view size to the right"},
-    set_size_up = {key = ALT("t"),cmd = E.."<C-W>+",desc = "appends split view size upwards"},
-    set_size_down = {key = ALT("s"),cmd = E.."<C-W>-",desc = "appends split view size downwards"},
+    set_size_up = {key = ALT(";"),cmd = E.."<C-W>+",desc = "appends split view size upwards"},
+    set_size_down = {key = ALT("'"),cmd = E.."<C-W>-",desc = "appends split view size downwards"},
 
-    switch_split_left = {key = CONTROL("j"),cmd = E.."<c-w><c-h>",desc = "set split view to the left"},
-    switch_split_right = {key = CONTROL("k"),cmd = E.."<c-w><c-l>",desc = "set split view to the right"},
+    switch_split_left = {key = CONTROL("h"),cmd = E.."<c-w><c-h>",desc = "set split view to the left"},
+    switch_split_right = {key = CONTROL("l"),cmd = E.."<c-w><c-l>",desc = "set split view to the right"},
+
+    switch_split_up = {key = CONTROL("j"),cmd = E.."<c-w><c-j>",desc = "set split view upwards"},
+    switch_split_down = {key = CONTROL("k"),cmd = E.."<c-w><c-k>",desc = "set split view downwards"},
+
+    open_split = {key = CONTROL("s"),cmd=C.."split",desc="open split"},
+    open_vsplit = {key = ALT("s"),cmd=C.."vsplit",desc="open vsplit"}
 }
 
 keymaps.tabs = {

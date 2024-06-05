@@ -4,7 +4,7 @@ if not success then return end
 
 config.setup {
     -- A list of parser names, or "all" (the five listed parsers should always be installed)
-    --ensure_installed = { "c","go", "lua", "vim", "vimdoc", "query" },
+    ensure_installed = { "c","go", "lua", "vim", "vimdoc", "query","markdown", "rust","javascript" },
     -- rainbow = {
     --     enable = true,
     --     -- list of languages you want to disable the plugin for
@@ -14,8 +14,6 @@ config.setup {
     --     -- Highlight the entire buffer all at once
     --     strategy = require('ts-rainbow').strategy.global,
     -- },
-
-    autotag = { enable = true },
 
     -- Install parsers synchronously (only applied to `ensure_installed`)
     sync_install = false,
