@@ -13,9 +13,6 @@ telescope.setup({
             "vscode",
             "class",
             "pdf",
-            "mkv",
-            "mp4",
-            "mp3",
             "dll",
         },
     }

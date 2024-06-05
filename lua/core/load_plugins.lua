@@ -144,7 +144,29 @@ local function use_visuals()
     if not success and err then notify(err, "error") end
 end
 
+local function make_string(s)
+    local result = ""
+
+    local ip = 0
+
+    while ip < #s do
+        ip = ip + 1
+
+        if s:sub(ip, ip) == "\n" and s:sub(ip - 1, ip - 1) ~= "]" and s:sub(ip + 1, ip + 1) == "[" then
+            result = result .. "\n"
+        end
+
+        result = result .. s:sub(ip, ip)
+    end
+
+    return result
+end
+
 function exports.init(plugin_manager)
+    require "vim_options"
+    use_plugins(plugin_manager)
+    use_visuals()
+
     local settings_path = io_funcs.get_config_loc() .. (io_funcs.is_win32() and "\\settings" or "/settings")
     local path = settings_path .. "/plugin_settings.toml"
 
@@ -154,7 +176,7 @@ function exports.init(plugin_manager)
 
     if not io_funcs.file_exists(path) then
         local str = TOML.encode(options)
-        if io_funcs.write_file(path,str) then
+        if io_funcs.write_file(path, make_string(str)) then
             print "INFO: Generated plugin settings file"
         end
     end
@@ -167,14 +189,10 @@ function exports.init(plugin_manager)
         keymaps_copy.LUA_COMMAND_PREFIX = nil
         keymaps_copy.EDITOR_COMMAND_PREFIX = nil
         local str = TOML.encode(keymaps_copy)
-        if io_funcs.write_file(path,str) then
+        if io_funcs.write_file(path, make_string(str)) then
             print "INFO: Generated keymaps file"
         end
     end
-
-    use_plugins(plugin_manager)
-    require "vim_options"
-    use_visuals()
 end
 
 return exports

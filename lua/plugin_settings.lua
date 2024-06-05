@@ -6,6 +6,7 @@ local file_content = io_funcs.read_all_file(path)
 local TOML = require "vendor.lua-toml.toml"
 
 if not file_content then
+    -- defaults --
     plugin_settings = {
         plugins = {
             enabled = true,
@@ -103,7 +104,7 @@ if not file_content then
         },
 
         alpha = {
-           enabled = false,
+           enabled = true,
            module = "alpha",
         },
 
