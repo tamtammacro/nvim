@@ -29,9 +29,25 @@ local plugins = {
         }
     },
 
-    "windwp/nvim-ts-autotag",
+    {
+        "folke/which-key.nvim",
+        event = "VeryLazy",
+        init = function()
+            vim.o.timeout = true
+            vim.o.timeoutlen = 300
+        end,
+        opts = {}
+    },
 
-    { "folke/neodev.nvim", opts = {} },
+    "folke/nvim-ts-autotag",
+
+    {
+        'xeluxee/competitest.nvim',
+        dependencies = 'MunifTanjim/nui.nvim',
+        config = function() require('competitest').setup() end,
+    },
+
+    { "folke/neodev.nvim",       opts = {} },
 
     {
         "windwp/nvim-autopairs",
@@ -40,11 +56,16 @@ local plugins = {
 
     "mbbill/undotree",
     "nvim-pack/nvim-spectre",
+    {
+        "folke/persistence.nvim",
+        event = "BufReadPre", -- this will only start session saving when an actual file was opened
+        opts = {}
+    },
 
     {
-      "folke/twilight.nvim",
-      opts = {
-      }
+        "folke/twilight.nvim",
+        opts = {
+        }
     },
 
     {
@@ -53,27 +74,28 @@ local plugins = {
         ft = { "markdown" },
         build = function() vim.fn["mkdp#util#install"]() end,
     },
-    {
-        "epwalsh/obsidian.nvim",
-        version = "*",
-        lazy = true,
-        ft = "markdown",
-        dependencies = {
-            "nvim-lua/plenary.nvim",
-        },
-        opts = {
-            workspaces = {
-                {
-                    name = "personal",
-                    path = "~/vaults/personal",
-                },
-                {
-                    name = "work",
-                    path = "~/vaults/work",
-                },
-            },
-        },
-    },
+
+    -- {
+    --     "epwalsh/obsidian.nvim",
+    --     version = "*",
+    --     lazy = true,
+    --     ft = "markdown",
+    --     dependencies = {
+    --         "nvim-lua/plenary.nvim",
+    --     },
+    --     opts = {
+    --         workspaces = {
+    --             {
+    --                 name = "personal",
+    --                 path = "~/vaults/personal",
+    --             },
+    --             {
+    --                 name = "work",
+    --                 path = "~/vaults/work",
+    --             },
+    --         },
+    --     },
+    -- },
     {
         "folke/zen-mode.nvim",
         opts = {}
@@ -124,7 +146,7 @@ local plugins = {
     {
         'Wansmer/treesj',
         config = function()
-            require('treesj').setup({use_default_keymaps = false})
+            require('treesj').setup({ use_default_keymaps = false })
         end,
     },
 
@@ -134,6 +156,60 @@ local plugins = {
     {
         'nvim-lualine/lualine.nvim',
         dependancies = { 'kyazdani42/nvim-web-devicons', opt = true }
+    },
+
+    "anuvyklack/middleclass",
+    "anuvyklack/animation.nvim",
+
+    {
+        "folke/windows.nvim",
+        config = function()
+            vim.o.winwidth = 10
+            vim.o.winminwidth = 10
+            vim.o.equalalways = false
+            require('windows').setup()
+            vim.cmd.WindowsEnableAutowidth()
+        end
+    },
+
+    {
+        "folke/paint.nvim",
+        config = function()
+            require("paint").setup({
+                ---@type PaintHighlight[]
+                highlights = {
+                    {
+                        -- filter can be a table of buffer options that should match,
+                        -- or a function called with buf as param that should return true.
+                        -- The example below will paint @something in comments with Constant
+                        filter = { filetype = "lua" },
+                        pattern = "%s*%-%-%-%s*(@%w+)",
+                        hl = "Constant",
+                    },
+                },
+            })
+        end,
+    },
+
+    {
+        "folke/nvim-scrollbar",
+        config = function()
+            require("scrollbar").setup()
+        end
+    },
+
+    {
+        "folke/todo-comments.nvim",
+        dependencies = { "nvim-lua/plenary.nvim" },
+        opts = {
+        }
+    },
+
+    "folke/nui.nvim",
+    {
+        'lukas-reineke/headlines.nvim',
+        dependencies = "nvim-treesitter/nvim-treesitter",
+        config = true, -- or `opts = {}`
     },
 
     "kevinhwang91/promise-async",
@@ -204,13 +280,12 @@ local plugins = {
 
     -- color schemes --
     "gruvbox-community/gruvbox",
-    { "Mofiqul/dracula.nvim" },
     {
         "olimorris/onedarkpro.nvim",
         priority = 1000, -- Ensure it loads first
     },
-    { "catppuccin/nvim",     as = "catppuccin" },
-    { "rose-pine/neovim",    name = "rose-pine" },
+    { "catppuccin/nvim",  as = "catppuccin" },
+    { "rose-pine/neovim", name = "rose-pine" },
     "EdenEast/nightfox.nvim",
     'Mofiqul/vscode.nvim',
     'folke/tokyonight.nvim',

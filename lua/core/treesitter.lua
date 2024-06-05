@@ -3,17 +3,22 @@ local success, config = pcall(require, "nvim-treesitter.configs")
 if not success then return end
 
 config.setup {
-    -- A list of parser names, or "all" (the five listed parsers should always be installed)
-    ensure_installed = { "c","go", "lua", "vim", "vimdoc", "query","markdown", "rust","javascript" },
-    -- rainbow = {
-    --     enable = true,
-    --     -- list of languages you want to disable the plugin for
-    --     disable = { 'jsx', 'cpp' },
-    --     -- Which query to use for finding delimiters
-    --     query = 'rainbow-parens',
-    --     -- Highlight the entire buffer all at once
-    --     strategy = require('ts-rainbow').strategy.global,
-    -- },
+    ensure_installed = { "c", "go", "lua", "vim", "vimdoc", "query", "markdown", "rust", "javascript" },
+
+    rainbow = {
+        enable = true,
+        disable = { 'jsx', 'cpp',"c" },
+        query = 'rainbow-parens',
+        strategy = require('ts-rainbow').strategy.global,
+    },
+
+    autotag = {
+        enable = true,
+        enable_rename = true,
+        enable_close = true,
+        enable_close_on_slash = true,
+        filetypes = { "html", "xml" },
+    },
 
     -- Install parsers synchronously (only applied to `ensure_installed`)
     sync_install = false,

@@ -57,11 +57,11 @@ if not file_content then
 
     keymaps.telescope = {
         find_files = { key = SPACE_S.."ff" , desc = "find files"},
-        live_grep = { key = SPACE_S.."fg", desc = "live grep" },
+        live_grep = { key = SPACE_S.."fg", desc = "file with live grep" },
         lsp_document_symbols = {key = SPACE_S.."fs", desc = "find lsp symbols"},
         oldfiles = {key = SPACE_S.."fo", desc = "find old files"},
-        grep_string = {key = SPACE_S.."fw"},
-        buffers = {key = SPACE_S.."fb",desc = "show key maps"},
+        --grep_string = {key = SPACE_S.."fw"},
+        buffers = {key = SPACE_S.."fb",desc = "find file buffers"},
         keymaps = {key = ALT("8"),desc = "show key maps"},
     }
 
@@ -75,11 +75,11 @@ if not file_content then
 
         goto_next = {key = SPACE_S.."d.",cmd = L.."vim.diagnostic.goto_next()"},
         goto_prev = {key = SPACE_S.."d,",cmd = L.."vim.diagnostic.goto_prev()"},
-        rename = {key = SPACE_S.."rr",cmd = L.."vim.lsp.buf.rename()"}, -- f2 key does the same action -- 
+        rename = {key = SPACE_S.."rr",cmd = L.."vim.lsp.buf.rename()",desc="rename"}, -- f2 key does the same action -- 
         open_float = {key = LEADER_S.."vd",cmd=L.."vim.diagnostic.open_float()"},
         workspace_symbol = {key = nil,cmd=L.."vim.lsp.buf.workspace_symbol()"},
-        hover = {key = SPACE_S.."kq",cmd=L.."vim.lsp.buf.hover()",desc = "symbol information (hover)"},
-        references = {key=SPACE_S.."kr",cmd = L.."vim.lsp.buf.references()"},
+        hover = {key = SPACE_S.."fq",cmd=L.."vim.lsp.buf.hover()",desc = "find symbol information (hover)"},
+        references = {key=SPACE_S.."fr",cmd = L.."vim.lsp.buf.references()",desc="find references"},
     }
 
     keymaps.undotree = {
@@ -87,7 +87,7 @@ if not file_content then
     }
 
     keymaps.conform = {
-        format = { key = SPACE_S.."kf", cmd=L.."vim.lsp.buf.format()", desc="format document" },
+        format = { key = SPACE_S.."kf", cmd=L.."vim.lsp.buf.format()", desc="document format" },
     }
 
     keymaps.git = {
@@ -104,8 +104,8 @@ if not file_content then
     }
 
     keymaps.treesj = {
-        join = { key = SPACE_S.."k{", cmd=C.."TSJJoin", desc="treesj join" },
-        split = { key = SPACE_S.."k}", cmd=C.."TSJSplit", desc="treesj split" }
+        join = { key = SPACE_S.."k{", cmd=C.."TSJJoin", desc="document join" },
+        split = { key = SPACE_S.."k}", cmd=C.."TSJSplit", desc="document split" }
     }
 
     keymaps.my_quick_actions = {
@@ -113,11 +113,11 @@ if not file_content then
     }
 
     keymaps.nvim_tree = {
-        toggle = { key = ALT("1"), cmd=C.."NvimTreeToggle", desc = "toggle nvim-tree" }
+        toggle = { key = ALT"1", cmd=C.."NvimTreeToggle", desc = "toggle nvim-tree" }
     }
 
     keymaps.terminal = {
-        toggle = {key = nil,cmd=C.."ToggleTerm",desc="open terminal"}
+        toggle = {key = ALT"3",cmd="toggle",desc="open terminal"}
     }
 
     keymaps.split_controls = {
@@ -141,7 +141,8 @@ if not file_content then
         go_right = {key = ALT(RIGHT_ARROW),cmd = C.."BufferNext"},
 
         move_left = {key = ALT(DOWN_ARROW),cmd = C.."BufferMovePrevious"},
-        move_right = {key = ALT(UP_ARROW),cmd = C.."BufferMoveNext"}
+        move_right = {key = ALT(UP_ARROW),cmd = C.."BufferMoveNext"},
+        close = {key = ALT("x"),cmd = C.."BufferClose"}
     }
 else
 	local data = TOML.parse(file_content,{strict = true})

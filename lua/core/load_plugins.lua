@@ -35,10 +35,10 @@ local function init_plugins()
     end
 
     local function require_mod(filename)
-        setup_mod("core." .. filename)
+        setup_mod(filename)
 
         if not is_ok then
-            setup_mod(filename)
+            setup_mod("core." .. filename)
         end
     end
 
@@ -51,7 +51,7 @@ local function init_plugins()
         is_enabled = is_table and data.enabled or not is_table and data
 
         if not is_enabled then return end
-        path = (is_table and (data.module or data.modules)) or plugin_name
+        path = (is_table and (data.module or data.modules))
         if not path then return end
 
         defer = is_table and data.defer and options.plugins.deferring_enabled and data.defer * 1000 or 0
@@ -177,7 +177,7 @@ function exports.init(plugin_manager)
     if not io_funcs.file_exists(path) then
         local str = TOML.encode(options)
         if io_funcs.write_file(path, make_string(str)) then
-            print "INFO: Generated plugin settings file"
+            print "INFO: Generated default plugin_settings file"
         end
     end
 
@@ -190,9 +190,15 @@ function exports.init(plugin_manager)
         keymaps_copy.EDITOR_COMMAND_PREFIX = nil
         local str = TOML.encode(keymaps_copy)
         if io_funcs.write_file(path, make_string(str)) then
-            print "INFO: Generated keymaps file"
+            print "INFO: Generated default keymaps file"
         end
     end
+
+    if not vim.v.argv[3] then
+        require("persistence").load()
+    end
+
+    print(vim.v.argv[3])
 end
 
 return exports

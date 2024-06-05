@@ -15,13 +15,17 @@ if not file_content then
 
         telescope = {
             enabled = true,
-            modules = {["builtin"] = "telescope.builtin",["config"] = "telescope_config"}
+            modules = {["builtin"] = "telescope.builtin",["config"] = "core.telescope"}
         },
 
         git = {
             enabled = true,
             module = "gitsigns",
-            defer = 1
+        },
+
+        which_key = {
+            enabled = true,
+            module = "core.which_key"
         },
 
         goto = {
@@ -31,7 +35,7 @@ if not file_content then
 
         my_quick_actions = {
             enabled = true,
-            module = "my_quick_actions"
+            module = "core.my_quick_actions"
         },
 
         split_controls = {
@@ -40,7 +44,7 @@ if not file_content then
 
         ufo = {
             enabled = true,
-            module = "ufo"
+            module = "core.ufo"
         },
 
         undotree = {
@@ -49,15 +53,15 @@ if not file_content then
 
         noice = {
             enabled = false,
-            module = "noice",
+            module = "core.noice",
         },
 
-        refractoring = {
+        refactoring = {
             enabled = true,
-            module = "refractoring",
+            module = "refactoring",
         },
 
-        highlight_indentation = {
+        ibl = {
             enabled = true,
             module = "ibl",
         },
@@ -67,11 +71,6 @@ if not file_content then
             module = "colorizer",
         },
 
-        auto_tag = {
-            enabled = true,
-            module = "auto_tag"
-        },
-
         symbols_outline = {
             enabled = true,
             module = "symbols-outline",
@@ -79,24 +78,24 @@ if not file_content then
 
         illuminate = {
             enabled = true,
-            module = "illuminate",
+            module = "core.illuminate",
         },
 
         status_line = {
             enabled = true,
-            module = "status_line",
+            module = "core.status_line",
             style = "",
             name = "lualine",
         },
 
         tree_sitter = {
             enabled = true,
-            module = "treesitter",
+            module = "core.treesitter",
         },
 
         webdev_icons = {
             enabled = true,
-            module = "webdev_icons"
+            module = "core.webdev_icons"
         },
 
         treesj = {
@@ -104,20 +103,20 @@ if not file_content then
         },
 
         alpha = {
-           enabled = true,
-           module = "alpha",
+           enabled = false,
+           module = "core.alpha",
         },
 
         conform = {
             enabled = true,
-            module = "conform"
+            module = "core.conform"
         },
 
         nvim_tree = {
             enabled = true,
             on_startup = false,
             side = "left",
-            module = "nvim_tree",
+            module = "core.nvim_tree",
             width = 30,
             adaptive_size = true,
             show_dotfiles = true,
@@ -126,13 +125,13 @@ if not file_content then
 
         discord = {
             enabled = false,
-            module = "discord_presence",
+            module = "core.discord_presence",
             style = "presence",
         },
 
         godot = {
             enabled = false,
-            module = "godot"
+            module = "core.godot"
         },
 
         theme = {
@@ -148,22 +147,22 @@ if not file_content then
 
         terminal = {
             enabled = true,
-            module = "term",
+            module = "core.toggleterm",
         },
 
         tabs = {
             enabled = true,
-            module = "barbar"
+            module = "core.barbar"
         },
 
         file_explorer = {
             enabled = true,
-            module = "oil"
+            module = "core.oil"
         },
 
         lsp = {
             enabled = true,
-            modules = {["lsp"] = "lsp",["cmp"] = "cmp"},
+            modules = {["lsp"] = "core.lsp",["cmp"] = "core.cmp"},
         }
     }
 else
