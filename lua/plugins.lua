@@ -197,10 +197,10 @@ local plugins = {
     { 'nvim-telescope/telescope-ui-select.nvim' },
 
     -- icons --
-    {
-        'goolord/alpha-nvim',
-        dependancies = { 'nvim-tree/nvim-web-devicons' }
-    },
+    -- {
+    --     'goolord/alpha-nvim',
+    --     dependancies = { 'nvim-tree/nvim-web-devicons' }
+    -- },
 
     -- color schemes --
     "gruvbox-community/gruvbox",

@@ -1,5 +1,5 @@
 local module_export = {}
-local options = require "options"
+local options = require "plugin_settings"
 local keymaps = require "keymaps"
 
 local modules = {}
@@ -61,7 +61,7 @@ function module_export.load_keymaps(_,external_opts)
                     if options[category_name].module then
                         load_module({category_name = category_name,data = data,action_name = action_name,module = options[category_name].module,opts = external_opts})
                     elseif options[category_name].modules then
-                        for _,module in ipairs(options[category_name].modules) do
+                        for _,module in pairs(options[category_name].modules) do
                             load_module({category_name = category_name,data = data,action_name = action_name,module = module,opts = external_opts})
                         end
                     end

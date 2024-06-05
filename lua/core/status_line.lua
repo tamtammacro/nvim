@@ -1,4 +1,4 @@
-local options = require "options"
+local options = require "plugin_settings"
 local DELAY = 2000
 
 if options.status_line.name == "lualine" then

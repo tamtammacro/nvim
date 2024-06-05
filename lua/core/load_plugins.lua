@@ -1,12 +1,20 @@
 local exports = {}
-local options = require "options"
-local notify_ok,notify = pcall(require,"notify")
+local options = require "plugin_settings"
+local io_funcs = require "helper.io_func"
+local funcs = require "helper.func"
+local keymaps = require "keymaps"
+
+local TOML = require "vendor.lua-toml.toml"
+
+local notify_ok, notify = pcall(require, "notify")
 
 if not notify_ok then return print "Could not load plugins: missing notify" end
 
 local INDENT_BLANKLINE_BACKGROUND_COLOR = 0xFF0000
-local INDENT_BLANK_LINE_LIST = {"IndentBlanklineContextChar","IndentBlanklineChar","IndentBlanklineSpaceChar","IndentBlanklineSpaceCharBlankline","IndentBlanklineContextSpaceChar","IndentBlanklineContextStart"}
-local FALLBACK_FUNC = {alpha = "Alpha",colorizer="ColorizerAttachToBuffer"}
+local INDENT_BLANK_LINE_LIST = { "IndentBlanklineContextChar", "IndentBlanklineChar", "IndentBlanklineSpaceChar",
+    "IndentBlanklineSpaceCharBlankline", "IndentBlanklineContextSpaceChar", "IndentBlanklineContextStart" }
+local FALLBACK_FUNC = { alpha = "Alpha", colorizer = "ColorizerAttachToBuffer" }
+local keymap_loader = require "core.load_keymaps"
 
 local function init_plugins()
     local is_ok
@@ -19,7 +27,7 @@ local function init_plugins()
     local is_multi_path
 
     local function setup_mod(filename)
-        is_ok,mod = pcall(require,filename)
+        is_ok, mod = pcall(require, filename)
 
         if is_ok and type(mod) == "table" and mod.setup then
             mod.setup()
@@ -27,7 +35,7 @@ local function init_plugins()
     end
 
     local function require_mod(filename)
-        setup_mod("core."..filename)
+        setup_mod("core." .. filename)
 
         if not is_ok then
             setup_mod(filename)
@@ -35,10 +43,10 @@ local function init_plugins()
     end
 
     local function require_sub_mods(p_path)
-        for _,file_name in ipairs(p_path) do require_mod(file_name) end
+        for _, file_name in pairs(p_path) do require_mod(file_name) end
     end
 
-    local function load_mod(plugin_name,data)
+    local function load_mod(plugin_name, data)
         is_table = type(data) == "table"
         is_enabled = is_table and data.enabled or not is_table and data
 
@@ -51,7 +59,7 @@ local function init_plugins()
 
         if is_multi_path then
             if defer > 0 then
-                vim.defer_fn(function() require_sub_mods(path) end,defer)
+                vim.defer_fn(function() require_sub_mods(path) end, defer)
             else
                 require_sub_mods(path)
             end
@@ -64,17 +72,17 @@ local function init_plugins()
                     if func_name and vim.cmd[func_name] and not vim.v.argv[3] then
                         vim.cmd[func_name]()
                     end
-                end,defer)
+                end, defer)
             else
                 if func_name and not vim.v.argv[3] and options.plugins.defer then
-                    vim.defer_fn(vim.cmd[func_name],options.plugins.deferring_enabled and options.plugins.defer or 0)
+                    vim.defer_fn(vim.cmd[func_name], options.plugins.deferring_enabled and options.plugins.defer or 0)
                 end
                 require_mod(path)
             end
         end
     end
 
-    for plugin_name,obj in pairs(options) do load_mod(plugin_name,obj) end
+    for plugin_name, obj in pairs(options) do load_mod(plugin_name, obj) end
 end
 
 local function use_plugins(plugin_manager)
@@ -86,42 +94,39 @@ local function use_plugins(plugin_manager)
         else
             require "plugins"
         end
-        xpcall(init_plugins,function(error) notify(error,"error") end)
+        xpcall(init_plugins, function(error) notify(error, "error") end)
     end
 
-    local success,err = pcall(function()
+    local success, err = pcall(function()
         if options.plugins.defer then
-            vim.defer_fn(init,options.plugins.defer * 1000)
+            vim.defer_fn(init, options.plugins.defer * 1000)
         else
             init()
         end
     end)
 
     if not success and err then
-        notify(("Error with 'use_plugins': %s"):format(err),"error")
+        notify(("Error with 'use_plugins': %s"):format(err), "error")
     end
-
     xpcall(function()
-        require("core.load_keymaps").load_keymaps()
-    end,print)
+        keymap_loader.load_keymaps()
+    end, print)
 end
 
 local function use_visuals()
     if not options.plugins.enabled then return end
 
-    local success,err = pcall(function()
-        if options.theme.enabled then
-            local theme_name = options.theme.style and #options.theme.style > 0 and options.theme.name.."-"..options.theme.style or options.theme.name
-            local success = pcall(vim.cmd.colorscheme,theme_name)
+    local current_theme = vim.g.colors_name
+
+    local success, err = pcall(function()
+        local theme_full_name = options.theme.style and #options.theme.style > 0 and
+            options.theme.name .. "-" .. options.theme.style or options.theme.name
+
+        if options.theme.enabled and (current_theme ~= theme_full_name) then
+            local success, error_message = pcall(vim.cmd.colorscheme, theme_full_name)
 
             if not success then
-                notify("Could not find color scheme: "..theme_name,"warning")
-                local error_message
-                success,error_message = pcall(vim.cmd.colorscheme,options.color_scheme.name)
-
-                if not success then
-                    notify(error_message,"error")
-                end
+                notify(error_message, "error")
             end
 
             if (options.theme.name == "material") then vim.g.material_style = options.theme.style end
@@ -132,16 +137,43 @@ local function use_visuals()
         end
     end)
 
-    for _,indent_name in ipairs(INDENT_BLANK_LINE_LIST) do
-        vim.cmd("highlight "..indent_name .." guifg="..INDENT_BLANKLINE_BACKGROUND_COLOR.." gui=nocombine")
+    for _, indent_name in ipairs(INDENT_BLANK_LINE_LIST) do
+        vim.cmd("highlight " .. indent_name .. " guifg=" .. INDENT_BLANKLINE_BACKGROUND_COLOR .. " gui=nocombine")
     end
 
-    if not success and err then notify(err,"error") end
+    if not success and err then notify(err, "error") end
 end
 
 function exports.init(plugin_manager)
-    require "vim_options"
+    local settings_path = io_funcs.get_config_loc() .. (vim.fn.has"win32" and "\\settings" or "/settings")
+    local path = settings_path .. "/plugin_settings.toml"
+
+    if not io_funcs.isdir(settings_path) then
+        io_funcs.mkdir(settings_path)
+    end
+
+    if not io_funcs.file_exists(path) then
+        local str = TOML.encode(options)
+        if io_funcs.write_file(path,str) then
+            print "INFO: Generated plugin settings file"
+        end
+    end
+
+    path = io_funcs.get_config_loc() .. "/settings/keymaps.toml"
+
+    if not io_funcs.file_exists(path) then
+        local keymaps_copy = funcs.deepcopy(keymaps)
+        keymaps_copy.VIM_COMMAND_PREFIX = nil
+        keymaps_copy.LUA_COMMAND_PREFIX = nil
+        keymaps_copy.EDITOR_COMMAND_PREFIX = nil
+        local str = TOML.encode(keymaps_copy)
+        if io_funcs.write_file(path,str) then
+            print "INFO: Generated keymaps file"
+        end
+    end
+
     use_plugins(plugin_manager)
+    require "vim_options"
     use_visuals()
 end
 

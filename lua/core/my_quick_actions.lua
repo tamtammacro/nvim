@@ -1,14 +1,9 @@
 local exports = {}
-local options = require "options"
+local io_funcs = require "helper.io_func"
 
 function exports.goto_config()
     vim.cmd.vsplit()
-
-    if vim.fn.has "win32" then
-        vim.cmd.e(vim.env.HOME.."\\AppData\\Local\\nvim")
-    else
-        vim.cmd.e("~/.config/nvim")
-    end
+    vim.cmd.e(io_funcs.get_config_loc())
 end
 
 return exports

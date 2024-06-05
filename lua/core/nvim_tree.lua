@@ -1,4 +1,4 @@
-local options = require "options"
+local options = require "plugin_settings"
 local nvim_tree_opts = options["nvim_tree"]
 
 local success, nvim_tree = pcall(require, "nvim-tree")
