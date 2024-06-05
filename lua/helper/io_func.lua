@@ -1,7 +1,11 @@
 local exports = {}
 
 function exports.get_config_loc()
-    return vim.fn.has "win32" and vim.env.HOME .. "\\AppData\\Local\\nvim" or "~/.config/nvim"
+    return exports.is_win32() and vim.env.HOME .. "\\AppData\\Local\\nvim" or "~/.config/nvim"
+end
+
+function exports.is_win32()
+    return vim.loop.os_uname().sysname == "Windows_NT"
 end
 
 function exports.read_all_file(path)

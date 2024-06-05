@@ -145,7 +145,7 @@ local function use_visuals()
 end
 
 function exports.init(plugin_manager)
-    local settings_path = io_funcs.get_config_loc() .. (vim.fn.has"win32" and "\\settings" or "/settings")
+    local settings_path = io_funcs.get_config_loc() .. (io_funcs.is_win32() and "\\settings" or "/settings")
     local path = settings_path .. "/plugin_settings.toml"
 
     if not io_funcs.isdir(settings_path) then
