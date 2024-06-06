@@ -5,7 +5,6 @@ if not success then return print "telescope is not installed" end
 telescope.setup({
     defaults = {
         file_ignore_patterns = {
-            'git',
             "cache",
             "CMakeFiles",
             "out",

@@ -15,12 +15,13 @@ if not file_content then
 
         telescope = {
             enabled = true,
-            modules = {["builtin"] = "telescope.builtin",["config"] = "core.telescope"}
+            modules = {builtin = "telescope.builtin",config = "core.telescope"}
         },
 
         git = {
             enabled = true,
-            module = "gitsigns",
+            gitblame_inline = false,
+            modules = {gitsigns = "gitsigns",gitcore = "core.git"},
         },
 
         which_key = {
@@ -52,7 +53,7 @@ if not file_content then
         },
 
         noice = {
-            enabled = false,
+            enabled = true,
             module = "core.noice",
         },
 
@@ -162,7 +163,7 @@ if not file_content then
 
         lsp = {
             enabled = true,
-            modules = {["lsp"] = "core.lsp",["cmp"] = "core.cmp"},
+            modules = {lsp = "core.lsp",cmp = "core.cmp"},
         }
     }
 else

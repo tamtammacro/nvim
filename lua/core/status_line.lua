@@ -1,5 +1,5 @@
 local options = require "plugin_settings"
-local DELAY = 2000
+local DELAY = 3000
 
 if options.status_line.name == "lualine" then
     local success, lualine = pcall(require, 'lualine')
@@ -223,13 +223,11 @@ if options.status_line.name == "lualine" then
 
 
         vim.defer_fn(function()
-            if options.noice.enabled then return end
             lualine.setup(config)
         end, options.noice.enabled and DELAY or 0)
         return
     end
     vim.defer_fn(function()
-        if options.noice.enabled then return end
         lualine.setup({})
     end, options.noice.enabled and DELAY or 0)
 end

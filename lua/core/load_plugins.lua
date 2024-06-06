@@ -14,7 +14,6 @@ local INDENT_BLANKLINE_BACKGROUND_COLOR = 0xFF0000
 local INDENT_BLANK_LINE_LIST = { "IndentBlanklineContextChar", "IndentBlanklineChar", "IndentBlanklineSpaceChar",
     "IndentBlanklineSpaceCharBlankline", "IndentBlanklineContextSpaceChar", "IndentBlanklineContextStart" }
 local FALLBACK_FUNC = { alpha = "Alpha", colorizer = "ColorizerAttachToBuffer" }
-local keymap_loader = require "core.load_keymaps"
 
 local function init_plugins()
     local is_ok
@@ -109,7 +108,7 @@ local function use_plugins(plugin_manager)
         notify(("Error with 'use_plugins': %s"):format(err), "error")
     end
     xpcall(function()
-        keymap_loader.load_keymaps()
+        require "core.load_keymaps".load_keymaps()
     end, print)
 end
 
@@ -181,7 +180,7 @@ function exports.init(plugin_manager)
         end
     end
 
-    path = io_funcs.get_config_loc() .. "/settings/keymaps.toml"
+    path = settings_path .. "/keymaps.toml"
 
     if not io_funcs.file_exists(path) then
         local keymaps_copy = funcs.deepcopy(keymaps)
@@ -197,8 +196,6 @@ function exports.init(plugin_manager)
     if not vim.v.argv[3] then
         require("persistence").load()
     end
-
-    print(vim.v.argv[3])
 end
 
 return exports
