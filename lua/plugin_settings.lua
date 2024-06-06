@@ -5,175 +5,210 @@ local path = io_funcs.get_config_loc() .. "/settings/plugin_settings.toml"
 local file_content = io_funcs.read_all_file(path)
 local TOML = require "vendor.lua-toml.toml"
 
-if not file_content then
-    -- defaults --
-    plugin_settings = {
-        plugins = {
-            enabled = true,
-            deferring_enabled = false
-        },
+local defaults = {
+    plugins = {
+        enabled = true,
+        deferring_enabled = false
+    },
 
-        telescope = {
-            enabled = true,
-            modules = {builtin = "telescope.builtin",config = "core.telescope"}
-        },
+    telescope = {
+        enabled = true,
+        modules = {builtin = "telescope.builtin",config = "core.telescope"}
+    },
 
-        git = {
-            enabled = true,
-            gitblame_inline = false,
-            modules = {gitsigns = "gitsigns",gitcore = "core.git"},
-        },
+    git = {
+        enabled = true,
+        gitblame_inline = false,
+        modules = {gitsigns = "gitsigns",gitcore = "core.git"},
+    },
 
-        which_key = {
-            enabled = true,
-            module = "core.which_key"
-        },
+    which_key = {
+        enabled = true,
+        module = "core.which_key"
+    },
 
-        goto = {
-            enabled = true,
-            module = "goto-preview"
-        },
+    goto = {
+        enabled = true,
+        module = "goto-preview"
+    },
 
-        my_quick_actions = {
-            enabled = true,
-            module = "core.my_quick_actions"
-        },
+    my_quick_actions = {
+        enabled = true,
+        module = "core.my_quick_actions"
+    },
 
-        split_controls = {
-            enabled = true
-        },
+    split_controls = {
+        enabled = true
+    },
 
-        ufo = {
-            enabled = true,
-            module = "core.ufo"
-        },
+    ufo = {
+        enabled = true,
+        module = "core.ufo"
+    },
 
-        undotree = {
-            enabled = true,
-        },
+    undotree = {
+        enabled = true,
+    },
 
-        noice = {
-            enabled = true,
-            module = "core.noice",
-        },
+    noice = {
+        enabled = true,
+        module = "core.noice",
+    },
 
-        refactoring = {
-            enabled = true,
-            module = "refactoring",
-        },
+    refactoring = {
+        enabled = true,
+        module = "refactoring",
+    },
 
-        ibl = {
-            enabled = true,
-            module = "ibl",
-        },
+    ibl = {
+        enabled = true,
+        module = "ibl",
+    },
 
-        colorizer = {
-            enabled = true,
-            module = "colorizer",
-        },
+    colorizer = {
+        enabled = true,
+        module = "colorizer",
+    },
 
-        symbols_outline = {
-            enabled = true,
-            module = "symbols-outline",
-        },
+    symbols_outline = {
+        enabled = true,
+        module = "symbols-outline",
+    },
 
-        illuminate = {
-            enabled = true,
-            module = "core.illuminate",
-        },
+    illuminate = {
+        enabled = true,
+        module = "core.illuminate",
+    },
 
-        status_line = {
-            enabled = true,
-            module = "core.status_line",
-            style = "",
-            name = "lualine",
-        },
+    status_line = {
+        enabled = true,
+        module = "core.status_line",
+        style = "",
+        name = "lualine",
+    },
 
-        tree_sitter = {
-            enabled = true,
-            module = "core.treesitter",
-        },
+    tree_sitter = {
+        enabled = true,
+        module = "core.treesitter",
+    },
 
-        webdev_icons = {
-            enabled = true,
-            module = "core.webdev_icons"
-        },
+    webdev_icons = {
+        enabled = true,
+        module = "core.webdev_icons"
+    },
 
-        treesj = {
-            enabled = true,
-        },
+    treesj = {
+        enabled = true,
+    },
 
-        alpha = {
-           enabled = false,
-           module = "core.alpha",
-        },
+    alpha = {
+       enabled = false,
+       module = "core.alpha",
+    },
 
-        conform = {
-            enabled = true,
-            module = "core.conform"
-        },
+    conform = {
+        enabled = true,
+        module = "core.conform"
+    },
 
-        nvim_tree = {
-            enabled = true,
-            on_startup = false,
-            side = "left",
-            module = "core.nvim_tree",
-            width = 30,
-            adaptive_size = true,
-            show_dotfiles = true,
-            show_gitignore = false,
-        },
+    nvim_tree = {
+        enabled = true,
+        on_startup = false,
+        side = "left",
+        module = "core.nvim_tree",
+        width = 30,
+        adaptive_size = true,
+        show_dotfiles = true,
+        show_gitignore = false,
+    },
 
-        discord = {
-            enabled = false,
-            module = "core.discord_presence",
-            style = "presence",
-        },
+    discord = {
+        enabled = false,
+        module = "core.discord_presence",
+        style = "presence",
+    },
 
-        godot = {
-            enabled = false,
-            module = "core.godot"
-        },
+    godot = {
+        enabled = false,
+        module = "core.godot"
+    },
 
-        theme = {
-            enabled = true,
-            name = "vscode",
-            transparent = false,
-        },
+    theme = {
+        enabled = true,
+        name = "vscode",
+        transparent = false,
+    },
 
-        trouble = {
-            enabled = false,
-            module = "trouble",
-        },
+    trouble = {
+        enabled = false,
+        module = "trouble",
+    },
 
-        terminal = {
-            enabled = true,
-            module = "core.toggleterm",
-        },
+    terminal = {
+        enabled = true,
+        module = "core.toggleterm",
+    },
 
-        tabs = {
-            enabled = true,
-            module = "core.barbar"
-        },
+    tabs = {
+        enabled = true,
+        module = "core.barbar",
+    },
 
-        file_explorer = {
-            enabled = true,
-            module = "core.oil"
-        },
+    file_explorer = {
+        enabled = true,
+        module = "core.oil"
+    },
 
-        lsp = {
-            enabled = true,
-            modules = {lsp = "core.lsp",cmp = "core.cmp"},
-        }
-    }
-else
-	local data = TOML.parse(file_content,{strict = true})
+    lsp = {
+        enabled = true,
+        modules = {lsp = "core.lsp",cmp = "core.cmp"},
+    },
 
-    if data then
-        plugin_settings = data
-    else
-        plugin_settings = {}
+    auto_update_settings_test = {
+        enabled = true,
+    },
+}
+
+plugin_settings = not file_content and defaults or TOML.parse(file_content,{strict = true})
+
+if not plugin_settings then return {} end
+
+coroutine.resume(coroutine.create(function()
+    for plugin_name,data in pairs(defaults) do
+        if plugin_name ~= "out_of_date" then
+            if plugin_settings[plugin_name] == nil and defaults[plugin_name] then
+                plugin_settings.out_of_date = true
+                plugin_settings[plugin_name] = data
+            end
+        end
+        if type(data) == "table" then
+            for opt, default_value in pairs(data) do
+                if plugin_settings[plugin_name][opt] == nil then
+                    plugin_settings.out_of_date = true
+                    plugin_settings[plugin_name][opt] = default_value
+                end
+            end
+        end
     end
-end
+
+    for plugin_name, data in pairs(plugin_settings) do
+        if plugin_name ~= "out_of_date" then
+            if defaults[plugin_name] == nil then
+                plugin_settings[plugin_name] = nil
+                plugin_settings.out_of_date = true
+            end
+        end
+        if type(data) == "table" then
+            for opt in pairs(data) do
+                if defaults[plugin_name][opt] == nil then
+                    plugin_settings[plugin_name][opt] = nil
+                    plugin_settings.out_of_date = true
+                end
+            end
+        end
+    end
+
+    coroutine.yield()
+end))
 
 return plugin_settings

@@ -174,7 +174,8 @@ function exports.init(plugin_manager)
         io_funcs.mkdir(settings_path)
     end
 
-    if not io_funcs.file_exists(path) then
+    if not io_funcs.file_exists(path) or options.out_of_date then
+        options.out_of_date = nil
         local str = TOML.encode(options)
         if io_funcs.write_file(path, make_string(str)) then
             print "INFO: Generated default plugin_settings file"
