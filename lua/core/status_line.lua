@@ -1,5 +1,5 @@
 local options = require "plugin_settings"
-local DELAY = 3000
+local DELAY = 0
 
 if options.status_line.name == "lualine" then
     local success, lualine = pcall(require, 'lualine')

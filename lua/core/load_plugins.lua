@@ -101,6 +101,7 @@ local function use_plugins(plugin_manager)
             vim.defer_fn(init, options.plugins.defer * 1000)
         else
             init()
+            vim.cmd.GitBlameDisable()
         end
     end)
 
