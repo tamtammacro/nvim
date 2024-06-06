@@ -10,3 +10,7 @@ if style == "" or not style then
 elseif style == "dashboard" then
     alpha.setup(require'alpha.themes.dashboard'.config)
 end
+
+if not vim.v.argv[3] then
+    vim.cmd.Alpha()
+end

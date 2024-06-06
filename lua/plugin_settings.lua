@@ -1,8 +1,9 @@
 local plugin_settings = nil
 local io_funcs = require "helper.io_func"
+local notify = require "notify"
 
-local path = io_funcs.get_config_loc() .. "/settings/plugin_settings.toml"
-local file_content = io_funcs.read_all_file(path)
+local plugin_settings_path = io_funcs.get_config_loc() .. "/settings/plugin_settings.toml"
+local file_content = io_funcs.read_all_file(plugin_settings_path)
 local TOML = require "vendor.lua-toml.toml"
 
 local defaults = {
@@ -163,10 +164,6 @@ local defaults = {
         enabled = true,
         modules = {lsp = "core.lsp",cmp = "core.cmp"},
     },
-
-    auto_update_settings_test = {
-        enabled = true,
-    },
 }
 
 plugin_settings = not file_content and defaults or TOML.parse(file_content,{strict = true})
@@ -174,6 +171,7 @@ plugin_settings = not file_content and defaults or TOML.parse(file_content,{stri
 if not plugin_settings then return {} end
 
 coroutine.resume(coroutine.create(function()
+    --NOTE: Adding missing plugin data
     for plugin_name,data in pairs(defaults) do
         if plugin_name ~= "out_of_date" then
             if plugin_settings[plugin_name] == nil and defaults[plugin_name] then
@@ -199,10 +197,26 @@ coroutine.resume(coroutine.create(function()
             end
         end
         if type(data) == "table" then
-            for opt in pairs(data) do
+            for opt, value in pairs(data) do
+                --NOTE: Removing outdated plugins
                 if defaults[plugin_name][opt] == nil then
                     plugin_settings[plugin_name][opt] = nil
                     plugin_settings.out_of_date = true
+                end
+                if type(value) ~= type(defaults[plugin_name][opt]) then
+                    notify(string.format("%s::%s is not the same type as reference table.",plugin_name,opt,plugin_name),"error")
+                end
+                if plugin_settings[plugin_name][opt] and opt == "module" then
+                    if value ~= defaults[plugin_name][opt] then
+                        plugin_settings[plugin_name][opt] = defaults[plugin_name][opt]
+                    end
+                elseif plugin_settings[plugin_name][opt] and opt == "modules" then
+                    for mod_name, mod_path in pairs(type(value) == "table" and value or {}) do
+                        if defaults[plugin_name][opt][mod_name] ~= mod_path then
+                            plugin_settings[plugin_name][opt][mod_name] = defaults[plugin_name][opt][mod_name] 
+                            plugin_settings.out_of_date = true
+                        end
+                    end
                 end
             end
         end

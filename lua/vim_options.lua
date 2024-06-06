@@ -65,6 +65,13 @@ xpcall(function()
 
     vim.g.loaded_netrwPlugin = 1
     vim.g.loaded_netrw = 1
+
+    local INDENT_BLANK_LINE_LIST = { "IndentBlanklineContextChar", "IndentBlanklineChar", "IndentBlanklineSpaceChar",
+        "IndentBlanklineSpaceCharBlankline", "IndentBlanklineContextSpaceChar", "IndentBlanklineContextStart" }
+    local INDENT_BLANKLINE_BACKGROUND_COLOR = 0xFF0000
+    for _, indent_name in ipairs(INDENT_BLANK_LINE_LIST) do
+        vim.cmd("highlight " .. indent_name .. " guifg=" .. INDENT_BLANKLINE_BACKGROUND_COLOR .. " gui=nocombine")
+    end
 end,function(error_message)
     print(error_message)
 end)

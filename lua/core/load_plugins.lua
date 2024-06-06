@@ -10,11 +10,6 @@ local notify_ok, notify = pcall(require, "notify")
 
 if not notify_ok then return print "Could not load plugins: missing notify" end
 
-local INDENT_BLANKLINE_BACKGROUND_COLOR = 0xFF0000
-local INDENT_BLANK_LINE_LIST = { "IndentBlanklineContextChar", "IndentBlanklineChar", "IndentBlanklineSpaceChar",
-    "IndentBlanklineSpaceCharBlankline", "IndentBlanklineContextSpaceChar", "IndentBlanklineContextStart" }
-local FALLBACK_FUNC = { alpha = "Alpha", colorizer = "ColorizerAttachToBuffer" }
-
 local function init_plugins()
     local is_ok
     local mod
@@ -63,21 +58,7 @@ local function init_plugins()
                 require_sub_mods(path)
             end
         elseif is_table then
-            local func_name = FALLBACK_FUNC[path]
-
-            if defer > 0 then
-                vim.defer_fn(function()
-                    require_mod(path)
-                    if func_name and vim.cmd[func_name] and not vim.v.argv[3] then
-                        vim.cmd[func_name]()
-                    end
-                end, defer)
-            else
-                if func_name and not vim.v.argv[3] and options.plugins.defer then
-                    vim.defer_fn(vim.cmd[func_name], options.plugins.deferring_enabled and options.plugins.defer or 0)
-                end
-                require_mod(path)
-            end
+            require_mod(path)
         end
     end
 
@@ -136,10 +117,6 @@ local function use_visuals()
             vim.cmd["highlight"]("Normal guibg=none")
         end
     end)
-
-    for _, indent_name in ipairs(INDENT_BLANK_LINE_LIST) do
-        vim.cmd("highlight " .. indent_name .. " guifg=" .. INDENT_BLANKLINE_BACKGROUND_COLOR .. " gui=nocombine")
-    end
 
     if not success and err then notify(err, "error") end
 end
