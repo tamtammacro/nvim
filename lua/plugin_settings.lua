@@ -14,23 +14,28 @@ local defaults = {
 
     telescope = {
         enabled = true,
-        modules = {builtin = "telescope.builtin",config = "core.telescope"}
+        modules = {builtin = "telescope.builtin",config = "plugin_config.telescope"}
     },
 
     git = {
         enabled = true,
         gitblame_inline = false,
-        modules = {gitsigns = "gitsigns",gitcore = "core.git"},
+        modules = {gitsigns = "gitsigns",gitcore = "plugin_config.git"},
     },
 
     which_key = {
         enabled = true,
-        module = "core.which_key"
+        module = "plugin_config.which_key"
     },
 
     goto = {
         enabled = true,
         module = "goto-preview"
+    },
+
+    dap = {
+        enabled = true,
+        module = "plugin_config.dap"
     },
 
     my_quick_actions = {
@@ -44,7 +49,7 @@ local defaults = {
 
     ufo = {
         enabled = true,
-        module = "core.ufo"
+        module = "plugin_config.ufo"
     },
 
     undotree = {
@@ -52,8 +57,8 @@ local defaults = {
     },
 
     noice = {
-        enabled = true,
-        module = "core.noice",
+        enabled = false,
+        module = "plugin_config.noice",
     },
 
     refactoring = {
@@ -78,24 +83,24 @@ local defaults = {
 
     illuminate = {
         enabled = true,
-        module = "core.illuminate",
+        module = "plugin_config.illuminate",
     },
 
     status_line = {
         enabled = true,
-        module = "core.status_line",
+        module = "plugin_config.status_line",
         style = "",
         name = "lualine",
     },
 
     tree_sitter = {
         enabled = true,
-        module = "core.treesitter",
+        module = "plugin_config.treesitter",
     },
 
     webdev_icons = {
         enabled = true,
-        module = "core.webdev_icons"
+        module = "plugin_config.webdev_icons"
     },
 
     treesj = {
@@ -104,19 +109,19 @@ local defaults = {
 
     alpha = {
        enabled = false,
-       module = "core.alpha",
+       module = "plugin_config.alpha",
     },
 
     conform = {
         enabled = true,
-        module = "core.conform"
+        module = "plugin_config.conform"
     },
 
     nvim_tree = {
         enabled = true,
         on_startup = false,
         side = "left",
-        module = "core.nvim_tree",
+        module = "plugin_config.nvim_tree",
         width = 30,
         adaptive_size = true,
         show_dotfiles = true,
@@ -125,13 +130,13 @@ local defaults = {
 
     discord = {
         enabled = false,
-        module = "core.discord_presence",
+        module = "plugin_config.discord_presence",
         style = "presence",
     },
 
     godot = {
-        enabled = false,
-        module = "core.godot"
+        enabled = true,
+        module = "plugin_config.godot"
     },
 
     theme = {
@@ -147,22 +152,22 @@ local defaults = {
 
     terminal = {
         enabled = true,
-        module = "core.toggleterm",
+        module = "plugin_config.toggleterm",
     },
 
     tabs = {
         enabled = true,
-        module = "core.barbar",
+        module = "plugin_config.barbar",
     },
 
     file_explorer = {
         enabled = true,
-        module = "core.oil"
+        module = "plugin_config.oil"
     },
 
     lsp = {
         enabled = true,
-        modules = {lsp = "core.lsp",cmp = "core.cmp"},
+        modules = {lsp = "plugin_config.lsp",cmp = "plugin_config.cmp"},
     },
 }
 
@@ -209,11 +214,12 @@ coroutine.resume(coroutine.create(function()
                 if plugin_settings[plugin_name][opt] and opt == "module" then
                     if value ~= defaults[plugin_name][opt] then
                         plugin_settings[plugin_name][opt] = defaults[plugin_name][opt]
+                        plugin_settings.out_of_date = true
                     end
                 elseif plugin_settings[plugin_name][opt] and opt == "modules" then
                     for mod_name, mod_path in pairs(type(value) == "table" and value or {}) do
                         if defaults[plugin_name][opt][mod_name] ~= mod_path then
-                            plugin_settings[plugin_name][opt][mod_name] = defaults[plugin_name][opt][mod_name] 
+                            plugin_settings[plugin_name][opt][mod_name] = defaults[plugin_name][opt][mod_name]
                             plugin_settings.out_of_date = true
                         end
                     end

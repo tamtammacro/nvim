@@ -32,7 +32,12 @@ local function init_plugins()
         setup_mod(filename)
 
         if not is_ok then
-            setup_mod("core." .. filename)
+            notify(string.format("Could not load module: %s",filename),"error")
+            --NOTE: mod is error_message here --
+            if mod then
+                notify(string.format("core.load_plugins, could not load module error: %s",mod),"error")
+            end
+            setup_mod("plugin_config." .. filename)
         end
     end
 
@@ -152,23 +157,38 @@ function exports.init(plugin_manager)
     end
 
     if not io_funcs.file_exists(path) or options.out_of_date then
+        local out_of_date_prev = options.out_of_date
+
         options.out_of_date = nil
         local str = TOML.encode(options)
+
         if io_funcs.write_file(path, make_string(str)) then
-            print "INFO: Generated default plugin_settings file"
+            if out_of_date_prev then
+                print "INFO: plugin_settings.toml was updated"
+            else
+                print "INFO: Generated plugin_settings.toml"
+            end
         end
+
     end
 
     path = settings_path .. "/keymaps.toml"
 
-    if not io_funcs.file_exists(path) then
+    if not io_funcs.file_exists(path) or keymaps.out_of_date then
+        local out_of_date_prev = keymaps.out_of_date
+        keymaps.out_of_date = nil
         local keymaps_copy = funcs.deepcopy(keymaps)
         keymaps_copy.VIM_COMMAND_PREFIX = nil
         keymaps_copy.LUA_COMMAND_PREFIX = nil
         keymaps_copy.EDITOR_COMMAND_PREFIX = nil
         local str = TOML.encode(keymaps_copy)
+
         if io_funcs.write_file(path, make_string(str)) then
-            print "INFO: Generated default keymaps file"
+            if out_of_date_prev then
+                print "INFO: keymaps.toml was updated"
+            else
+                print "INFO: Generated keymaps.toml"
+            end
         end
     end
 

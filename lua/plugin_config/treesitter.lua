@@ -6,7 +6,7 @@ config.setup {
     ensure_installed = { "c", "go", "lua", "vim", "vimdoc", "query", "markdown", "rust", "javascript" },
 
     rainbow = {
-        enable = true,
+        enable = false,
         disable = { 'jsx', 'cpp', "c" },
         query = 'rainbow-parens',
         strategy = require('ts-rainbow').strategy.global,

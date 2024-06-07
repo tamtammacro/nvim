@@ -7,7 +7,7 @@ Then install the packer plugins with<br />
 :PackerSync<br />
 
 Dependancies:<br />
-ripgrep,clang,fd,unzip,gzip,wget,zig,nerdfont<br />
+ripgrep,clang,fd,unzip,gzip,wget,zig,ncat,nerdfont<br />
 
 Win32 dependancies:<br />
 chocolatey,mingw32

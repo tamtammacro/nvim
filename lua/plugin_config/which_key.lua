@@ -40,5 +40,8 @@ xpcall(function()
         g = {
             name = "Go", -- optional group name
         },
+        d = {
+            name = "Debug", -- optional group name
+        },
     }, { prefix = SPACE_S })
 end, print)

@@ -1,9 +1,11 @@
+local io_funcs = require "helper.io_func"
+
 local gdscript_config = {
     capabilities = {},
     settings = {}
 }
 
-if vim.fn.has "win32" then
+if io_funcs.is_win32() then
     gdscript_config.cmd = {"ncat","localhost",os.getenv "GDScript_Port" or "6005"}
 end
 

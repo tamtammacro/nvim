@@ -4,8 +4,6 @@ local lspconfig
 success, lspconfig = pcall(require, "lspconfig")
 if not success then return print "lspconfig is not installed" end
 
-local servers = { "pyright", "tsserver", "rust_analyzer", "cssls", "gopls" }
-
 local function on_attach(_, bufnr)
     --local opts = {buffer = bufnr, remap = false}
 end
@@ -20,14 +18,12 @@ lspconfig.clangd.setup {
     filetypes = { "c", "cpp", "objc", "objcpp" },
 }
 
-for _, server_name in ipairs(servers) do
-    require('lspconfig')[server_name].setup { on_attach = on_attach }
-end
-
 local lsp
 success, lsp = pcall(require, "lsp-zero")
 
 if not success then return print "lsp zero is not installed" end
+
+vim.lsp.set_log_level("debug")
 
 lsp.preset("recommended")
 

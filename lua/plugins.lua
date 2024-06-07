@@ -47,7 +47,7 @@ local plugins = {
         config = function() require('competitest').setup() end,
     },
 
-    { "folke/neodev.nvim",       opts = {} },
+    { "folke/neodev.nvim",    opts = {} },
 
     {
         "windwp/nvim-autopairs",
@@ -150,7 +150,7 @@ local plugins = {
         end,
     },
 
-    { 'akinsho/toggleterm.nvim',                  version = "*", config = true },
+    { 'akinsho/toggleterm.nvim', version = "*", config = true },
 
     -- visuals --
     {
@@ -300,6 +300,12 @@ local plugins = {
     {
         "williamboman/mason.nvim",
         run = ":MasonUpdate"
+    },
+
+    "jay-babu/mason-nvim-dap.nvim",
+    { "rcarriga/nvim-dap-ui", dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" } },
+    {
+        "ldelossa/nvim-dap-projects",
     },
     "hrsh7th/cmp-nvim-lsp",
     "hrsh7th/cmp-buffer",

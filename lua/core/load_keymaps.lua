@@ -14,7 +14,7 @@ local function set_keymap(obj,func,opts,args)
     opts = opts or {}
     opts.noremap = true
     opts.silent = true
-    opts.desc = obj.desc or "Unknown"
+    opts.desc = obj.desc or "No description"
 
     local command = type(func) == "string" and func:match("^"..keymaps.EDITOR_COMMAND_PREFIX) and func:sub(#keymaps.EDITOR_COMMAND_PREFIX+1,#func)
 
@@ -39,7 +39,7 @@ function module_export.load_keymaps(_,external_opts)
         mod_ok = type(mod) == "table"
 
         if not mod_ok then
-            mod = modules[t.category_name] or select(2,pcall(require,"core."..t.module))
+            mod = modules[t.category_name] or select(2,pcall(require,"plugin_config."..t.module))
             mod_ok = type(mod) == "table"
         end
 
