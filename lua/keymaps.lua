@@ -39,7 +39,7 @@ local E = "e."
 local keymaps
 
 defaults.__settings__ = {
-    CUSTOM_DESC = false
+    CUSTOM_DESCRIPTION = false
 }
 
 defaults.__cmd_types__  = {}
@@ -166,7 +166,7 @@ end})
 
 coroutine.resume(coroutine.create(function()
     for keymap_name,data in pairs(defaults) do
-        if keymap_name ~= "__metadata__" or keymap_name ~= "__cmd_types__" then
+        if keymap_name ~= "__metadata__" then
             if keymaps[keymap_name] == nil and defaults[keymap_name] then
                 keymaps.__metadata__.out_of_date = true
                 keymaps[keymap_name] = data
@@ -183,7 +183,7 @@ coroutine.resume(coroutine.create(function()
     end
 
     for keymap_name, data in pairs(keymaps) do
-        if keymap_name ~= "__metadata__" or keymap_name == "__cmd_types__" then
+        if keymap_name ~= "__metadata__" then
             if defaults[keymap_name] == nil then
                 keymaps[keymap_name] = nil
                 keymaps.__metadata__.out_of_date = true
@@ -195,7 +195,7 @@ coroutine.resume(coroutine.create(function()
                     keymaps[keymap_name][opt] = nil
                     keymaps.__metadata__.out_of_date = true
                 end
-                if not keymaps.__settings__.CUSTOM_DESC and defaults[keymap_name][opt] and opt == "desc" then
+                if keymaps.__settings__.CUSTOM_DESCRIPTION == false and defaults[keymap_name][opt] and opt == "desc" then
                    if defaults[keymap_name][opt] ~= value then
                        keymaps[keymap_name][opt] = defaults[keymap_name][opt]
                        keymaps.__metadata__.out_of_date = true

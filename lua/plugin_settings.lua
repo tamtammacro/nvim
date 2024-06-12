@@ -6,7 +6,7 @@ local notify = require "notify"
 local TOML = require "vendor.lua-toml.toml"
 
 local defaults = {
-    plugins = {
+    __settings__ = {
         enabled = true,
         deferring_enabled = false
     },
@@ -189,7 +189,6 @@ coroutine.resume(coroutine.create(function()
             if plugin_settings[plugin_name] == nil and defaults[plugin_name] then
                 plugin_settings.__metadata__.out_of_date = true
                 plugin_settings[plugin_name] = data
-                print("mising = ",plugin_name)
             end
 
             if type(data) == "table" then
@@ -213,11 +212,11 @@ coroutine.resume(coroutine.create(function()
 
             if type(data) == "table" then
                 for opt, value in pairs(data) do
-                    if defaults[plugin_name][opt] == nil then
+                    if defaults[plugin_name][opt] == nil and opt ~= "defer" then
                         plugin_settings[plugin_name][opt] = nil
                         plugin_settings.__metadata__.out_of_date = true
                     end
-                    if type(value) ~= type(defaults[plugin_name][opt]) then
+                    if opt ~= "defer" and type(value) ~= type(defaults[plugin_name][opt]) then
                         notify(string.format("%s::%s is not the same type as reference table.",plugin_name,opt,plugin_name),"error")
                     end
                     if plugin_settings[plugin_name][opt] and opt == "module" then

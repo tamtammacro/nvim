@@ -11,6 +11,8 @@ local notify_ok, notify = pcall(require, "notify")
 
 if not notify_ok then return print "Could not load plugins: missing notify" end
 
+local deferred_items = {}
+
 local function init_plugins()
     local is_ok
     local mod
@@ -30,18 +32,24 @@ local function init_plugins()
     end
 
     local function require_mod(filename)
+        if type(filename) ~= "string" then
+            print("Something went wrong:", filename, "is not a string")
+            return
+        end
+
         setup_mod(filename)
 
         if not is_ok then
-            notify(string.format("Could not load module: %s",filename),"error")
+            notify(string.format("Could not load module: %s", filename), "error")
             if mod then
-                notify(string.format("core.load_plugins, could not load module error: %s",mod),"error")
+                notify(string.format("core.load_plugins, could not load module error: %s", mod), "error")
             end
             setup_mod("plugin_config." .. filename)
         end
     end
 
     local function require_sub_mods(p_path)
+        if type(p_path) == "string" then return require_mod(p_path) end
         for _, file_name in pairs(p_path) do require_mod(file_name) end
     end
 
@@ -53,25 +61,40 @@ local function init_plugins()
         path = (is_table and (data.module or data.modules))
         if not path then return end
 
-        defer = is_table and data.defer and plugin_settings.plugins.deferring_enabled and data.defer * 1000 or 0
+        defer = is_table and data.defer and plugin_settings.__settings__.deferring_enabled and data.defer * 1000 or 0
         is_multi_path = type(path) == "table"
 
-        if is_multi_path then
+        if is_multi_path and is_table then
             if defer > 0 then
-                vim.defer_fn(function() require_sub_mods(path) end, defer)
+                table.insert(deferred_items, { path = path, defer = defer, is_multi = true })
             else
                 require_sub_mods(path)
             end
-        elseif is_table then
-            require_mod(path)
+        elseif not is_multi_path and is_table then
+            if defer > 0 then
+                table.insert(deferred_items, { path = path, defer = defer,is_multi = false })
+            else
+                require_mod(path)
+            end
         end
     end
 
     for plugin_name, obj in pairs(plugin_settings) do load_mod(plugin_name, obj) end
+
+    for index, element in ipairs(deferred_items) do
+        vim.defer_fn(function()
+            if element.is_multi then
+                require_sub_mods(element.path)
+            else
+                require_mod(element.path)
+            end
+            table.remove(deferred_items,index)
+        end, element.defer)
+    end
 end
 
 local function use_plugins(plugin_manager)
-    if not plugin_settings.plugins.enabled then return end
+    if not plugin_settings.__settings__.enabled then return end
 
     local function init()
         if plugin_manager == "packer" then
@@ -83,8 +106,8 @@ local function use_plugins(plugin_manager)
     end
 
     local success, err = pcall(function()
-        if plugin_settings.plugins.defer then
-            vim.defer_fn(init, plugin_settings.plugins.defer * 1000)
+        if plugin_settings.__settings__.defer then
+            vim.defer_fn(init, plugin_settings.__settings__.defer * 1000)
         else
             init()
             vim.cmd.GitBlameDisable()
@@ -100,7 +123,7 @@ local function use_plugins(plugin_manager)
 end
 
 local function use_visuals()
-    if not plugin_settings.plugins.enabled then return end
+    if not plugin_settings.__settings__.enabled then return end
 
     local current_theme = vim.g.colors_name
 

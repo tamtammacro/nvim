@@ -11,6 +11,7 @@ vim.g.nvim_tree_show_icons = {
     files = 0,
     folder_arrows = 0,
 }
+
 vim.defer_fn(function()
     nvim_tree.setup {
     auto_reload_on_write = true,
