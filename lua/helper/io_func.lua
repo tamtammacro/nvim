@@ -61,6 +61,8 @@ function exports.read_file_lines(path)
 end
 
 function exports.write_file(path,content)
+    if not content then return end
+
     local file = io.open(path, "w")
     if not file then return print(string.format("Could not write file: %s does not exist",path)) end
 

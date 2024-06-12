@@ -1,10 +1,9 @@
 local defaults = {}
+local fmeta = require "helper.fmeta"
 local options = require "plugin_settings"
 
 local io_funcs = require "helper.io_func"
 
-local path = io_funcs.get_config_loc() .. "/settings/keymaps.toml"
-local file_content = io_funcs.read_all_file(path)
 local TOML = require "vendor.lua-toml.toml"
 
 local SPACE_S = "<Space>"
@@ -43,6 +42,9 @@ defaults.__settings__ = {
     CUSTOM_DESC = false
 }
 
+defaults.__cmd_types__  = {}
+defaults.__metadata__ = fmeta.create_fmd("keymaps.toml")
+
 defaults.goto = {
     preview = { key = "gp", cmd="goto_preview_definition", desc = "goto signature preview" },
 }
@@ -52,7 +54,7 @@ defaults.telescope = {
     live_grep = { key = SPACE_S.."fg", desc = "file with live grep" },
     lsp_document_symbols = {key = SPACE_S.."fs", desc = "find lsp symbols"},
     oldfiles = {key = SPACE_S.."fo", desc = "find old files"},
-    --grep_string = {key = SPACE_S.."fw"},
+    grep_string = {key = SPACE_S.."fw"},
     buffers = {key = SPACE_S.."fb",desc = "find file buffers"},
     keymaps = {key = ALT("8"),desc = "show key maps"},
 }
@@ -142,22 +144,38 @@ defaults.tabs = {
     close = {key = ALT("x"),cmd = C.."BufferClose",desc="tab close"}
 }
 
+local file_content = io_funcs.read_all_file(defaults.__metadata__.path)
 keymaps = not file_content and defaults or TOML.parse(file_content,{strict = true})
 
-if not keymaps then return print "ERROR: Something went wrong in keymaps.lua" and {} end
+if not keymaps then
+    print "ERROR: Something went wrong in keymaps.lua"
+    return defaults
+end
+
+setmetatable(keymaps,{__index = function(self,key)
+	if key == "__metadata__" then
+		return rawget(defaults,"__metadata__")
+	end
+
+	if key == "__cmd_types__" then
+		return rawget(defaults,"__cmd_types__")
+	end
+
+    return rawget(self,key)
+end})
 
 coroutine.resume(coroutine.create(function()
     for keymap_name,data in pairs(defaults) do
-        if keymap_name ~= "out_of_date" then
+        if keymap_name ~= "__metadata__" or keymap_name ~= "__cmd_types__" then
             if keymaps[keymap_name] == nil and defaults[keymap_name] then
-                keymaps.out_of_date = true
+                keymaps.__metadata__.out_of_date = true
                 keymaps[keymap_name] = data
             end
         end
         if type(data) == "table" then
             for opt, default_value in pairs(data) do
                 if keymaps[keymap_name][opt] == nil then
-                    keymaps.out_of_date = true
+                    keymaps.__metadata__.out_of_date = true
                     keymaps[keymap_name][opt] = default_value
                 end
             end
@@ -165,22 +183,22 @@ coroutine.resume(coroutine.create(function()
     end
 
     for keymap_name, data in pairs(keymaps) do
-        if keymap_name ~= "out_of_date" then
+        if keymap_name ~= "__metadata__" or keymap_name == "__cmd_types__" then
             if defaults[keymap_name] == nil then
                 keymaps[keymap_name] = nil
-                keymaps.out_of_date = true
+                keymaps.__metadata__.out_of_date = true
             end
         end
         if type(data) == "table" then
             for opt,value in pairs(data) do
                 if defaults[keymap_name][opt] == nil then
                     keymaps[keymap_name][opt] = nil
-                    keymaps.out_of_date = true
+                    keymaps.__metadata__.out_of_date = true
                 end
                 if not keymaps.__settings__.CUSTOM_DESC and defaults[keymap_name][opt] and opt == "desc" then
                    if defaults[keymap_name][opt] ~= value then
                        keymaps[keymap_name][opt] = defaults[keymap_name][opt]
-                       keymaps.out_of_date = true
+                       keymaps.__metadata__.out_of_date = true
                    end
                 end
             end
@@ -190,8 +208,8 @@ coroutine.resume(coroutine.create(function()
     coroutine.yield()
 end))
 
-keymaps.VIM_COMMAND_PREFIX = C
-keymaps.LUA_COMMAND_PREFIX = L
-keymaps.EDITOR_COMMAND_PREFIX = E
+defaults.__cmd_types__.VIM_COMMAND_PREFIX = C
+defaults.__cmd_types__.LUA_COMMAND_PREFIX = L
+defaults.__cmd_types__.EDITOR_COMMAND_PREFIX = E
 
 return keymaps

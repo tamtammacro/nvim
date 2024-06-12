@@ -1,8 +1,9 @@
 local exports = {}
-local options = require "plugin_settings"
-local io_funcs = require "helper.io_func"
 local funcs = require "helper.func"
+local plugin_settings = require "plugin_settings"
+local io_funcs = require "helper.io_func"
 local keymaps = require "keymaps"
+local preferences = require "preferences"
 
 local TOML = require "vendor.lua-toml.toml"
 
@@ -33,7 +34,6 @@ local function init_plugins()
 
         if not is_ok then
             notify(string.format("Could not load module: %s",filename),"error")
-            --NOTE: mod is error_message here --
             if mod then
                 notify(string.format("core.load_plugins, could not load module error: %s",mod),"error")
             end
@@ -53,7 +53,7 @@ local function init_plugins()
         path = (is_table and (data.module or data.modules))
         if not path then return end
 
-        defer = is_table and data.defer and options.plugins.deferring_enabled and data.defer * 1000 or 0
+        defer = is_table and data.defer and plugin_settings.plugins.deferring_enabled and data.defer * 1000 or 0
         is_multi_path = type(path) == "table"
 
         if is_multi_path then
@@ -67,11 +67,11 @@ local function init_plugins()
         end
     end
 
-    for plugin_name, obj in pairs(options) do load_mod(plugin_name, obj) end
+    for plugin_name, obj in pairs(plugin_settings) do load_mod(plugin_name, obj) end
 end
 
 local function use_plugins(plugin_manager)
-    if not options.plugins.enabled then return end
+    if not plugin_settings.plugins.enabled then return end
 
     local function init()
         if plugin_manager == "packer" then
@@ -83,8 +83,8 @@ local function use_plugins(plugin_manager)
     end
 
     local success, err = pcall(function()
-        if options.plugins.defer then
-            vim.defer_fn(init, options.plugins.defer * 1000)
+        if plugin_settings.plugins.defer then
+            vim.defer_fn(init, plugin_settings.plugins.defer * 1000)
         else
             init()
             vim.cmd.GitBlameDisable()
@@ -100,25 +100,25 @@ local function use_plugins(plugin_manager)
 end
 
 local function use_visuals()
-    if not options.plugins.enabled then return end
+    if not plugin_settings.plugins.enabled then return end
 
     local current_theme = vim.g.colors_name
 
     local success, err = pcall(function()
-        local theme_full_name = options.theme.style and #options.theme.style > 0 and
-            options.theme.name .. "-" .. options.theme.style or options.theme.name
+        local theme_full_name = preferences.theme.style and #plugin_settings.theme.style > 0 and
+            preferences.theme.name .. "-" .. preferences.theme.style or preferences.theme.name
 
-        if options.theme.enabled and (current_theme ~= theme_full_name) then
+        if preferences.theme.enabled and (current_theme ~= theme_full_name) then
             local success, error_message = pcall(vim.cmd.colorscheme, theme_full_name)
 
             if not success then
                 notify(error_message, "error")
             end
 
-            if (options.theme.name == "material") then vim.g.material_style = options.theme.style end
+            if (preferences.theme.name == "material") then vim.g.material_style = preferences.theme.style end
         end
 
-        if options.theme.transparent then
+        if preferences.background.transparent then
             vim.cmd["highlight"]("Normal guibg=none")
         end
     end)
@@ -149,45 +149,57 @@ function exports.init(plugin_manager)
     use_plugins(plugin_manager)
     use_visuals()
 
-    local settings_path = io_funcs.get_config_loc() .. (io_funcs.is_win32() and "\\settings" or "/settings")
-    local path = settings_path .. "/plugin_settings.toml"
-
-    if not io_funcs.isdir(settings_path) then
-        io_funcs.mkdir(settings_path)
+    if not io_funcs.isdir(plugin_settings.__metadata__.folder_path) then
+        io_funcs.mkdir(plugin_settings.__metadata__.folder_path)
     end
 
-    if not io_funcs.file_exists(path) or options.out_of_date then
-        local out_of_date_prev = options.out_of_date
+    if not io_funcs.file_exists(plugin_settings.__metadata__.path) or plugin_settings.__metadata__.out_of_date then
+        local out_of_date_prev = plugin_settings.__metadata__.out_of_date
 
-        options.out_of_date = nil
-        local str = TOML.encode(options)
+        local copy = funcs.deepcopy(plugin_settings)
+        copy.__metadata__ = nil
 
-        if io_funcs.write_file(path, make_string(str)) then
+        local str = TOML.encode(copy)
+
+        if io_funcs.write_file(plugin_settings.__metadata__.path, make_string(str)) then
             if out_of_date_prev then
-                print "INFO: plugin_settings.toml was updated"
+                print(("INFO: %s was updated"):format(plugin_settings.__metadata__.file_name))
             else
-                print "INFO: Generated plugin_settings.toml"
+                print(("INFO: Generated %s"):format(plugin_settings.__metadata__.file_name))
             end
         end
-
     end
 
-    path = settings_path .. "/keymaps.toml"
+    if not io_funcs.file_exists(keymaps.__metadata__.path) or keymaps.__metadata__.out_of_date then
+        local out_of_date_prev = keymaps.__metadata__.out_of_date
 
-    if not io_funcs.file_exists(path) or keymaps.out_of_date then
-        local out_of_date_prev = keymaps.out_of_date
-        keymaps.out_of_date = nil
-        local keymaps_copy = funcs.deepcopy(keymaps)
-        keymaps_copy.VIM_COMMAND_PREFIX = nil
-        keymaps_copy.LUA_COMMAND_PREFIX = nil
-        keymaps_copy.EDITOR_COMMAND_PREFIX = nil
-        local str = TOML.encode(keymaps_copy)
+        keymaps.__cmd_types__ = nil
+        local copy = funcs.deepcopy(keymaps)
+        copy.__metadata__ = nil
 
-        if io_funcs.write_file(path, make_string(str)) then
+        local str = TOML.encode(copy)
+
+        if io_funcs.write_file(keymaps.__metadata__.path, make_string(str)) then
             if out_of_date_prev then
-                print "INFO: keymaps.toml was updated"
+                print(("INFO: %s was updated"):format(keymaps.__metadata__.file_name))
             else
-                print "INFO: Generated keymaps.toml"
+                print(("INFO: Generated %s"):format(keymaps.__metadata__.file_name))
+            end
+        end
+    end
+
+    if not io_funcs.file_exists(preferences.__metadata__.path) or preferences.__metadata__.out_of_date then
+        local out_of_date_prev = preferences.__metadata__.out_of_date
+        local copy = funcs.deepcopy(preferences)
+        copy.__metadata__ = nil
+
+        local str = TOML.encode(copy)
+
+        if io_funcs.write_file(preferences.__metadata__.path, make_string(str)) then
+            if out_of_date_prev then
+                print(("INFO: %s was updated"):format(preferences.__metadata__.file_name))
+            else
+                print(("INFO: Generated %s"):format(preferences.__metadata__.file_name))
             end
         end
     end

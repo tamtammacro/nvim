@@ -1,9 +1,8 @@
 local plugin_settings = nil
 local io_funcs = require "helper.io_func"
+local fmeta = require "helper.fmeta"
 local notify = require "notify"
 
-local plugin_settings_path = io_funcs.get_config_loc() .. "/settings/plugin_settings.toml"
-local file_content = io_funcs.read_all_file(plugin_settings_path)
 local TOML = require "vendor.lua-toml.toml"
 
 local defaults = {
@@ -139,12 +138,6 @@ local defaults = {
         module = "plugin_config.godot"
     },
 
-    theme = {
-        enabled = true,
-        name = "vscode",
-        transparent = false,
-    },
-
     trouble = {
         enabled = false,
         module = "trouble",
@@ -171,56 +164,73 @@ local defaults = {
     },
 }
 
+defaults.__metadata__ = fmeta.create_fmd("plugin_settings.toml")
+local file_content = io_funcs.read_all_file(defaults.__metadata__.path)
+
 plugin_settings = not file_content and defaults or TOML.parse(file_content,{strict = true})
 
-if not plugin_settings then return {} end
+setmetatable(plugin_settings,{__index = function(self,key)
+	if key == "__metadata__" then
+		return rawget(defaults,"__metadata__")
+	end
+
+    return rawget(self,key)
+end})
+
+if not plugin_settings then
+    print "ERROR: Something went wrong in plugin_settings.lua"
+    return defaults
+end
 
 coroutine.resume(coroutine.create(function()
-    --NOTE: Adding missing plugin data
     for plugin_name,data in pairs(defaults) do
-        if plugin_name ~= "out_of_date" then
+        if plugin_name ~= "__metadata__" then
+
             if plugin_settings[plugin_name] == nil and defaults[plugin_name] then
-                plugin_settings.out_of_date = true
+                plugin_settings.__metadata__.out_of_date = true
                 plugin_settings[plugin_name] = data
+                print("mising = ",plugin_name)
             end
-        end
-        if type(data) == "table" then
-            for opt, default_value in pairs(data) do
-                if plugin_settings[plugin_name][opt] == nil then
-                    plugin_settings.out_of_date = true
-                    plugin_settings[plugin_name][opt] = default_value
+
+            if type(data) == "table" then
+                for opt, default_value in pairs(data) do
+                    if plugin_settings[plugin_name][opt] == nil then
+                        plugin_settings.__metadata__.out_of_date = true
+                        plugin_settings[plugin_name][opt] = default_value
+                    end
                 end
             end
         end
     end
 
     for plugin_name, data in pairs(plugin_settings) do
-        if plugin_name ~= "out_of_date" then
+        if plugin_name ~= "__metadata__" then
+
             if defaults[plugin_name] == nil then
                 plugin_settings[plugin_name] = nil
-                plugin_settings.out_of_date = true
+                plugin_settings.__metadata__.out_of_date = true
             end
-        end
-        if type(data) == "table" then
-            for opt, value in pairs(data) do
-                --NOTE: Removing outdated plugins
-                if defaults[plugin_name][opt] == nil then
-                    plugin_settings[plugin_name][opt] = nil
-                    plugin_settings.out_of_date = true
-                end
-                if type(value) ~= type(defaults[plugin_name][opt]) then
-                    notify(string.format("%s::%s is not the same type as reference table.",plugin_name,opt,plugin_name),"error")
-                end
-                if plugin_settings[plugin_name][opt] and opt == "module" then
-                    if value ~= defaults[plugin_name][opt] then
-                        plugin_settings[plugin_name][opt] = defaults[plugin_name][opt]
-                        plugin_settings.out_of_date = true
+
+            if type(data) == "table" then
+                for opt, value in pairs(data) do
+                    if defaults[plugin_name][opt] == nil then
+                        plugin_settings[plugin_name][opt] = nil
+                        plugin_settings.__metadata__.out_of_date = true
                     end
-                elseif plugin_settings[plugin_name][opt] and opt == "modules" then
-                    for mod_name, mod_path in pairs(type(value) == "table" and value or {}) do
-                        if defaults[plugin_name][opt][mod_name] ~= mod_path then
-                            plugin_settings[plugin_name][opt][mod_name] = defaults[plugin_name][opt][mod_name]
-                            plugin_settings.out_of_date = true
+                    if type(value) ~= type(defaults[plugin_name][opt]) then
+                        notify(string.format("%s::%s is not the same type as reference table.",plugin_name,opt,plugin_name),"error")
+                    end
+                    if plugin_settings[plugin_name][opt] and opt == "module" then
+                        if value ~= defaults[plugin_name][opt] then
+                            plugin_settings[plugin_name][opt] = defaults[plugin_name][opt]
+                            plugin_settings.__metadata__.out_of_date = true
+                        end
+                    elseif plugin_settings[plugin_name][opt] and opt == "modules" then
+                        for mod_name, mod_path in pairs(type(value) == "table" and value or {}) do
+                            if defaults[plugin_name][opt][mod_name] ~= mod_path then
+                                plugin_settings[plugin_name][opt][mod_name] = defaults[plugin_name][opt][mod_name]
+                                plugin_settings.__metadata__.out_of_date = true
+                            end
                         end
                     end
                 end
