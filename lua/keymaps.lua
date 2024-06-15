@@ -32,18 +32,14 @@ local CONTROL_SHIFT = function(key)
     return "<C-S-"..key..">"
 end
 
-local C = "c."
-local L = "l."
-local E = "e."
+local C = ":"
+local L = "lua ->"
+local E = "v."
 
 local keymaps
 
-defaults.__settings__ = {
-    CUSTOM_DESCRIPTION = false
-}
-
 defaults.__cmd_types__  = {}
-defaults.__metadata__ = fmeta.create_fmd("keymaps.toml")
+defaults.__metadata__ = fmeta.create_fmd({file_name = "keymaps.toml"})
 
 defaults.goto = {
     preview = { key = "gp", cmd="goto_preview_definition", desc = "goto signature preview" },
@@ -155,9 +151,7 @@ end
 setmetatable(keymaps,{__index = function(self,key)
 	if key == "__metadata__" then
 		return rawget(defaults,"__metadata__")
-	end
-
-	if key == "__cmd_types__" then
+    elseif key == "__cmd_types__" then
 		return rawget(defaults,"__cmd_types__")
 	end
 
@@ -182,22 +176,20 @@ coroutine.resume(coroutine.create(function()
         end
     end
 
-    for keymap_name, data in pairs(keymaps) do
-        if keymap_name ~= "__metadata__" then
-            if defaults[keymap_name] == nil then
-                keymaps[keymap_name] = nil
-                keymaps.__metadata__.out_of_date = true
-            end
+    for keymap_category, category_data in pairs(keymaps) do
+        if defaults[keymap_category] == nil then
+            keymaps[keymap_category] = nil
+            keymaps.__metadata__.out_of_date = true
         end
-        if type(data) == "table" then
-            for opt,value in pairs(data) do
-                if defaults[keymap_name][opt] == nil then
-                    keymaps[keymap_name][opt] = nil
+        if type(category_data) == "table" then
+            for keymap_name,keymap_data in pairs(category_data) do
+                if defaults[keymap_category][keymap_name] == nil then
+                    keymaps[keymap_category][keymap_name] = nil
                     keymaps.__metadata__.out_of_date = true
                 end
-                if keymaps.__settings__.CUSTOM_DESCRIPTION == false and defaults[keymap_name][opt] and opt == "desc" then
-                   if defaults[keymap_name][opt] ~= value then
-                       keymaps[keymap_name][opt] = defaults[keymap_name][opt]
+                if defaults[keymap_category][keymap_name] then
+                   if defaults[keymap_category][keymap_name].desc ~= keymap_data.desc then
+                       keymaps[keymap_category][keymap_name].desc = defaults[keymap_category][keymap_name].desc
                        keymaps.__metadata__.out_of_date = true
                    end
                 end
@@ -205,7 +197,7 @@ coroutine.resume(coroutine.create(function()
         end
     end
 
-    coroutine.yield()
+    -- coroutine.yield()
 end))
 
 defaults.__cmd_types__.VIM_COMMAND_PREFIX = C

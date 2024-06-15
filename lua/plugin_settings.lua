@@ -8,7 +8,7 @@ local TOML = require "vendor.lua-toml.toml"
 local defaults = {
     __settings__ = {
         enabled = true,
-        deferring_enabled = false
+        deferring_enabled = true
     },
 
     telescope = {
@@ -164,7 +164,7 @@ local defaults = {
     },
 }
 
-defaults.__metadata__ = fmeta.create_fmd("plugin_settings.toml")
+defaults.__metadata__ = fmeta.create_fmd({file_name = "plugin_settings.toml"})
 local file_content = io_funcs.read_all_file(defaults.__metadata__.path)
 
 plugin_settings = not file_content and defaults or TOML.parse(file_content,{strict = true})
@@ -237,7 +237,7 @@ coroutine.resume(coroutine.create(function()
         end
     end
 
-    coroutine.yield()
+    -- coroutine.yield()
 end))
 
 return plugin_settings

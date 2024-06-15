@@ -1,6 +1,6 @@
 local exports = {}
 
-local strings = require "user.utils.strings"
+local strings = require "helper.utils.strings"
 
 function exports.buf_cap_word()
     local current_line = vim.api.nvim_get_current_line()

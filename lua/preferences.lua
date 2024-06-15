@@ -8,11 +8,15 @@ local defaults = {
         name = "vscode",
     },
     background = {
-        transparent = false
+        transparent = false,
+        mode = "dark"
     },
+    editor = {
+        termguicolors = true
+    }
 }
 
-defaults.__metadata__ = fmeta.create_fmd("preferences.toml")
+defaults.__metadata__ = fmeta.create_fmd({file_name = "preferences.toml"})
 
 local file_content = io_funcs.read_all_file(defaults.__metadata__.path)
 local TOML = require "vendor.lua-toml.toml"
@@ -70,7 +74,7 @@ coroutine.resume(coroutine.create(function()
         end
     end
 
-    coroutine.yield()
+    -- coroutine.yield()
 end))
 
 

@@ -53,7 +53,7 @@ local function init_plugins()
         for _, file_name in pairs(p_path) do require_mod(file_name) end
     end
 
-    local function load_mod(plugin_name, data)
+    local function load_mod(data)
         is_table = type(data) == "table"
         is_enabled = is_table and data.enabled or not is_table and data
 
@@ -66,7 +66,11 @@ local function init_plugins()
 
         if is_multi_path and is_table then
             if defer > 0 then
-                table.insert(deferred_items, { path = path, defer = defer, is_multi = true })
+                if type(path) == "table" then
+                    for _,path_v in pairs(path) do
+                        table.insert(deferred_items, { path = path_v, defer = defer })
+                    end
+                end
             else
                 require_sub_mods(path)
             end
@@ -79,15 +83,11 @@ local function init_plugins()
         end
     end
 
-    for plugin_name, obj in pairs(plugin_settings) do load_mod(plugin_name, obj) end
+    for _, obj in pairs(plugin_settings) do load_mod(obj) end
 
     for index, element in ipairs(deferred_items) do
         vim.defer_fn(function()
-            if element.is_multi then
-                require_sub_mods(element.path)
-            else
-                require_mod(element.path)
-            end
+            require_mod(element.path)
             table.remove(deferred_items,index)
         end, element.defer)
     end
@@ -110,7 +110,7 @@ local function use_plugins(plugin_manager)
             vim.defer_fn(init, plugin_settings.__settings__.defer * 1000)
         else
             init()
-            vim.cmd.GitBlameDisable()
+            -- vim.cmd.GitBlameDisable()
         end
     end)
 
@@ -186,9 +186,9 @@ function exports.init(plugin_manager)
 
         if io_funcs.write_file(plugin_settings.__metadata__.path, make_string(str)) then
             if out_of_date_prev then
-                print(("INFO: %s was updated"):format(plugin_settings.__metadata__.file_name))
+                notify(("INFO: %s was updated"):format(plugin_settings.__metadata__.file_name))
             else
-                print(("INFO: Generated %s"):format(plugin_settings.__metadata__.file_name))
+                notify(("INFO: Generated %s"):format(plugin_settings.__metadata__.file_name))
             end
         end
     end
@@ -204,9 +204,9 @@ function exports.init(plugin_manager)
 
         if io_funcs.write_file(keymaps.__metadata__.path, make_string(str)) then
             if out_of_date_prev then
-                print(("INFO: %s was updated"):format(keymaps.__metadata__.file_name))
+                notify(("INFO: %s was updated"):format(keymaps.__metadata__.file_name))
             else
-                print(("INFO: Generated %s"):format(keymaps.__metadata__.file_name))
+                notify(("INFO: Generated %s"):format(keymaps.__metadata__.file_name))
             end
         end
     end
@@ -220,9 +220,9 @@ function exports.init(plugin_manager)
 
         if io_funcs.write_file(preferences.__metadata__.path, make_string(str)) then
             if out_of_date_prev then
-                print(("INFO: %s was updated"):format(preferences.__metadata__.file_name))
+                notify(("INFO: %s was updated"):format(preferences.__metadata__.file_name))
             else
-                print(("INFO: Generated %s"):format(preferences.__metadata__.file_name))
+                notify(("INFO: Generated %s"):format(preferences.__metadata__.file_name))
             end
         end
     end

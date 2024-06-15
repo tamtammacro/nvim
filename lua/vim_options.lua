@@ -1,10 +1,11 @@
 local vo = vim.o
+local preferences = require "preferences"
 
 local SHIFT_TAB_SPACE = 4
 
 xpcall(function()
     vo.number = true
-    vo.background = "dark"
+    vo.background = preferences.background.mode
     vo.termguicolors = true
     vo.tabstop = SHIFT_TAB_SPACE
     vo.softtabstop = SHIFT_TAB_SPACE

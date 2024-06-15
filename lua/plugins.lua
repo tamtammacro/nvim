@@ -15,15 +15,20 @@ vim.opt.rtp:prepend(lazypath)
 
 local plugins = {
     -- functionality --
-    "mg979/vim-visual-multi",
+    {
+        "mg979/vim-visual-multi",
+        event = "VeryLazy"
+    },
 
     {
         'stevearc/conform.nvim',
+        event = "VeryLazy",
         opts = {},
     },
 
     {
         "ThePrimeagen/refactoring.nvim",
+        event = "VeryLazy",
         dependancies = {
             { "nvim-lua/plenary.nvim" },
         }
@@ -39,23 +44,26 @@ local plugins = {
         opts = {}
     },
 
-    "folke/nvim-ts-autotag",
+    {"folke/nvim-ts-autotag", event = "VeryLazy"},
 
     {
         'xeluxee/competitest.nvim',
+        event = "VeryLazy",
         dependencies = 'MunifTanjim/nui.nvim',
         config = function() require('competitest').setup() end,
     },
 
-    { "folke/neodev.nvim",    opts = {} },
 
     {
         "windwp/nvim-autopairs",
+        event = "VeryLazy",
         config = true
     },
 
-    "mbbill/undotree",
-    "nvim-pack/nvim-spectre",
+    {"mbbill/undotree",event = "VeryLazy"},
+
+    {"nvim-pack/nvim-spectre",event = "VeryLazy"},
+
     {
         "folke/persistence.nvim",
         event = "BufReadPre", -- this will only start session saving when an actual file was opened
@@ -64,12 +72,13 @@ local plugins = {
 
     {
         "folke/twilight.nvim",
-        opts = {
-        }
+        event = "VeryLazy",
+        opts = {}
     },
 
     {
         "iamcco/markdown-preview.nvim",
+        event = "VeryLazy",
         cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
         ft = { "markdown" },
         build = function() vim.fn["mkdp#util#install"]() end,
@@ -98,6 +107,7 @@ local plugins = {
     -- },
     {
         "folke/zen-mode.nvim",
+        event = "VeryLazy",
         opts = {}
     },
 
@@ -110,18 +120,21 @@ local plugins = {
         end
     },
 
-    "theprimeagen/harpoon",
-    'simrat39/symbols-outline.nvim',
-    "mbbill/undotree",
+    {"theprimeagen/harpoon",event = "VeryLazy"},
+    {'simrat39/symbols-outline.nvim', event = "VeryLazy"},
+
     {
         'phaazon/hop.nvim',
+        event = "VeryLazy",
         branch = 'v2',
         config = function()
             require 'hop'.setup { keys = 'etovxqpdygfblzhckisuran' }
         end
     },
+
     {
         'rmagatti/goto-preview',
+        event = "VeryLazy",
         config = function()
             require('goto-preview').setup {}
         end
@@ -129,6 +142,7 @@ local plugins = {
 
     {
         'romgrk/barbar.nvim',
+        event = "VeryLazy",
         init = function() vim.g.barbar_auto_setup = false end,
         opts = {},
         version = '^1.0.0',
@@ -145,6 +159,7 @@ local plugins = {
 
     {
         'Wansmer/treesj',
+        event = "VeryLazy",
         config = function()
             require('treesj').setup({ use_default_keymaps = false })
         end,
@@ -155,14 +170,16 @@ local plugins = {
     -- visuals --
     {
         'nvim-lualine/lualine.nvim',
+        event = "VeryLazy",
         dependancies = { 'kyazdani42/nvim-web-devicons', opt = true }
     },
 
-    "anuvyklack/middleclass",
-    "anuvyklack/animation.nvim",
+    {"anuvyklack/middleclass", event = "VeryLazy"},
+    {"anuvyklack/animation.nvim", event = "VeryLazy"},
 
     {
         "folke/windows.nvim",
+        event = "VeryLazy",
         config = function()
             vim.o.winwidth = 10
             vim.o.winminwidth = 10
@@ -174,9 +191,10 @@ local plugins = {
 
     {
         "folke/paint.nvim",
+        event = "VeryLazy",
         config = function()
             require("paint").setup({
-                ---@type PaintHighlight[]
+                -- ---@type PaintHighlight[]
                 highlights = {
                     {
                         -- filter can be a table of buffer options that should match,
@@ -193,6 +211,7 @@ local plugins = {
 
     {
         "folke/nvim-scrollbar",
+        event = "VeryLazy",
         config = function()
             require("scrollbar").setup()
         end
@@ -200,24 +219,27 @@ local plugins = {
 
     {
         "folke/todo-comments.nvim",
+        event = "VeryLazy",
         dependencies = { "nvim-lua/plenary.nvim" },
-        opts = {
-        }
+        opts = {}
     },
 
-    "folke/nui.nvim",
+    {"folke/nui.nvim", event = "VeryLazy"},
+
     {
         'lukas-reineke/headlines.nvim',
+        event = "VeryLazy",
         dependencies = "nvim-treesitter/nvim-treesitter",
         config = true, -- or `opts = {}`
     },
 
     "kevinhwang91/promise-async",
-    "kevinhwang91/nvim-ufo",
 
-    "rcarriga/nvim-notify",
+    {"kevinhwang91/nvim-ufo", event = "VeryLazy"},
+
     {
         "anuvyklack/pretty-fold.nvim",
+        event = "VeryLazy",
         config = function()
             require('pretty-fold').setup {
                 keep_indentation = false,
@@ -233,17 +255,23 @@ local plugins = {
             }
         end
     },
-    'tamton-aquib/staline.nvim',
-    'nvim-tree/nvim-web-devicons',
-    "HiPhish/nvim-ts-rainbow2",
-    'NvChad/nvim-colorizer.lua',
-    "uga-rosa/ccc.nvim",
-    'rcarriga/nvim-notify',
-    "folke/noice.nvim",
 
-    "MunifTanjim/nui.nvim",
-    "RRethy/vim-illuminate",
-    "lukas-reineke/indent-blankline.nvim",
+    {'tamton-aquib/staline.nvim', event = "VeryLazy"},
+    {'nvim-tree/nvim-web-devicons', event = "VeryLazy"},
+    {"HiPhish/nvim-ts-rainbow2", event = "VeryLazy"},
+
+    {'NvChad/nvim-colorizer.lua', event = "VeryLazy"},
+
+    {"uga-rosa/ccc.nvim", event = "VeryLazy"},
+
+    {'rcarriga/nvim-notify',event = "VeryLazy"},
+    {"folke/noice.nvim", event = "VeryLazy"},
+
+    {"MunifTanjim/nui.nvim", event = "VeryLazy"},
+
+    {"RRethy/vim-illuminate", event = "VeryLazy"},
+
+    {"lukas-reineke/indent-blankline.nvim", event = "VeryLazy"},
 
     -- {
     --     "utilyre/barbecue.nvim",
@@ -257,29 +285,34 @@ local plugins = {
     -- },
 
     -- git integration --
-    "tpope/vim-fugitive",
-    "lewis6991/gitsigns.nvim",
-    "f-person/git-blame.nvim",
-    "sindrets/diffview.nvim",
+    {"tpope/vim-fugitive", event = "VeryLazy"},
+
+    {"lewis6991/gitsigns.nvim"},
+    {"f-person/git-blame.nvim", event = "VeryLazy"},
+
+    {"sindrets/diffview.nvim", event = "VeryLazy"},
 
     -- telescope --
     'nvim-lua/plenary.nvim',
+
     {
         'nvim-telescope/telescope.nvim',
         tag = '0.1.6',
+        event = "VeryLazy"
     },
 
-    { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' },
-    { 'nvim-telescope/telescope-ui-select.nvim' },
+    { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make', event = "VeryLazy" },
+    { 'nvim-telescope/telescope-ui-select.nvim', event = "VeryLazy" },
 
     -- icons --
     {
         'goolord/alpha-nvim',
-        dependancies = { 'nvim-tree/nvim-web-devicons' }
+        event = "VeryLazy",
     },
 
     -- color schemes --
-    "gruvbox-community/gruvbox",
+    {"gruvbox-community/gruvbox"},
+
     {
         "olimorris/onedarkpro.nvim",
         priority = 1000, -- Ensure it loads first
@@ -299,30 +332,41 @@ local plugins = {
     -- lsp --
     {
         "williamboman/mason.nvim",
-        run = ":MasonUpdate"
+        run = ":MasonUpdate",
+        event = "VeryLazy",
     },
 
-    "jay-babu/mason-nvim-dap.nvim",
-    { "rcarriga/nvim-dap-ui", dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" } },
+    -- { "folke/neodev.nvim", event="VeryLazy", opts = {} },
+
+    {"jay-babu/mason-nvim-dap.nvim", event = "VeryLazy"},
+
+    { "rcarriga/nvim-dap-ui", dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" }, event = "VeryLazy" },
+
     {
         "ldelossa/nvim-dap-projects",
+        event = "VeryLazy"
     },
-    "hrsh7th/cmp-nvim-lsp",
-    "hrsh7th/cmp-buffer",
-    "hrsh7th/cmp-path",
-    "hrsh7th/cmp-cmdline",
-    "neovim/nvim-lspconfig",
+
+    {"hrsh7th/cmp-nvim-lsp", event = "VeryLazy"},
+    {"hrsh7th/cmp-buffer", event = "VeryLazy"},
+
+    {"hrsh7th/cmp-path", event = "VeryLazy"},
+
+    {"hrsh7th/cmp-cmdline", event = "VeryLazy"},
+    {"neovim/nvim-lspconfig", event = "VeryLazy"},
 
     {
         "williamboman/mason.nvim",
         "williamboman/mason-lspconfig.nvim",
         "neovim/nvim-lspconfig",
+        event = "VeryLazy"
     },
 
-    { "folke/trouble.nvim", opts = {}, cmd = "Trouble" },
+    { "folke/trouble.nvim", event = "VeryLazy", opts = {}, cmd = "Trouble" },
 
     {
         'VonHeikemen/lsp-zero.nvim',
+        event = "VeryLazy",
         branch = 'v1.x',
         dependancies = {
 
@@ -344,17 +388,18 @@ local plugins = {
     },
 
     -- -- discord rpc --
-    --'IogaMaster/neocord',
-    --"andweeb/presence.nvim",
+    -- 'IogaMaster/neocord',
+    -- "andweeb/presence.nvim",
 
     -- file manager --
-    'prichrd/netrw.nvim',
-    'stevearc/oil.nvim',
-    'nvim-tree/nvim-tree.lua',
+    {'prichrd/netrw.nvim', event = "VeryLazy"},
+    {'stevearc/oil.nvim',event = "VeryLazy"},
+    {'nvim-tree/nvim-tree.lua', event = "VeryLazy"},
 
     -- tree sitter --
     {
         'nvim-treesitter/nvim-treesitter',
+        event = "VeryLazy",
         run = function()
             local M = require('nvim-treesitter.install')
             M.compilers = { vim.fn.getenv('CC'), "cc", "gcc", "clang", "cl", "zig" }
@@ -363,11 +408,12 @@ local plugins = {
         end,
     },
 
-    "nvim-treesitter/playground",
-    "nvim-treesitter/nvim-treesitter-context",
+    {"nvim-treesitter/playground", event = "VeryLazy"},
+    {"nvim-treesitter/nvim-treesitter-context", event = "VeryLazy"},
 
     {
         'olivercederborg/poimandres.nvim',
+        event = "VeryLazy",
         config = function()
             require('poimandres').setup {}
         end
