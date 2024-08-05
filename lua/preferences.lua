@@ -1,6 +1,5 @@
 local io_funcs = require "helper.io_func"
 local fmeta = require "helper.fmeta"
-local notify = require "notify"
 
 local defaults = {
     theme = {
@@ -68,13 +67,13 @@ coroutine.resume(coroutine.create(function()
                     preferences.__metadata__.out_of_date = true
                 end
                 if type(value) ~= type(defaults[pref_name][opt]) then
-                    notify(string.format("%s::%s is not the same type as reference table.",pref_name,opt,pref_name),"error")
+                    print(string.format("%s::%s is not the same type as reference table.",pref_name,opt,pref_name))
                 end
             end
         end
     end
 
-    -- coroutine.yield()
+    coroutine.yield()
 end))
 
 

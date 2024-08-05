@@ -1,7 +1,6 @@
 local plugin_settings = nil
 local io_funcs = require "helper.io_func"
 local fmeta = require "helper.fmeta"
-local notify = require "notify"
 
 local TOML = require "vendor.lua-toml.toml"
 
@@ -18,7 +17,7 @@ local defaults = {
 
     git = {
         enabled = true,
-        gitblame_inline = false,
+        gitblame_inline = true,
         modules = {gitsigns = "gitsigns",gitcore = "plugin_config.git"},
     },
 
@@ -217,7 +216,7 @@ coroutine.resume(coroutine.create(function()
                         plugin_settings.__metadata__.out_of_date = true
                     end
                     if opt ~= "defer" and type(value) ~= type(defaults[plugin_name][opt]) then
-                        notify(string.format("%s::%s is not the same type as reference table.",plugin_name,opt,plugin_name),"error")
+                        print(string.format("%s::%s is not the same type as reference table.",plugin_name,opt,plugin_name))
                     end
                     if plugin_settings[plugin_name][opt] and opt == "module" then
                         if value ~= defaults[plugin_name][opt] then

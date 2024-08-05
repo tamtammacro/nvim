@@ -2,6 +2,8 @@ local module_export = {}
 local options = require "plugin_settings"
 local keymaps = require "keymaps"
 
+if type(options) ~= "table" or type(keymaps) ~= "table" then return print "Failed to load keymaps: obj invalid type" end
+
 local modules = {}
 
 local mod

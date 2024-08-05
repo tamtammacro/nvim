@@ -258,14 +258,14 @@ local plugins = {
 
     {'tamton-aquib/staline.nvim', event = "VeryLazy"},
     {'nvim-tree/nvim-web-devicons', event = "VeryLazy"},
-    {"HiPhish/nvim-ts-rainbow2", event = "VeryLazy"},
+    --{"HiPhish/nvim-ts-rainbow2", event = "VeryLazy"},
 
     {'NvChad/nvim-colorizer.lua', event = "VeryLazy"},
 
     {"uga-rosa/ccc.nvim", event = "VeryLazy"},
 
     {'rcarriga/nvim-notify',event = "VeryLazy"},
-    {"folke/noice.nvim", event = "VeryLazy"},
+    -- {"folke/noice.nvim", event = "VeryLazy"},
 
     {"MunifTanjim/nui.nvim", event = "VeryLazy"},
 

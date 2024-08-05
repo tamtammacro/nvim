@@ -7,10 +7,6 @@ local preferences = require "preferences"
 
 local TOML = require "vendor.lua-toml.toml"
 
-local notify_ok, notify = pcall(require, "notify")
-
-if not notify_ok then return print "Could not load plugins: missing notify" end
-
 local deferred_items = {}
 
 local function init_plugins()
@@ -40,9 +36,9 @@ local function init_plugins()
         setup_mod(filename)
 
         if not is_ok then
-            notify(string.format("Could not load module: %s", filename), "error")
+            print(string.format("Could not load module: %s", filename))
             if mod then
-                notify(string.format("core.load_plugins, could not load module error: %s", mod), "error")
+                print(string.format("core.load_plugins, could not load module error: %s", mod))
             end
             setup_mod("plugin_config." .. filename)
         end
@@ -102,7 +98,7 @@ local function use_plugins(plugin_manager)
         else
             require "plugins"
         end
-        xpcall(init_plugins, function(error) notify(error, "error") end)
+        xpcall(init_plugins, function(error) print(error) end)
     end
 
     local success, err = pcall(function()
@@ -110,12 +106,11 @@ local function use_plugins(plugin_manager)
             vim.defer_fn(init, plugin_settings.__settings__.defer * 1000)
         else
             init()
-            -- vim.cmd.GitBlameDisable()
         end
     end)
 
     if not success and err then
-        notify(("Error with 'use_plugins': %s"):format(err), "error")
+        print(("Error with 'use_plugins': %s"):format(err))
     end
     xpcall(function()
         require "core.load_keymaps".load_keymaps()
@@ -135,7 +130,7 @@ local function use_visuals()
             local success, error_message = pcall(vim.cmd.colorscheme, theme_full_name)
 
             if not success then
-                notify(error_message, "error")
+                print(error_message)
             end
 
             if (preferences.theme.name == "material") then vim.g.material_style = preferences.theme.style end
@@ -146,7 +141,7 @@ local function use_visuals()
         end
     end)
 
-    if not success and err then notify(err, "error") end
+    if not success and err then print(err) end
 end
 
 local function make_string(s)
@@ -186,9 +181,9 @@ function exports.init(plugin_manager)
 
         if io_funcs.write_file(plugin_settings.__metadata__.path, make_string(str)) then
             if out_of_date_prev then
-                notify(("INFO: %s was updated"):format(plugin_settings.__metadata__.file_name))
+                print(("INFO: %s was updated"):format(plugin_settings.__metadata__.file_name))
             else
-                notify(("INFO: Generated %s"):format(plugin_settings.__metadata__.file_name))
+                print(("INFO: Generated %s"):format(plugin_settings.__metadata__.file_name))
             end
         end
     end
@@ -204,9 +199,9 @@ function exports.init(plugin_manager)
 
         if io_funcs.write_file(keymaps.__metadata__.path, make_string(str)) then
             if out_of_date_prev then
-                notify(("INFO: %s was updated"):format(keymaps.__metadata__.file_name))
+                print(("INFO: %s was updated"):format(keymaps.__metadata__.file_name))
             else
-                notify(("INFO: Generated %s"):format(keymaps.__metadata__.file_name))
+                print(("INFO: Generated %s"):format(keymaps.__metadata__.file_name))
             end
         end
     end
@@ -220,9 +215,9 @@ function exports.init(plugin_manager)
 
         if io_funcs.write_file(preferences.__metadata__.path, make_string(str)) then
             if out_of_date_prev then
-                notify(("INFO: %s was updated"):format(preferences.__metadata__.file_name))
+                print(("INFO: %s was updated"):format(preferences.__metadata__.file_name))
             else
-                notify(("INFO: Generated %s"):format(preferences.__metadata__.file_name))
+                print(("INFO: Generated %s"):format(preferences.__metadata__.file_name))
             end
         end
     end
@@ -230,6 +225,12 @@ function exports.init(plugin_manager)
     if not vim.v.argv[3] then
         require("persistence").load()
     end
+
+    vim.defer_fn(function()
+        if not plugin_settings.git.gitblame_inline then
+            pcall(vim.cmd.GitBlameDisable)
+        end
+    end,500)
 end
 
 return exports

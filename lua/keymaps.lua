@@ -2,6 +2,8 @@ local defaults = {}
 local fmeta = require "helper.fmeta"
 local options = require "plugin_settings"
 
+if type(options) ~= "table" then return end
+
 local io_funcs = require "helper.io_func"
 
 local TOML = require "vendor.lua-toml.toml"

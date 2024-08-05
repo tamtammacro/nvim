@@ -5,12 +5,12 @@ if not success then return end
 config.setup {
     ensure_installed = { "c", "go", "lua", "vim", "vimdoc", "query", "markdown", "rust", "javascript" },
 
-    rainbow = {
-        enable = false,
-        disable = { 'jsx', 'cpp', "c" },
-        query = 'rainbow-parens',
-        strategy = require('ts-rainbow').strategy.global,
-    },
+    -- rainbow = {
+    --     enable = true,
+    --     disable = { 'jsx', 'cpp', "c" },
+    --     query = 'rainbow-parens',
+    --     strategy = require('ts-rainbow').strategy.global,
+    -- },
 
     autotag = {
         enable = true,
@@ -30,9 +30,9 @@ config.setup {
         disable = function(lang, buf)
             if vim.api.nvim_buf_get_option(0, "filetype") ~= "TelescopePrompt" then
                 if lang == "cpp" then
-                    vim.cmd.TSDisable "rainbow"
+                    pcall(vim.cmd.TSDisable, "rainbow")
                 else 
-                    vim.cmd.TSEnable "rainbow"
+                    pcall(vim.cmd.TSEnable, "rainbow")
                 end
             end
             local max_filesize = 100 * 1024     -- 100 KB

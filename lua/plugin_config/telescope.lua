@@ -19,5 +19,5 @@ telescope.setup({
 
 xpcall(function()
     telescope.load_extension("ui-select")
-    telescope.load_extension("noice")
+    --telescope.load_extension("noice")
 end,print)
