@@ -1,0 +1,14 @@
+return {
+    {
+        'nvim-treesitter/nvim-treesitter',
+        event = "VeryLazy",
+        run = function()
+            local M = require('nvim-treesitter.install')
+            M.compilers = { vim.fn.getenv('CC'), "cc", "gcc", "clang", "cl", "zig" }
+            M.prefer_git = false
+            M.update({ with_sync = true })
+        end,
+    },
+    {"nvim-treesitter/playground", event = "VeryLazy"},
+    {"nvim-treesitter/nvim-treesitter-context", event = "VeryLazy"},
+}

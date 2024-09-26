@@ -1,29 +1,23 @@
 local plugin_settings = nil
 local io_funcs = require "helper.io_func"
 local fmeta = require "helper.fmeta"
-
-local TOML = require "vendor.lua-toml.toml"
+local preferences = require "preferences"
+local JSON = require("vendor.json.json")
 
 local defaults = {
-    __settings__ = {
-        enabled = true,
-        deferring_enabled = true
-    },
-
     telescope = {
         enabled = true,
-        modules = {builtin = "telescope.builtin",config = "plugin_config.telescope"}
+        modules = {builtin = "telescope.builtin",config = "plugin_conf.telescope"}
     },
 
     git = {
         enabled = true,
-        gitblame_inline = true,
-        modules = {gitsigns = "gitsigns",gitcore = "plugin_config.git"},
+        modules = {gitsigns = "gitsigns",gitcore = "plugin_conf.git"},
     },
 
     which_key = {
-        enabled = true,
-        module = "plugin_config.which_key"
+        enabled = false,
+        module = "plugin_conf.which_key"
     },
 
     goto = {
@@ -32,8 +26,13 @@ local defaults = {
     },
 
     dap = {
+        enabled = false,
+        module = "plugin_conf.dap"
+    },
+
+    numb = {
         enabled = true,
-        module = "plugin_config.dap"
+        module = "plugin_conf.numb"
     },
 
     my_quick_actions = {
@@ -47,7 +46,7 @@ local defaults = {
 
     ufo = {
         enabled = true,
-        module = "plugin_config.ufo"
+        module = "plugin_conf.ufo"
     },
 
     undotree = {
@@ -56,7 +55,7 @@ local defaults = {
 
     noice = {
         enabled = false,
-        module = "plugin_config.noice",
+        module = "plugin_conf.noice",
     },
 
     refactoring = {
@@ -81,24 +80,22 @@ local defaults = {
 
     illuminate = {
         enabled = true,
-        module = "plugin_config.illuminate",
+        module = "plugin_conf.illuminate",
     },
 
     status_line = {
         enabled = true,
-        module = "plugin_config.status_line",
-        style = "",
-        name = "lualine",
+        module = "plugin_conf.status_line",
     },
 
     tree_sitter = {
         enabled = true,
-        module = "plugin_config.treesitter",
+        module = "plugin_conf.treesitter",
     },
 
     webdev_icons = {
         enabled = true,
-        module = "plugin_config.webdev_icons"
+        module = "plugin_conf.webdev_icons"
     },
 
     treesj = {
@@ -107,34 +104,27 @@ local defaults = {
 
     alpha = {
        enabled = false,
-       module = "plugin_config.alpha",
+       module = "plugin_conf.alpha",
     },
 
     conform = {
         enabled = true,
-        module = "plugin_config.conform"
+        module = "plugin_conf.conform"
     },
 
     nvim_tree = {
         enabled = true,
-        on_startup = false,
-        side = "left",
-        module = "plugin_config.nvim_tree",
-        width = 30,
-        adaptive_size = true,
-        show_dotfiles = true,
-        show_gitignore = false,
+        module = "plugin_conf.nvim_tree",
     },
 
     discord = {
         enabled = false,
-        module = "plugin_config.discord_presence",
-        style = "presence",
+        module = "plugin_conf.discord_presence",
     },
 
     godot = {
         enabled = true,
-        module = "plugin_config.godot"
+        module = "plugin_conf.godot"
     },
 
     trouble = {
@@ -144,33 +134,32 @@ local defaults = {
 
     terminal = {
         enabled = true,
-        module = "plugin_config.toggleterm",
+        module = "plugin_conf.toggleterm",
     },
 
     tabs = {
         enabled = true,
-        module = "plugin_config.barbar",
+        module = "plugin_conf.barbar",
     },
 
     file_explorer = {
         enabled = true,
-        module = "plugin_config.oil"
+        module = "plugin_conf.oil"
     },
 
     lsp = {
         enabled = true,
-        modules = {lsp = "plugin_config.lsp",cmp = "plugin_config.cmp"},
+        modules = {lsp = "plugin_conf.lsp",cmp = "plugin_conf.cmp"},
     },
 }
 
-defaults.__metadata__ = fmeta.create_fmd({file_name = "plugin_settings.toml"})
-local file_content = io_funcs.read_all_file(defaults.__metadata__.path)
-
-plugin_settings = not file_content and defaults or TOML.parse(file_content,{strict = true})
+local metadata = fmeta.create_fmd({file_name = "plugins.json"})
+local file_content = io_funcs.read_all_file(metadata.path)
+plugin_settings = not file_content and defaults or JSON.decode(file_content)
 
 setmetatable(plugin_settings,{__index = function(self,key)
 	if key == "__metadata__" then
-		return rawget(defaults,"__metadata__")
+		return metadata
 	end
 
     return rawget(self,key)
@@ -202,33 +191,31 @@ coroutine.resume(coroutine.create(function()
     end
 
     for plugin_name, data in pairs(plugin_settings) do
-        if plugin_name ~= "__metadata__" then
+        if defaults[plugin_name] == nil then
+            plugin_settings[plugin_name] = nil
+            metadata.out_of_date = true
+        end
 
-            if defaults[plugin_name] == nil then
-                plugin_settings[plugin_name] = nil
-                plugin_settings.__metadata__.out_of_date = true
-            end
-
-            if type(data) == "table" then
-                for opt, value in pairs(data) do
-                    if defaults[plugin_name][opt] == nil and opt ~= "defer" then
-                        plugin_settings[plugin_name][opt] = nil
-                        plugin_settings.__metadata__.out_of_date = true
+        if type(data) == "table" then
+            for opt, value in pairs(data) do
+                if defaults[plugin_name][opt] == nil and opt ~= "defer" then
+                    plugin_settings[plugin_name][opt] = nil
+                    metadata.out_of_date = true
+                    print(opt)
+                end
+                if opt ~= "defer" and type(value) ~= type(defaults[plugin_name][opt]) then
+                    print(string.format("%s::%s is not the same type as reference table.",plugin_name,opt,plugin_name))
+                end
+                if plugin_settings[plugin_name][opt] and opt == "module" then
+                    if value ~= defaults[plugin_name][opt] then
+                        plugin_settings[plugin_name][opt] = defaults[plugin_name][opt]
+                        metadata.out_of_date = true
                     end
-                    if opt ~= "defer" and type(value) ~= type(defaults[plugin_name][opt]) then
-                        print(string.format("%s::%s is not the same type as reference table.",plugin_name,opt,plugin_name))
-                    end
-                    if plugin_settings[plugin_name][opt] and opt == "module" then
-                        if value ~= defaults[plugin_name][opt] then
-                            plugin_settings[plugin_name][opt] = defaults[plugin_name][opt]
-                            plugin_settings.__metadata__.out_of_date = true
-                        end
-                    elseif plugin_settings[plugin_name][opt] and opt == "modules" then
-                        for mod_name, mod_path in pairs(type(value) == "table" and value or {}) do
-                            if defaults[plugin_name][opt][mod_name] ~= mod_path then
-                                plugin_settings[plugin_name][opt][mod_name] = defaults[plugin_name][opt][mod_name]
-                                plugin_settings.__metadata__.out_of_date = true
-                            end
+                elseif plugin_settings[plugin_name][opt] and opt == "modules" then
+                    for mod_name, mod_path in pairs(type(value) == "table" and value or {}) do
+                        if defaults[plugin_name][opt][mod_name] ~= mod_path then
+                            plugin_settings[plugin_name][opt][mod_name] = defaults[plugin_name][opt][mod_name]
+                            metadata.out_of_date = true
                         end
                     end
                 end

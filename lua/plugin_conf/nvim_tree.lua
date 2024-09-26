@@ -1,5 +1,6 @@
-local options = require "plugin_settings"
-local nvim_tree_opts = options["nvim_tree"]
+-- local options = require "plugin_settings"
+local options = require "preferences"
+local explorer = options.editor.explorer
 
 local success, nvim_tree = pcall(require, "nvim-tree")
 
@@ -16,9 +17,9 @@ vim.defer_fn(function()
     nvim_tree.setup {
     auto_reload_on_write = true,
         view = {
-            width = nvim_tree_opts.width,
-            adaptive_size = nvim_tree_opts.adaptive_size,
-            side = nvim_tree_opts.side,
+            width = explorer.width,
+            adaptive_size = explorer.adaptive_size,
+            side = explorer.side,
             centralize_selection = false,
             cursorline = true,
             debounce_delay = 15,
@@ -48,15 +49,15 @@ vim.defer_fn(function()
             }, group_empty = true,
         },
         filters = {
-            dotfiles = not options.nvim_tree.show_dotfiles,
-            git_ignored = not options.nvim_tree.show_gitignore,
+            dotfiles = not explorer.show_dotfiles,
+            git_ignored = not explorer.show_gitignore,
         },
         update_focused_file = {
             enable = true,
         },
     }
 
-    if nvim_tree_opts.on_startup then
+    if explorer.on_startup then
         local main_window = vim.api.nvim_get_current_win()
         vim.cmd.NvimTreeOpen()
         vim.api.nvim_set_current_win(main_window)

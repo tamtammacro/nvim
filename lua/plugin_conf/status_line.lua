@@ -1,12 +1,14 @@
-local options = require "plugin_settings"
+local plugin_settings = require "plugin_settings"
+local options = require "preferences"
+
 local DELAY = 0
 
-if options.status_line.name == "lualine" then
+if options.editor.status_line.name == "lualine" then
     local success, lualine = pcall(require, 'lualine')
 
     if not success then return print "lualine is not installed" end
 
-    if options.status_line.style == "evil" then
+    if options.editor.status_line.style == "evil" then
         -- Color table for highlights
         -- stylua: ignore
         local colors = {
@@ -224,10 +226,10 @@ if options.status_line.name == "lualine" then
 
         vim.defer_fn(function()
             lualine.setup(config)
-        end, options.noice.enabled and DELAY or 0)
+        end, plugin_settings.noice.enabled and DELAY or 0)
         return
     end
     vim.defer_fn(function()
         lualine.setup({})
-    end, options.noice.enabled and DELAY or 0)
+    end, plugin_settings.noice.enabled and DELAY or 0)
 end

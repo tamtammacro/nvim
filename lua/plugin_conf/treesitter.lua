@@ -1,6 +1,6 @@
 local success, config = pcall(require, "nvim-treesitter.configs")
 
-if not success then return end
+if not success then return print "something is wrong with treesitter.configs" end
 
 config.setup {
     ensure_installed = { "c", "go", "lua", "vim", "vimdoc", "query", "markdown", "rust", "javascript" },

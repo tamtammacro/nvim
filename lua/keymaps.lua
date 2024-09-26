@@ -1,12 +1,11 @@
 local defaults = {}
+local JSON = require("vendor.json.json")
 local fmeta = require "helper.fmeta"
 local options = require "plugin_settings"
 
 if type(options) ~= "table" then return end
 
 local io_funcs = require "helper.io_func"
-
-local TOML = require "vendor.lua-toml.toml"
 
 local SPACE_S = "<Space>"
 local LEADER_S = "<leader>"
@@ -40,8 +39,7 @@ local E = "v."
 
 local keymaps
 
-defaults.__cmd_types__  = {}
-defaults.__metadata__ = fmeta.create_fmd({file_name = "keymaps.toml"})
+local cmd_types = {}
 
 defaults.goto = {
     preview = { key = "gp", cmd="goto_preview_definition", desc = "goto signature preview" },
@@ -60,6 +58,7 @@ defaults.telescope = {
 defaults.lsp = {
     signature = {key = nil,desc="lsp help signature",mode="i",cmd = L.."vim.lsp.buf.signature_help()"},
     code_action = {key=ALT(ENTER),cmd = L.."vim.lsp.buf.code_action()",desc = "code action"},
+    -- code_action_2 = {key=SPACE_S..ENTER_S,cmd = L.."vim.lsp.buf.code_action()",desc = "code action"},
 
     goto_defination = {key = "gd",desc="goto symbol defination",cmd = L.."vim.lsp.buf.definition()"},
     goto_defination_intellij_idea = {key = CONTROL("b"),desc="goto symbol defination, Intellij idea",cmd = L.."vim.lsp.buf.definition()"},
@@ -142,36 +141,36 @@ defaults.tabs = {
     close = {key = ALT("x"),cmd = C.."BufferClose",desc="tab close"}
 }
 
-local file_content = io_funcs.read_all_file(defaults.__metadata__.path)
-keymaps = not file_content and defaults or TOML.parse(file_content,{strict = true})
+local metadata = fmeta.create_fmd({file_name = "keymaps.json"})
 
-if not keymaps then
-    print "ERROR: Something went wrong in keymaps.lua"
-    return defaults
-end
+if not metadata then return print "Could not create metadata for keymaps" end
+
+local file_content = io_funcs.read_all_file(metadata.path)
+keymaps = not file_content and defaults or JSON.decode(file_content)
 
 setmetatable(keymaps,{__index = function(self,key)
 	if key == "__metadata__" then
-		return rawget(defaults,"__metadata__")
+		return metadata
     elseif key == "__cmd_types__" then
-		return rawget(defaults,"__cmd_types__")
+        return cmd_types
 	end
 
     return rawget(self,key)
 end})
 
+
 coroutine.resume(coroutine.create(function()
     for keymap_name,data in pairs(defaults) do
         if keymap_name ~= "__metadata__" then
             if keymaps[keymap_name] == nil and defaults[keymap_name] then
-                keymaps.__metadata__.out_of_date = true
+                metadata.out_of_date = true
                 keymaps[keymap_name] = data
             end
         end
         if type(data) == "table" then
             for opt, default_value in pairs(data) do
                 if keymaps[keymap_name][opt] == nil then
-                    keymaps.__metadata__.out_of_date = true
+                    metadata.out_of_date = true
                     keymaps[keymap_name][opt] = default_value
                 end
             end
@@ -181,29 +180,29 @@ coroutine.resume(coroutine.create(function()
     for keymap_category, category_data in pairs(keymaps) do
         if defaults[keymap_category] == nil then
             keymaps[keymap_category] = nil
-            keymaps.__metadata__.out_of_date = true
+            metadata.out_of_date = true
         end
         if type(category_data) == "table" then
             for keymap_name,keymap_data in pairs(category_data) do
                 if defaults[keymap_category][keymap_name] == nil then
                     keymaps[keymap_category][keymap_name] = nil
-                    keymaps.__metadata__.out_of_date = true
+                    metadata.out_of_date = true
                 end
                 if defaults[keymap_category][keymap_name] then
                    if defaults[keymap_category][keymap_name].desc ~= keymap_data.desc then
                        keymaps[keymap_category][keymap_name].desc = defaults[keymap_category][keymap_name].desc
-                       keymaps.__metadata__.out_of_date = true
+                       metadata.out_of_date = true
                    end
                 end
             end
         end
     end
 
-    -- coroutine.yield()
+    coroutine.yield()
 end))
 
-defaults.__cmd_types__.VIM_COMMAND_PREFIX = C
-defaults.__cmd_types__.LUA_COMMAND_PREFIX = L
-defaults.__cmd_types__.EDITOR_COMMAND_PREFIX = E
+cmd_types.VIM_COMMAND_PREFIX = C
+cmd_types.LUA_COMMAND_PREFIX = L
+cmd_types.EDITOR_COMMAND_PREFIX = E
 
 return keymaps

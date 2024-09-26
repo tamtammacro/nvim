@@ -30,10 +30,7 @@ function M.setup()
 
     lsp.preset("recommended")
 
-    lsp.ensure_installed({
-        'tsserver',
-        'rust_analyzer',
-    })
+    lsp.ensure_installed({})
 
     lsp.nvim_workspace()
 

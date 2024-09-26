@@ -1,11 +1,14 @@
 local exports = {}
-local funcs = require "helper.func"
-local plugin_settings = require "plugin_settings"
-local io_funcs = require "helper.io_func"
-local keymaps = require "keymaps"
-local preferences = require "preferences"
 
-local TOML = require "vendor.lua-toml.toml"
+local JSON = require("vendor.json.json")
+
+local strings = require "helper.utils.strings"
+local funcs = require "helper.func"
+local io_funcs = require "helper.io_func"
+
+local plugin_settings = require "plugin_settings"
+local preferences = require "preferences"
+local keymaps = require "keymaps"
 
 local deferred_items = {}
 
@@ -57,7 +60,7 @@ local function init_plugins()
         path = (is_table and (data.module or data.modules))
         if not path then return end
 
-        defer = is_table and data.defer and plugin_settings.__settings__.deferring_enabled and data.defer * 1000 or 0
+        defer = is_table and data.defer and data.defer * 1000 or 0
         is_multi_path = type(path) == "table"
 
         if is_multi_path and is_table then
@@ -90,8 +93,6 @@ local function init_plugins()
 end
 
 local function use_plugins(plugin_manager)
-    if not plugin_settings.__settings__.enabled then return end
-
     local function init()
         if plugin_manager == "packer" then
             require "packer_plugins"
@@ -101,13 +102,7 @@ local function use_plugins(plugin_manager)
         xpcall(init_plugins, function(error) print(error) end)
     end
 
-    local success, err = pcall(function()
-        if plugin_settings.__settings__.defer then
-            vim.defer_fn(init, plugin_settings.__settings__.defer * 1000)
-        else
-            init()
-        end
-    end)
+    local success, err = pcall(init)
 
     if not success and err then
         print(("Error with 'use_plugins': %s"):format(err))
@@ -118,25 +113,23 @@ local function use_plugins(plugin_manager)
 end
 
 local function use_visuals()
-    if not plugin_settings.__settings__.enabled then return end
-
     local current_theme = vim.g.colors_name
 
     local success, err = pcall(function()
-        local theme_full_name = preferences.theme.style and #plugin_settings.theme.style > 0 and
-            preferences.theme.name .. "-" .. preferences.theme.style or preferences.theme.name
+        local theme_full_name = preferences.editor.theme.style and #plugin_settings.editor.theme.style > 0 and
+            preferences.editor.theme.name .. "-" .. preferences.editor.theme.style or preferences.editor.theme.name
 
-        if preferences.theme.enabled and (current_theme ~= theme_full_name) then
+        if preferences.editor.theme and (current_theme ~= theme_full_name) then
             local success, error_message = pcall(vim.cmd.colorscheme, theme_full_name)
 
             if not success then
                 print(error_message)
             end
 
-            if (preferences.theme.name == "material") then vim.g.material_style = preferences.theme.style end
+            if (preferences.editor.theme.name == "material") then vim.g.material_style = preferences.editor.theme.style end
         end
 
-        if preferences.background.transparent then
+        if preferences.editor.background.transparent then
             vim.cmd["highlight"]("Normal guibg=none")
         end
     end)
@@ -144,22 +137,22 @@ local function use_visuals()
     if not success and err then print(err) end
 end
 
-local function make_string(s)
-    local result = ""
+function write_config_file(data)
+    local metadata = data.__metadata__
 
-    local ip = 0
+    if not io_funcs.file_exists(metadata.path) or metadata.out_of_date then
+        local out_of_date_prev = metadata.out_of_date
 
-    while ip < #s do
-        ip = ip + 1
+        local str = strings.table_to_json_string(data)
 
-        if s:sub(ip, ip) == "\n" and s:sub(ip - 1, ip - 1) ~= "]" and s:sub(ip + 1, ip + 1) == "[" then
-            result = result .. "\n"
+        if io_funcs.write_file(metadata.path,str) then
+            if out_of_date_prev then
+                print(("INFO: %s was updated"):format(metadata.file_name))
+            else
+                print(("INFO: Generated %s"):format(metadata.file_name))
+            end
         end
-
-        result = result .. s:sub(ip, ip)
     end
-
-    return result
 end
 
 function exports.init(plugin_manager)
@@ -171,63 +164,16 @@ function exports.init(plugin_manager)
         io_funcs.mkdir(plugin_settings.__metadata__.folder_path)
     end
 
-    if not io_funcs.file_exists(plugin_settings.__metadata__.path) or plugin_settings.__metadata__.out_of_date then
-        local out_of_date_prev = plugin_settings.__metadata__.out_of_date
-
-        local copy = funcs.deepcopy(plugin_settings)
-        copy.__metadata__ = nil
-
-        local str = TOML.encode(copy)
-
-        if io_funcs.write_file(plugin_settings.__metadata__.path, make_string(str)) then
-            if out_of_date_prev then
-                print(("INFO: %s was updated"):format(plugin_settings.__metadata__.file_name))
-            else
-                print(("INFO: Generated %s"):format(plugin_settings.__metadata__.file_name))
-            end
-        end
-    end
-
-    if not io_funcs.file_exists(keymaps.__metadata__.path) or keymaps.__metadata__.out_of_date then
-        local out_of_date_prev = keymaps.__metadata__.out_of_date
-
-        keymaps.__cmd_types__ = nil
-        local copy = funcs.deepcopy(keymaps)
-        copy.__metadata__ = nil
-
-        local str = TOML.encode(copy)
-
-        if io_funcs.write_file(keymaps.__metadata__.path, make_string(str)) then
-            if out_of_date_prev then
-                print(("INFO: %s was updated"):format(keymaps.__metadata__.file_name))
-            else
-                print(("INFO: Generated %s"):format(keymaps.__metadata__.file_name))
-            end
-        end
-    end
-
-    if not io_funcs.file_exists(preferences.__metadata__.path) or preferences.__metadata__.out_of_date then
-        local out_of_date_prev = preferences.__metadata__.out_of_date
-        local copy = funcs.deepcopy(preferences)
-        copy.__metadata__ = nil
-
-        local str = TOML.encode(copy)
-
-        if io_funcs.write_file(preferences.__metadata__.path, make_string(str)) then
-            if out_of_date_prev then
-                print(("INFO: %s was updated"):format(preferences.__metadata__.file_name))
-            else
-                print(("INFO: Generated %s"):format(preferences.__metadata__.file_name))
-            end
-        end
-    end
+    write_config_file(plugin_settings)
+    write_config_file(preferences)
+    write_config_file(keymaps)
 
     if not vim.v.argv[3] then
         require("persistence").load()
     end
 
     vim.defer_fn(function()
-        if not plugin_settings.git.gitblame_inline then
+        if not preferences.git.gitblame_inline then
             pcall(vim.cmd.GitBlameDisable)
         end
     end,500)
