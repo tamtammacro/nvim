@@ -26,7 +26,7 @@ local defaults = {
     },
 
     dap = {
-        enabled = false,
+        enabled = true,
         module = "plugin_conf.dap"
     },
 

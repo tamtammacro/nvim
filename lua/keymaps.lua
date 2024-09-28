@@ -56,9 +56,8 @@ defaults.telescope = {
 }
 
 defaults.lsp = {
-    signature = {key = nil,desc="lsp help signature",mode="i",cmd = L.."vim.lsp.buf.signature_help()"},
+    signature = {key = SPACE_S.."fk",desc="lsp help signature",mode="i",cmd = L.."vim.lsp.buf.signature_help()"},
     code_action = {key=ALT(ENTER),cmd = L.."vim.lsp.buf.code_action()",desc = "code action"},
-    -- code_action_2 = {key=SPACE_S..ENTER_S,cmd = L.."vim.lsp.buf.code_action()",desc = "code action"},
 
     goto_defination = {key = "gd",desc="goto symbol defination",cmd = L.."vim.lsp.buf.definition()"},
     goto_defination_intellij_idea = {key = CONTROL("b"),desc="goto symbol defination, Intellij idea",cmd = L.."vim.lsp.buf.definition()"},

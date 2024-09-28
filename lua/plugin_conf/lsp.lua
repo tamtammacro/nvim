@@ -1,97 +1,140 @@
 local M = {}
 
 function M.setup()
-    local success
-    local lspconfig
+	local success
+	local lspconfig
 
-    success, lspconfig = pcall(require, "lspconfig")
-    if not success then return print "lspconfig is not installed" end
+	success, lspconfig = pcall(require, "lspconfig")
+	if not success then
+		return print("lspconfig is not installed")
+	end
 
-    local function on_attach(_, bufnr)
-        --local opts = {buffer = bufnr, remap = false}
-    end
+	local function on_attach(_, bufnr)
+		--local opts = {buffer = bufnr, remap = false}
+	end
 
-    lspconfig.clangd.setup {
-        on_attach = on_attach,
-        cmd = {
-            "clangd",
-            "--background-index",
-            "--suggest-missing-includes",
-        },
-        filetypes = { "c", "cpp", "objc", "objcpp" },
-    }
+	-- local capabilities = vim.lsp.protocol.make_client_capabilities()
+	local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-    local lsp
-    success, lsp = pcall(require, "lsp-zero")
+	capabilities.textDocument.signatureHelp = {
+		dynamicRegistration = true,
+		signatureInformation = {
+			documentationFormat = { "markdown", "plaintext" },
+			parameterInformation = { labelOffsetSupport = true },
+		},
+	}
 
-    if not success then return print "lsp zero is not installed" end
+	lspconfig.clangd.setup({
+		on_attach = on_attach,
+		capabilities = capabilities,
 
-    vim.lsp.set_log_level("debug")
+		cmd = {
+			"clangd",
+			"--background-index",
+			"--suggest-missing-includes",
+		},
+		filetypes = { "c", "cpp", "objc", "objcpp" },
+	})
 
-    lsp.preset("recommended")
+	local lsp
+	success, lsp = pcall(require, "lsp-zero")
 
-    lsp.ensure_installed({})
+	if not success then
+		return print("lsp zero is not installed")
+	end
 
-    lsp.nvim_workspace()
+	vim.lsp.set_log_level("debug")
 
-    local cmp
+	lsp.preset("recommended")
 
-    success, cmp = pcall(require, 'cmp')
+	lsp.ensure_installed({})
 
-    if not success then return print "cmp is not installed" end
+	lsp.nvim_workspace()
 
-    local cmp_select = { behavior = cmp.SelectBehavior.Select }
-    local cmp_mappings = lsp.defaults.cmp_mappings({
-        ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
-        ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
-        ['<C-y>'] = cmp.mapping.confirm({ select = true }),
-        ["<C-Space>"] = cmp.mapping.complete(),
-    })
+	local cmp
 
-    cmp_mappings['<Tab>'] = nil
-    cmp_mappings['<S-Tab>'] = nil
+	success, cmp = pcall(require, "cmp")
 
-    lsp.setup_nvim_cmp({
-        mapping = cmp_mappings
-    })
+	if not success then
+		return print("cmp is not installed")
+	end
 
-    lsp.set_preferences({
-        suggest_lsp_servers = false,
-        sign_icons = {
-            error = 'E',
-            warn = 'W',
-            hint = 'H',
-            info = 'I'
-        }
-    })
+	local cmp_select = { behavior = cmp.SelectBehavior.Select }
+	local cmp_mappings = lsp.defaults.cmp_mappings({
+		["<C-p>"] = cmp.mapping.select_prev_item(cmp_select),
+		["<C-n>"] = cmp.mapping.select_next_item(cmp_select),
+		["<C-y>"] = cmp.mapping.confirm({ select = true }),
+		["<C-Space>"] = cmp.mapping.complete(),
+	})
 
-    lsp.on_attach(on_attach)
-    lsp.setup()
+	cmp_mappings["<Tab>"] = nil
+	cmp_mappings["<S-Tab>"] = nil
 
-    vim.diagnostic.config({
-        virtual_text = true
-    })
+	lsp.setup_nvim_cmp({
+		mapping = cmp_mappings,
+	})
 
-    cmp.setup.cmdline("/", {
-        mapping = cmp.mapping.preset.cmdline(),
-        sources = {
-            { name = "buffer" },
-        },
-    })
+	lsp.set_preferences({
+		suggest_lsp_servers = false,
+		sign_icons = {
+			error = "E",
+			warn = "W",
+			hint = "H",
+			info = "I",
+		},
+	})
 
-    cmp.setup.cmdline(":", {
-        mapping = cmp.mapping.preset.cmdline(),
-        sources = cmp.config.sources({
-            { name = "path" },
-        }, {
-            {
-                name = "cmdline",
-                option = {
-                    ignore_cmds = { "Man", "!" },
-                },
-            },
-        }),
-    })
+	lsp.on_attach(on_attach)
+	lsp.setup()
+
+	vim.diagnostic.config({
+		virtual_text = true,
+	})
+
+	cmp.setup({
+		snippet = {
+			expand = function(args)
+				local luasnip = require("luasnip")
+
+				luasnip.lsp_expand(args.body)
+
+				-- vim.fn["vsnip#anonymous"](args.body) -- For vsnip users.
+			end,
+		},
+		sources = {
+			{ name = "nvim_lsp" },
+			{ name = "nvim_lsp_signature_help" }, -- Signature help source
+			{ name = "luasnip" }, -- Snippet completions
+		},
+	})
+
+	cmp.setup.cmdline("/", {
+		mapping = cmp.mapping.preset.cmdline(),
+		sources = {
+			{ name = "buffer" },
+		},
+	})
+
+	cmp.setup.cmdline(":", {
+		mapping = cmp.mapping.preset.cmdline(),
+		sources = cmp.config.sources({
+			{ name = "path" },
+		}, {
+			{
+				name = "cmdline",
+				option = {
+					ignore_cmds = { "Man", "!" },
+				},
+			},
+		}),
+	})
 end
+
+-- vim.api.nvim_set_keymap(
+-- 	"n",
+-- 	"<leader>k",
+-- 	"<cmd>lua vim.lsp.buf.signature_help()<CR>",
+-- 	{ noremap = true, silent = true }
+-- )
 
 return M

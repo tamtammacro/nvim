@@ -4,7 +4,7 @@ local fmeta = require("helper.fmeta")
 local defaults = {
 	editor = {
 		theme = {
-			name = "catppuccin-macchiato",
+			name = "default",
 		},
 		background = {
 			transparent = false,
