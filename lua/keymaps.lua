@@ -2,6 +2,9 @@ local defaults = {}
 local JSON = require("vendor.json.json")
 local fmeta = require "helper.fmeta"
 local options = require "plugin_settings"
+local preferences = require "preferences"
+
+if not preferences then return print "failed to fetch preferences in keymaps.lua" end
 
 if type(options) ~= "table" then return end
 
@@ -94,7 +97,7 @@ defaults.symbols_outline = {
 }
 
 defaults.file_explorer = {
-    toggle = {key = SPACE_S.."fm",cmd=options.file_explorer.path == "netrw" and C.."Ex" or C.."Oil",desc = "file manager"}
+    toggle = {key = SPACE_S.."fm",cmd=preferences.editor.file_explorer.name == "netrw" and C.."Ex" or C.."Oil",desc = "file manager"}
 }
 
 defaults.treesj = {
@@ -158,6 +161,7 @@ setmetatable(keymaps,{__index = function(self,key)
 end})
 
 
+if preferences.conf.enable_plugin_check then
 coroutine.resume(coroutine.create(function()
     for keymap_name,data in pairs(defaults) do
         if keymap_name ~= "__metadata__" then
@@ -199,6 +203,7 @@ coroutine.resume(coroutine.create(function()
 
     coroutine.yield()
 end))
+end
 
 cmd_types.VIM_COMMAND_PREFIX = C
 cmd_types.LUA_COMMAND_PREFIX = L

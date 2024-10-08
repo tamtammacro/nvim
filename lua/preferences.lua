@@ -2,9 +2,16 @@ local io_funcs = require("helper.io_func")
 local fmeta = require("helper.fmeta")
 
 local defaults = {
+	conf = {
+	    template = "minimal",
+		enable_plugin_check = false,
+	},
 	editor = {
+        file_explorer = {
+            name = "netrw"
+        },
 		theme = {
-			name = "default",
+			name = "desert",
 		},
 		background = {
 			transparent = false,
@@ -55,45 +62,49 @@ setmetatable(preferences, {
 	end,
 })
 
-coroutine.resume(coroutine.create(function()
-	for pref_name, data in pairs(defaults) do
-		if pref_name ~= "__metadata__" then
-			if preferences[pref_name] == nil and defaults[pref_name] then
-				metadata.out_of_date = true
-				preferences[pref_name] = data
-			end
-		end
-		if type(data) == "table" then
-			for opt, default_value in pairs(data) do
-				if preferences[pref_name][opt] == nil then
+if preferences.conf.enable_plugin_check then
+	coroutine.resume(coroutine.create(function()
+		for pref_name, data in pairs(defaults) do
+			if pref_name ~= "__metadata__" then
+				if preferences[pref_name] == nil and defaults[pref_name] then
 					metadata.out_of_date = true
-					preferences[pref_name][opt] = default_value
+					preferences[pref_name] = data
+				end
+			end
+			if type(data) == "table" then
+				for opt, default_value in pairs(data) do
+					if preferences[pref_name][opt] == nil then
+						metadata.out_of_date = true
+						preferences[pref_name][opt] = default_value
+					end
 				end
 			end
 		end
-	end
 
-	for pref_name, data in pairs(preferences) do
-		if pref_name ~= "__metadata__" then
-			if defaults[pref_name] == nil then
-				preferences[pref_name] = nil
-				metadata.out_of_date = true
-			end
-		end
-		if type(data) == "table" then
-			for opt, value in pairs(data) do
-				if defaults[pref_name][opt] == nil then
-					preferences[pref_name][opt] = nil
+		for pref_name, data in pairs(preferences) do
+			if pref_name ~= "__metadata__" then
+				if defaults[pref_name] == nil then
+					preferences[pref_name] = nil
 					metadata.out_of_date = true
 				end
-				if type(value) ~= type(defaults[pref_name][opt]) then
-					print(string.format("%s::%s is not the same type as reference table.", pref_name, opt, pref_name))
+			end
+			if type(data) == "table" then
+				for opt, value in pairs(data) do
+					if defaults[pref_name][opt] == nil then
+						preferences[pref_name][opt] = nil
+						metadata.out_of_date = true
+					end
+					if type(value) ~= type(defaults[pref_name][opt]) then
+						print(
+							string.format("%s::%s is not the same type as reference table.", pref_name, opt, pref_name)
+						)
+					end
 				end
 			end
 		end
-	end
 
-	coroutine.yield()
-end))
+		coroutine.yield()
+	end))
+end
 
 return preferences

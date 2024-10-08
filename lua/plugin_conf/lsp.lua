@@ -13,8 +13,8 @@ function M.setup()
 		--local opts = {buffer = bufnr, remap = false}
 	end
 
-	-- local capabilities = vim.lsp.protocol.make_client_capabilities()
 	local capabilities = require("cmp_nvim_lsp").default_capabilities()
+    -- capabilities.textDocument.completion.completionItem.snippetSupport = true
 
 	capabilities.textDocument.signatureHelp = {
 		dynamicRegistration = true,
@@ -92,19 +92,16 @@ function M.setup()
 	})
 
 	cmp.setup({
-		snippet = {
-			expand = function(args)
-				local luasnip = require("luasnip")
-
-				luasnip.lsp_expand(args.body)
-
-				-- vim.fn["vsnip#anonymous"](args.body) -- For vsnip users.
-			end,
-		},
+		-- snippet = {
+		-- 	expand = function(args)
+		-- 		local luasnip = require("luasnip")
+		-- 		luasnip.lsp_expand(args.body)
+		-- 	end,
+		-- },
 		sources = {
 			{ name = "nvim_lsp" },
 			{ name = "nvim_lsp_signature_help" }, -- Signature help source
-			{ name = "luasnip" }, -- Snippet completions
+			-- { name = "luasnip" }, -- Snippet completions
 		},
 	})
 
@@ -129,12 +126,5 @@ function M.setup()
 		}),
 	})
 end
-
--- vim.api.nvim_set_keymap(
--- 	"n",
--- 	"<leader>k",
--- 	"<cmd>lua vim.lsp.buf.signature_help()<CR>",
--- 	{ noremap = true, silent = true }
--- )
 
 return M

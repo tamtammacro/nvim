@@ -156,7 +156,6 @@ function write_config_file(data)
 end
 
 function exports.init(plugin_manager)
-    require "vim_options"
     use_plugins(plugin_manager)
     use_visuals()
 
@@ -168,15 +167,17 @@ function exports.init(plugin_manager)
     write_config_file(preferences)
     write_config_file(keymaps)
 
-    if not vim.v.argv[3] then
-        require("persistence").load()
-    end
+    -- if not vim.v.argv[3] then
+    --     require("persistence").load()
+    -- end
 
     vim.defer_fn(function()
         if not preferences.git.gitblame_inline then
             pcall(vim.cmd.GitBlameDisable)
         end
     end,500)
+
+    require "vim_options"
 end
 
 return exports

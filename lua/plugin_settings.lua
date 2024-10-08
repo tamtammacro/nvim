@@ -6,12 +6,12 @@ local JSON = require("vendor.json.json")
 
 local defaults = {
     telescope = {
-        enabled = true,
+        enabled = false,
         modules = {builtin = "telescope.builtin",config = "plugin_conf.telescope"}
     },
 
     git = {
-        enabled = true,
+        enabled = false,
         modules = {gitsigns = "gitsigns",gitcore = "plugin_conf.git"},
     },
 
@@ -21,22 +21,22 @@ local defaults = {
     },
 
     goto = {
-        enabled = true,
+        enabled = false,
         module = "goto-preview"
     },
 
     dap = {
-        enabled = true,
+        enabled = false,
         module = "plugin_conf.dap"
     },
 
     numb = {
-        enabled = true,
+        enabled = false,
         module = "plugin_conf.numb"
     },
 
     my_quick_actions = {
-        enabled = true,
+        enabled = false,
         module = "core.my_quick_actions"
     },
 
@@ -45,12 +45,12 @@ local defaults = {
     },
 
     ufo = {
-        enabled = true,
+        enabled = false,
         module = "plugin_conf.ufo"
     },
 
     undotree = {
-        enabled = true,
+        enabled = false,
     },
 
     noice = {
@@ -59,47 +59,47 @@ local defaults = {
     },
 
     refactoring = {
-        enabled = true,
+        enabled = false,
         module = "refactoring",
     },
 
     ibl = {
-        enabled = true,
+        enabled = false,
         module = "ibl",
     },
 
     colorizer = {
-        enabled = true,
+        enabled = false,
         module = "colorizer",
     },
 
     symbols_outline = {
-        enabled = true,
+        enabled = false,
         module = "symbols-outline",
     },
 
     illuminate = {
-        enabled = true,
+        enabled = false,
         module = "plugin_conf.illuminate",
     },
 
     status_line = {
-        enabled = true,
+        enabled = false,
         module = "plugin_conf.status_line",
     },
 
     tree_sitter = {
-        enabled = true,
+        enabled = false,
         module = "plugin_conf.treesitter",
     },
 
     webdev_icons = {
-        enabled = true,
+        enabled = false,
         module = "plugin_conf.webdev_icons"
     },
 
     treesj = {
-        enabled = true,
+        enabled = false,
     },
 
     alpha = {
@@ -108,12 +108,12 @@ local defaults = {
     },
 
     conform = {
-        enabled = true,
+        enabled = false,
         module = "plugin_conf.conform"
     },
 
     nvim_tree = {
-        enabled = true,
+        enabled = false,
         module = "plugin_conf.nvim_tree",
     },
 
@@ -123,7 +123,7 @@ local defaults = {
     },
 
     godot = {
-        enabled = true,
+        enabled = false,
         module = "plugin_conf.godot"
     },
 
@@ -133,17 +133,17 @@ local defaults = {
     },
 
     terminal = {
-        enabled = true,
+        enabled = false,
         module = "plugin_conf.toggleterm",
     },
 
     tabs = {
-        enabled = true,
+        enabled = false,
         module = "plugin_conf.barbar",
     },
 
     file_explorer = {
-        enabled = true,
+        enabled = false,
         module = "plugin_conf.oil"
     },
 
@@ -154,6 +154,7 @@ local defaults = {
 }
 
 local metadata = fmeta.create_fmd({file_name = "plugins.json"})
+if not metadata then return print "failed to create metadata in plugin_settings.lua" end
 local file_content = io_funcs.read_all_file(metadata.path)
 plugin_settings = not file_content and defaults or JSON.decode(file_content)
 
@@ -170,6 +171,7 @@ if not plugin_settings then
     return defaults
 end
 
+if preferences.conf.enable_plugin_check then
 coroutine.resume(coroutine.create(function()
     for plugin_name,data in pairs(defaults) do
         if plugin_name ~= "__metadata__" then
@@ -226,4 +228,5 @@ coroutine.resume(coroutine.create(function()
     -- coroutine.yield()
 end))
 
+end
 return plugin_settings

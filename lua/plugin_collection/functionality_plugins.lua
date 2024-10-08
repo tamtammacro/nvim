@@ -42,8 +42,6 @@ return {
 		end,
 	},
 
-	{ "folke/nvim-ts-autotag", event = "VeryLazy" },
-
 	{
 		"xeluxee/competitest.nvim",
 		event = "VeryLazy",
@@ -51,12 +49,6 @@ return {
 		config = function()
 			require("competitest").setup()
 		end,
-	},
-
-	{
-		"windwp/nvim-autopairs",
-		event = "VeryLazy",
-		config = true,
 	},
 
 	{ "mbbill/undotree", event = "VeryLazy" },

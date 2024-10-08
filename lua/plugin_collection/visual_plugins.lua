@@ -8,7 +8,8 @@ return {
 	{ "anuvyklack/middleclass", event = "VeryLazy" },
 	{ "anuvyklack/animation.nvim", event = "VeryLazy" },
 
-	{ "andweeb/presence.nvim" },
+	-- discord
+	-- { "andweeb/presence.nvim" },
 
 	{ "nacro90/numb.nvim" },
 

@@ -7,15 +7,17 @@ return {
 
 	{ "folke/neodev.nvim", event = "VeryLazy", opts = {} },
 
-	{ "jay-babu/mason-nvim-dap.nvim", event = "VeryLazy" },
+	-- { "folke/nvim-ts-autotag", event = "VeryLazy" },
 
-	{ "rcarriga/nvim-dap-ui", dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" }, event = "VeryLazy" },
-
-	{
-		"ldelossa/nvim-dap-projects",
-		event = "VeryLazy",
-	},
-
+	-- { "jay-babu/mason-nvim-dap.nvim", event = "VeryLazy" },
+	--
+	-- { "rcarriga/nvim-dap-ui", dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" }, event = "VeryLazy" },
+	--
+	-- {
+	-- 	"ldelossa/nvim-dap-projects",
+	-- 	event = "VeryLazy",
+	-- },
+	--
 	{ "hrsh7th/cmp-nvim-lsp", event = "VeryLazy" },
 	{ "hrsh7th/cmp-buffer", event = "VeryLazy" },
 
@@ -32,7 +34,7 @@ return {
 		"L3MON4D3/LuaSnip", -- Snippet engine
 	},
 
-	{ "saadparwaiz1/cmp_luasnip" }, -- Snippet completions for LuaSnip
+	-- { "saadparwaiz1/cmp_luasnip" }, -- Snippet completions for LuaSnip
 
 	{
 		"williamboman/mason.nvim",
@@ -41,7 +43,7 @@ return {
 		event = "VeryLazy",
 	},
 
-	{ "folke/trouble.nvim", event = "VeryLazy", opts = {}, cmd = "Trouble" },
+	-- { "folke/trouble.nvim", event = "VeryLazy", opts = {}, cmd = "Trouble" },
 
 	{
 		"VonHeikemen/lsp-zero.nvim",
@@ -65,4 +67,11 @@ return {
 			{ "hrsh7th/vim-vsnip" },
 		},
 	},
+
+	{
+		"windwp/nvim-autopairs",
+		event = "VeryLazy",
+		config = true,
+	},
+
 }

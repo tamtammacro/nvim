@@ -32,6 +32,7 @@ xpcall(function()
     vim.opt.signcolumn = "yes"
     vim.opt.splitbelow = true
     vim.opt.splitright = true
+    vim.opt.encoding = 'utf-8'
 
     vim.opt.nu = true
     vim.opt.relativenumber = true
@@ -64,8 +65,14 @@ xpcall(function()
 
     vim.g.barbar_auto_setup = false
 
-    vim.g.loaded_netrwPlugin = 1
-    vim.g.loaded_netrw = 1
+    -- vim.g.loaded_netrwPlugin = 1
+    -- vim.g.loaded_netrw = 1
+    vim.g.netrw_banner = 0
+    vim.g.netrw_liststyle = 3
+    vim.g.netrw_sftp_cmd = 'scp'
+    vim.g.netrw_http_cmd = 'curl'
+
+    vim.cmd('highlight EndOfBuffer ctermbg=none guibg=none')
 
     local INDENT_BLANK_LINE_LIST = { "IndentBlanklineContextChar", "IndentBlanklineChar", "IndentBlanklineSpaceChar",
         "IndentBlanklineSpaceCharBlankline", "IndentBlanklineContextSpaceChar", "IndentBlanklineContextStart" }
