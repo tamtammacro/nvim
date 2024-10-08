@@ -2,7 +2,7 @@ local plugin_settings = nil
 local io_funcs = require "helper.io_func"
 local fmeta = require "helper.fmeta"
 local preferences = require "preferences"
-local JSON = require("vendor.json.json")
+local JSON = require("helper.json")
 
 local defaults = {
     telescope = {

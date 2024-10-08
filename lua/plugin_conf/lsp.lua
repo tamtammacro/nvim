@@ -14,7 +14,7 @@ function M.setup()
 	end
 
 	local capabilities = require("cmp_nvim_lsp").default_capabilities()
-    -- capabilities.textDocument.completion.completionItem.snippetSupport = true
+    capabilities.textDocument.completion.completionItem.snippetSupport = true
 
 	capabilities.textDocument.signatureHelp = {
 		dynamicRegistration = true,
@@ -92,16 +92,16 @@ function M.setup()
 	})
 
 	cmp.setup({
-		-- snippet = {
-		-- 	expand = function(args)
-		-- 		local luasnip = require("luasnip")
-		-- 		luasnip.lsp_expand(args.body)
-		-- 	end,
-		-- },
+		snippet = {
+			expand = function(args)
+				local luasnip = require("luasnip")
+				luasnip.lsp_expand(args.body)
+			end,
+		},
 		sources = {
 			{ name = "nvim_lsp" },
 			{ name = "nvim_lsp_signature_help" }, -- Signature help source
-			-- { name = "luasnip" }, -- Snippet completions
+			{ name = "luasnip" }, -- Snippet completions
 		},
 	})
 

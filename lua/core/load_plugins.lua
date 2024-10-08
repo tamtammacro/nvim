@@ -1,13 +1,13 @@
 local exports = {}
 
-local JSON = require("vendor.json.json")
-
 local strings = require "helper.utils.strings"
-local funcs = require "helper.func"
 local io_funcs = require "helper.io_func"
 
 local plugin_settings = require "plugin_settings"
 local preferences = require "preferences"
+
+if not preferences then return print "failed to fetch preferences module in load_plugins.lua" end
+if not plugin_settings then return print "failed to fetch plugin_settings module in load_plugins.lua" end
 local keymaps = require "keymaps"
 
 local deferred_items = {}
@@ -137,7 +137,7 @@ local function use_visuals()
     if not success and err then print(err) end
 end
 
-function write_config_file(data)
+local function write_config_file(data)
     local metadata = data.__metadata__
 
     if not io_funcs.file_exists(metadata.path) or metadata.out_of_date then
@@ -167,9 +167,13 @@ function exports.init(plugin_manager)
     write_config_file(preferences)
     write_config_file(keymaps)
 
-    -- if not vim.v.argv[3] then
-    --     require("persistence").load()
-    -- end
+    if not vim.v.argv[3] then
+        local success,persistance = pcall(require,"persistence")
+
+        if success and persistance then
+           persistance.load()
+        end
+    end
 
     vim.defer_fn(function()
         if not preferences.git.gitblame_inline then

@@ -43,7 +43,7 @@ if not metadata then
 end
 
 local file_content = io_funcs.read_all_file(metadata.path)
-local JSON = require("vendor.json.json")
+local JSON = require("helper.json")
 
 local preferences = not file_content and defaults or JSON.decode(file_content)
 

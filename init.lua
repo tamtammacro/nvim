@@ -6,10 +6,8 @@ local ok, plugins = pcall(require, "core.load_plugins")
 
 if not ok then
 	return print("Error:", plugins)
-end
-
-if type(plugins) ~= "table" then
-	return
+elseif type(plugins) ~= "table" then
+    return
 end
 
 if not plugins then

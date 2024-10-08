@@ -1,5 +1,5 @@
 local defaults = {}
-local JSON = require("vendor.json.json")
+local JSON = require("helper.json")
 local fmeta = require "helper.fmeta"
 local options = require "plugin_settings"
 local preferences = require "preferences"
