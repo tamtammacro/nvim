@@ -40,8 +40,6 @@ local C = ":"
 local L = "lua ->"
 local E = "v."
 
-local keymaps
-
 local cmd_types = {}
 
 defaults.goto = {
@@ -143,16 +141,23 @@ defaults.tabs = {
     close = {key = ALT("x"),cmd = C.."BufferClose",desc="tab close"}
 }
 
-local metadata = fmeta.create_fmd({file_name = "keymaps.json"})
+local metadata = nil
+local keymaps = nil
 
-if not metadata then return print "Could not create metadata for keymaps" end
+if preferences.conf.save_config then
+    metadata = fmeta.create_fmd({file_name = "keymaps.json"})
 
-local file_content = io_funcs.read_all_file(metadata.path)
-keymaps = not file_content and defaults or JSON.decode(file_content)
+    if not metadata then return print "Could not create metadata for keymaps" end
+
+    local file_content = io_funcs.read_all_file(metadata.path)
+    keymaps = not file_content and defaults or JSON.decode(file_content)
+else
+    keymaps = defaults
+end
 
 setmetatable(keymaps,{__index = function(self,key)
 	if key == "__metadata__" then
-		return metadata
+		return metadata or {}
     elseif key == "__cmd_types__" then
         return cmd_types
 	end

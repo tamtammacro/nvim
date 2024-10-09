@@ -5,7 +5,7 @@ return {
 		event = "VeryLazy",
 	},
 
-	{ "folke/neodev.nvim", event = "VeryLazy", opts = {} },
+	-- { "folke/neodev.nvim", event = "VeryLazy", opts = {} },
 
 	-- { "folke/nvim-ts-autotag", event = "VeryLazy" },
 
@@ -25,15 +25,15 @@ return {
 
 	{ "hrsh7th/nvim-cmp" },
 
-	{ "hrsh7th/cmp-nvim-lsp-signature-help" },
+	{ "hrsh7th/cmp-nvim-lsp-signature-help", event = "VeryLazy" },
 
 	{ "hrsh7th/cmp-cmdline", event = "VeryLazy" },
 	{ "neovim/nvim-lspconfig", event = "VeryLazy" },
 
-	{
-		"L3MON4D3/LuaSnip", -- Snippet engine
-	},
-
+	-- {
+	-- 	"L3MON4D3/LuaSnip", -- Snippet engine
+	-- },
+	--
 	-- { "saadparwaiz1/cmp_luasnip" }, -- Snippet completions for LuaSnip
 
 	{
@@ -55,16 +55,16 @@ return {
 			{ "hrsh7th/nvim-cmp" },
 			{ "hrsh7th/cmp-buffer" },
 			{ "hrsh7th/cmp-path" },
-			{ "saadparwaiz1/cmp_luasnip" },
+			-- { "saadparwaiz1/cmp_luasnip" },
 			{ "hrsh7th/cmp-nvim-lsp" },
 			{ "hrsh7th/cmp-nvim-lua" },
 
-			-- Snippets
-			{ "L3MON4D3/LuaSnip" },
-			{ "rafamadriz/friendly-snippets" },
+			-- -- Snippets
+			-- { "L3MON4D3/LuaSnip" },
+			-- { "rafamadriz/friendly-snippets" },
 
-			{ "hrsh7th/cmp-vsnip" },
-			{ "hrsh7th/vim-vsnip" },
+			-- { "hrsh7th/cmp-vsnip" },
+			-- { "hrsh7th/vim-vsnip" },
 		},
 	},
 

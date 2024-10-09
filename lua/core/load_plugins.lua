@@ -163,9 +163,11 @@ function exports.init(plugin_manager)
         io_funcs.mkdir(plugin_settings.__metadata__.folder_path)
     end
 
-    write_config_file(plugin_settings)
-    write_config_file(preferences)
-    write_config_file(keymaps)
+    if preferences.conf.save_config then
+        write_config_file(plugin_settings)
+        write_config_file(preferences)
+        write_config_file(keymaps)
+    end
 
     if not vim.v.argv[3] then
         local success,persistance = pcall(require,"persistence")

@@ -5,6 +5,7 @@ local defaults = {
 	conf = {
 	    template = "minimal",
 		enable_plugin_check = false,
+        save_config = false,
 	},
 	editor = {
         file_explorer = {
@@ -36,26 +37,33 @@ local defaults = {
 	},
 }
 
-local metadata = fmeta.create_fmd({ file_name = "preferences.json" })
+local preferences = nil
+local metadata = nil
 
-if not metadata then
-	return print("Could not create metadata for preferences")
-end
+if defaults.conf.save_config then
+    metadata = fmeta.create_fmd({ file_name = "preferences.json" })
 
-local file_content = io_funcs.read_all_file(metadata.path)
-local JSON = require("helper.json")
+    if not metadata then
+        return print("Could not create metadata for preferences")
+    end
 
-local preferences = not file_content and defaults or JSON.decode(file_content)
+    local file_content = io_funcs.read_all_file(metadata.path)
+    local JSON = require("helper.json")
 
-if not preferences then
-	print("ERROR: Something went wrong in preferences.lua")
-	return defaults
+    preferences = not file_content and defaults or JSON.decode(file_content)
+
+    if not preferences then
+        print("ERROR: Something went wrong in preferences.lua")
+        return defaults
+    end
+else
+    preferences = defaults
 end
 
 setmetatable(preferences, {
 	__index = function(self, key)
 		if key == "__metadata__" then
-			return metadata
+			return metadata or {}
 		end
 
 		return rawget(self, key)

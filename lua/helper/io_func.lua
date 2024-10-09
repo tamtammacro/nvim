@@ -9,6 +9,8 @@ function exports.is_win32()
 end
 
 function exports.read_all_file(path)
+    if not path then return end
+
     local file = io.open(path, "rb")
 
     if not file then return end
@@ -21,6 +23,7 @@ function exports.read_all_file(path)
 end
 
 function exports.file_exists(file)
+	if not file then return end
     local ok, err, code = os.rename(file, file)
 
     if not ok then
@@ -31,14 +34,18 @@ function exports.file_exists(file)
 end
 
 function exports.isdir(path)
+    if not path then return end
     return exports.file_exists(path .. "/")
 end
 
 function exports.mkdir(dirname)
+	if not dirname then return end
     os.execute("mkdir " .. dirname)
 end
 
 function exports.read_file_lines(path)
+    if not path then return end
+
     local file = io.open(path, "rb")
 
     if not file then return nil end
@@ -61,7 +68,7 @@ function exports.read_file_lines(path)
 end
 
 function exports.write_file(path,content)
-    if not content then return end
+    if not content or not path then return end
 
     local file = io.open(path, "w")
     if not file then return print(string.format("Could not write file: %s does not exist",path)) end

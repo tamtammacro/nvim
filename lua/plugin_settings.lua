@@ -4,6 +4,8 @@ local fmeta = require "helper.fmeta"
 local preferences = require "preferences"
 local JSON = require("helper.json")
 
+if not preferences then return print "Failed to fetch prefernces in plugin_settings.lua" end
+
 local defaults = {
     telescope = {
         enabled = false,
@@ -153,14 +155,20 @@ local defaults = {
     },
 }
 
-local metadata = fmeta.create_fmd({file_name = "plugins.json"})
-if not metadata then return print "failed to create metadata in plugin_settings.lua" end
-local file_content = io_funcs.read_all_file(metadata.path)
-plugin_settings = not file_content and defaults or JSON.decode(file_content)
+local metadata = nil
+
+if preferences.conf.save_config then
+    metadata = fmeta.create_fmd({file_name = "plugins.json"})
+    if not metadata then return print "failed to create metadata in plugin_settings.lua" end
+    local file_content = io_funcs.read_all_file(metadata.path)
+    plugin_settings = not file_content and defaults or JSON.decode(file_content)
+else
+    plugin_settings = defaults
+end
 
 setmetatable(plugin_settings,{__index = function(self,key)
 	if key == "__metadata__" then
-		return metadata
+		return metadata or {}
 	end
 
     return rawget(self,key)
