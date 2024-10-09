@@ -1,13 +1,7 @@
-local cmd = {"lua-language-server", "--stdio"}
-
-local function start_lsp()
-  local client_id = vim.lsp.start_client({
-    cmd = cmd,
-    root_dir = vim.fn.getcwd(),
-  })
-
-  vim.lsp.buf_attach_client(0, client_id)
-end
+local lsp_data = {
+    --{cmd = {"lua-language-server","--stdio"}, pattern = "lua"},
+    {cmd = {"clangd"}, pattern = {"c", "cpp", "objc"}}
+}
 
 vim.diagnostic.config({
   virtual_text = true,
@@ -17,31 +11,22 @@ vim.diagnostic.config({
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 
-local client_id = vim.lsp.start_client({
-  cmd = cmd,
-  root_dir = vim.fn.getcwd(),
-  capabilities = capabilities,
-  -- on_attach = function(client, bufnr)
-  -- end,
-})
+for _, lsp in ipairs(lsp_data) do
+    vim.api.nvim_create_autocmd("FileType", {
+        pattern = lsp.pattern,
+        callback = function()
+            local client_id = vim.lsp.start_client({
+                cmd = lsp.cmd,
+                root_dir = vim.fn.getcwd(),
+                capabilities = capabilities,
+                on_attach = function(client, bufnr)
+                end,
+              })
 
-local cmd = { "clangd" }
-
-local function start_clangd_lsp()
-  local client_id = vim.lsp.start_client({
-    cmd = cmd,
-    root_dir = vim.fn.getcwd(),
-  })
-
-  vim.lsp.buf_attach_client(0, client_id)
+              vim.lsp.buf_attach_client(0, client_id)
+          end,
+    })
 end
-
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = {"c", "cpp", "objc"},
-  callback = function()
-    start_clangd_lsp()
-  end,
-})
 
 vim.api.nvim_create_autocmd("CursorHold", {
   callback = function()
