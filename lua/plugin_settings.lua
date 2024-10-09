@@ -151,7 +151,8 @@ local defaults = {
 
     lsp = {
         enabled = true,
-        modules = {lsp = "plugin_conf.lsp",cmp = "plugin_conf.cmp"},
+        module = "plugin_conf.lsp_minimal"
+        -- modules = {lsp = "plugin_conf.lsp",cmp = "plugin_conf.cmp"},
     },
 }
 

@@ -159,14 +159,20 @@ function exports.init(plugin_manager)
     use_plugins(plugin_manager)
     use_visuals()
 
-    if not io_funcs.isdir(plugin_settings.__metadata__.folder_path) then
-        io_funcs.mkdir(plugin_settings.__metadata__.folder_path)
-    end
-
     if preferences.conf.save_config then
+        if not io_funcs.isdir(plugin_settings.__metadata__.folder_path) then
+            io_funcs.mkdir(plugin_settings.__metadata__.folder_path)
+        end
+
         write_config_file(plugin_settings)
         write_config_file(preferences)
         write_config_file(keymaps)
+
+        vim.defer_fn(function()
+            if not preferences.git.gitblame_inline then
+                pcall(vim.cmd.GitBlameDisable)
+            end
+        end,500)
     end
 
     if not vim.v.argv[3] then
@@ -176,12 +182,6 @@ function exports.init(plugin_manager)
            persistance.load()
         end
     end
-
-    vim.defer_fn(function()
-        if not preferences.git.gitblame_inline then
-            pcall(vim.cmd.GitBlameDisable)
-        end
-    end,500)
 
     require "vim_options"
 end

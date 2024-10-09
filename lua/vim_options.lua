@@ -56,6 +56,9 @@ xpcall(function()
 
     vim.opt.termguicolors = true
 
+    vim.opt.tags = './tags;/'
+    vim.o.omnifunc = 'v:lua.vim.lsp.omnifunc'
+
     -- vim.opt.scrolloff = 8
     --vim.opt.signcolumn = "yes"
     vim.opt.isfname:append("@-@")

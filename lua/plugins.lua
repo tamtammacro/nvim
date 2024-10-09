@@ -14,7 +14,13 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 local plugins = {
-	require("plugin_collection.lsp_plugins"),
+	{
+		"windwp/nvim-autopairs",
+		event = "VeryLazy",
+		config = true,
+	},
+
+	-- require("plugin_collection.lsp_plugins"),
 	-- require("plugin_collection.functionality_plugins"),
 	-- require("plugin_collection.color_scheme_plugins"),
 	-- require "plugin_collection.visual_plugins",
