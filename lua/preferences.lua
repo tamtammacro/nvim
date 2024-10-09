@@ -3,14 +3,14 @@ local fmeta = require("helper.fmeta")
 
 local defaults = {
 	conf = {
-	    template = "minimal",
+		template = "minimal",
 		enable_plugin_check = false,
-        save_config = false,
+		save_config = false,
 	},
 	editor = {
-        file_explorer = {
-            name = "netrw"
-        },
+		file_explorer = {
+			name = "netrw",
+		},
 		theme = {
 			name = "desert",
 		},
@@ -41,23 +41,23 @@ local preferences = nil
 local metadata = nil
 
 if defaults.conf.save_config then
-    metadata = fmeta.create_fmd({ file_name = "preferences.json" })
+	metadata = fmeta.create_fmd({ file_name = "preferences.json" })
 
-    if not metadata then
-        return print("Could not create metadata for preferences")
-    end
+	if not metadata then
+		return print("Could not create metadata for preferences")
+	end
 
-    local file_content = io_funcs.read_all_file(metadata.path)
-    local JSON = require("helper.json")
+	local file_content = io_funcs.read_all_file(metadata.path)
+	local JSON = require("helper.json")
 
-    preferences = not file_content and defaults or JSON.decode(file_content)
+	preferences = not file_content and defaults or JSON.decode(file_content)
 
-    if not preferences then
-        print("ERROR: Something went wrong in preferences.lua")
-        return defaults
-    end
+	if not preferences then
+		print("ERROR: Something went wrong in preferences.lua")
+		return defaults
+	end
 else
-    preferences = defaults
+	preferences = defaults
 end
 
 setmetatable(preferences, {

@@ -8,12 +8,12 @@ if not preferences then return print "Failed to fetch prefernces in plugin_setti
 
 local defaults = {
     telescope = {
-        enabled = false,
+        enabled = true,
         modules = {builtin = "telescope.builtin",config = "plugin_conf.telescope"}
     },
 
     git = {
-        enabled = false,
+        enabled = true,
         modules = {gitsigns = "gitsigns",gitcore = "plugin_conf.git"},
     },
 
@@ -23,17 +23,17 @@ local defaults = {
     },
 
     goto = {
-        enabled = false,
+        enabled = true,
         module = "goto-preview"
     },
 
     dap = {
-        enabled = false,
+        enabled = true,
         module = "plugin_conf.dap"
     },
 
     numb = {
-        enabled = false,
+        enabled = true,
         module = "plugin_conf.numb"
     },
 
@@ -47,61 +47,61 @@ local defaults = {
     },
 
     ufo = {
-        enabled = false,
+        enabled = true,
         module = "plugin_conf.ufo"
     },
 
     undotree = {
-        enabled = false,
+        enabled = true,
     },
 
     noice = {
-        enabled = false,
+        enabled = true,
         module = "plugin_conf.noice",
     },
 
     refactoring = {
-        enabled = false,
+        enabled = true,
         module = "refactoring",
     },
 
     ibl = {
-        enabled = false,
+        enabled = true,
         module = "ibl",
     },
 
     colorizer = {
-        enabled = false,
+        enabled = true,
         module = "colorizer",
     },
 
     symbols_outline = {
-        enabled = false,
+        enabled = true,
         module = "symbols-outline",
     },
 
     illuminate = {
-        enabled = false,
+        enabled = true,
         module = "plugin_conf.illuminate",
     },
 
     status_line = {
-        enabled = false,
+        enabled = true,
         module = "plugin_conf.status_line",
     },
 
     tree_sitter = {
-        enabled = false,
+        enabled = true,
         module = "plugin_conf.treesitter",
     },
 
     webdev_icons = {
-        enabled = false,
+        enabled = true,
         module = "plugin_conf.webdev_icons"
     },
 
     treesj = {
-        enabled = false,
+        enabled = true,
     },
 
     alpha = {
@@ -110,12 +110,12 @@ local defaults = {
     },
 
     conform = {
-        enabled = false,
+        enabled = true,
         module = "plugin_conf.conform"
     },
 
     nvim_tree = {
-        enabled = false,
+        enabled = true,
         module = "plugin_conf.nvim_tree",
     },
 
@@ -135,24 +135,23 @@ local defaults = {
     },
 
     terminal = {
-        enabled = false,
+        enabled = true,
         module = "plugin_conf.toggleterm",
     },
 
     tabs = {
-        enabled = false,
+        enabled = true,
         module = "plugin_conf.barbar",
     },
 
     file_explorer = {
-        enabled = false,
+        enabled = true,
         module = "plugin_conf.oil"
     },
 
     lsp = {
         enabled = true,
-        module = "plugin_conf.lsp_minimal"
-        -- modules = {lsp = "plugin_conf.lsp",cmp = "plugin_conf.cmp"},
+        modules = {lsp = "plugin_conf.lsp",cmp = "plugin_conf.cmp"}
     },
 }
 
@@ -174,6 +173,12 @@ setmetatable(plugin_settings,{__index = function(self,key)
 
     return rawget(self,key)
 end})
+
+for key in pairs(plugin_settings) do
+    if key ~= "lsp" and plugin_settings[key].enabled then
+        plugin_settings[key].enabled = preferences.conf.template ~= "minimal"
+    end
+end
 
 if not plugin_settings then
     print "ERROR: Something went wrong in plugin_settings.lua"
@@ -212,7 +217,6 @@ coroutine.resume(coroutine.create(function()
                 if defaults[plugin_name][opt] == nil and opt ~= "defer" then
                     plugin_settings[plugin_name][opt] = nil
                     metadata.out_of_date = true
-                    print(opt)
                 end
                 if opt ~= "defer" and type(value) ~= type(defaults[plugin_name][opt]) then
                     print(string.format("%s::%s is not the same type as reference table.",plugin_name,opt,plugin_name))
@@ -233,9 +237,13 @@ coroutine.resume(coroutine.create(function()
             end
         end
     end
-
-    -- coroutine.yield()
 end))
-
 end
+
+if preferences.conf.template == "minimal" then
+    plugin_settings.lsp.module = "plugin_conf.lsp_minimal"
+else
+    plugin_settings.lsp.modules = {lsp = "plugin_conf.lsp",cmp = "plugin_conf.cmp"}
+end
+
 return plugin_settings

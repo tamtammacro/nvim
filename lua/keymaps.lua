@@ -155,6 +155,8 @@ else
     keymaps = defaults
 end
 
+keymaps.file_explorer.toggle = {key = SPACE_S.."fm",cmd=preferences.editor.file_explorer.name == "netrw" and C.."Ex" or C.."Oil",desc = "file manager"}
+
 setmetatable(keymaps,{__index = function(self,key)
 	if key == "__metadata__" then
 		return metadata or {}

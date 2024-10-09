@@ -111,7 +111,7 @@ return {
 	{ "uga-rosa/ccc.nvim", event = "VeryLazy" },
 
 	{ "rcarriga/nvim-notify", event = "VeryLazy" },
-	-- {"folke/noice.nvim", event = "VeryLazy"},
+	{ "folke/noice.nvim", event = "VeryLazy" },
 
 	{ "MunifTanjim/nui.nvim", event = "VeryLazy" },
 

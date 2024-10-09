@@ -5,9 +5,9 @@ return {
 		event = "VeryLazy",
 	},
 
-	-- { "folke/neodev.nvim", event = "VeryLazy", opts = {} },
+	{ "folke/neodev.nvim", event = "VeryLazy", opts = {} },
 
-	-- { "folke/nvim-ts-autotag", event = "VeryLazy" },
+	{ "folke/nvim-ts-autotag", event = "VeryLazy" },
 
 	{ "hrsh7th/cmp-nvim-lsp", event = "VeryLazy" },
 	{ "hrsh7th/cmp-buffer", event = "VeryLazy" },
@@ -28,7 +28,7 @@ return {
 		event = "VeryLazy",
 	},
 
-	-- { "folke/trouble.nvim", event = "VeryLazy", opts = {}, cmd = "Trouble" },
+	{ "folke/trouble.nvim", event = "VeryLazy", opts = {}, cmd = "Trouble" },
 
 	{
 		"VonHeikemen/lsp-zero.nvim",
@@ -44,12 +44,12 @@ return {
 			{ "hrsh7th/cmp-nvim-lua" },
 
 			-- -- Snippets
-			-- { "L3MON4D3/LuaSnip" },
-			-- { "rafamadriz/friendly-snippets" },
+			{ "L3MON4D3/LuaSnip" },
+			{ "rafamadriz/friendly-snippets" },
 
-			-- { "saadparwaiz1/cmp_luasnip" },
-			-- { "hrsh7th/cmp-vsnip" },
-			-- { "hrsh7th/vim-vsnip" },
+			{ "saadparwaiz1/cmp_luasnip" },
+			{ "hrsh7th/cmp-vsnip" },
+			{ "hrsh7th/vim-vsnip" },
 		},
 	},
 }
