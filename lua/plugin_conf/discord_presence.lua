@@ -1,5 +1,3 @@
-local options = require("plugin_settings")
-
 local presence, neocord
 local success
 

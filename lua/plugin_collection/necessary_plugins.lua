@@ -4,4 +4,7 @@ return {
 		event = "VeryLazy",
 		config = true,
 	},
+    {
+        "vimwiki/vimwiki"
+    },
 }

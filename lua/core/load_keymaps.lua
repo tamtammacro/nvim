@@ -1,8 +1,8 @@
 local module_export = {}
-local options = require "plugin_settings"
+local plugin_settings = require "plugin_settings"
 local keymaps = require "keymaps"
 
-if type(options) ~= "table" or type(keymaps) ~= "table" then return print "Failed to load keymaps: obj invalid type" end
+if type(plugin_settings) ~= "table" or type(keymaps) ~= "table" then return print "Failed to load keymaps: obj invalid type" end
 
 local modules = {}
 
@@ -61,18 +61,18 @@ function module_export.load_keymaps(_, external_opts)
         if type(keymap_category_table) == "table" then
             for action_name, data in pairs(keymap_category_table) do
                 if type(data) == "table" then
-                    if options[category_name] ~= nil and options[category_name].enabled then
-                        if options[category_name].module then
+                    if plugin_settings[category_name] ~= nil and plugin_settings[category_name].enabled then
+                        if plugin_settings[category_name].module then
                             load_module({
                                 category_name = category_name,
                                 data = data,
                                 action_name = action_name,
                                 module =
-                                    options[category_name].module,
+                                    plugin_settings[category_name].module,
                                 opts = external_opts
                             })
-                        elseif options[category_name].modules then
-                            for _, module in pairs(options[category_name].modules) do
+                        elseif plugin_settings[category_name].modules then
+                            for _, module in pairs(plugin_settings[category_name].modules) do
                                 load_module({
                                     category_name = category_name,
                                     data = data,

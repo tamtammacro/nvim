@@ -1,4 +1,8 @@
 return {
+	{ 
+        "nvim-tree/nvim-web-devicons", 
+        event = "VeryLazy" 
+    },
 	{
 		"nvim-lualine/lualine.nvim",
 		event = "VeryLazy",
@@ -103,7 +107,6 @@ return {
 	},
 
 	{ "tamton-aquib/staline.nvim", event = "VeryLazy" },
-	{ "nvim-tree/nvim-web-devicons", event = "VeryLazy" },
 	-- {"HiPhish/nvim-ts-rainbow2", event = "VeryLazy"},
 
 	{ "NvChad/nvim-colorizer.lua", event = "VeryLazy" },

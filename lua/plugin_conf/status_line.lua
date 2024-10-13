@@ -1,14 +1,14 @@
 local plugin_settings = require "plugin_settings"
-local options = require "preferences"
+local preferences = require "preferences"
 
 local DELAY = 0
 
-if options.editor.status_line.name == "lualine" then
+if preferences.editor.status_line.name == "lualine" then
     local success, lualine = pcall(require, 'lualine')
 
     if not success then return print "lualine is not installed" end
 
-    if options.editor.status_line.style == "evil" then
+    if preferences.editor.status_line.style == "evil" then
         -- Color table for highlights
         -- stylua: ignore
         local colors = {

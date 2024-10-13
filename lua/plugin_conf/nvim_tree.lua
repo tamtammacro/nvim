@@ -1,6 +1,5 @@
--- local options = require "plugin_settings"
-local options = require "preferences"
-local explorer = options.editor.explorer
+local preferences = require "preferences"
+local explorer = preferences.editor.explorer
 
 local success, nvim_tree = pcall(require, "nvim-tree")
 

@@ -181,7 +181,7 @@ function exports.init(plugin_manager)
 	use_plugins(plugin_manager)
 	use_visuals()
 
-	if preferences.conf.save_config then
+	if preferences.conf.save_config_to_json then
 		if not io_funcs.isdir(plugin_settings.__metadata__.folder_path) then
 			io_funcs.mkdir(plugin_settings.__metadata__.folder_path)
 		end

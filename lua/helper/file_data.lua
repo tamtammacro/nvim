@@ -5,8 +5,8 @@ local io_funcs = require "helper.io_func"
 local folder_name = "settings"
 local folder_path = io_funcs.get_config_loc() .. (io_funcs.is_win32() and "\\" .. folder_name or "/" .. folder_name)
 
-function M.create_fmd(data)
-    if not data.file_name then return print "Error: file_name field is nil or invalid" end
+function M.create(data)
+    if not data.file_name then return error "file_name field is nil" end
 
     return {
         folder_name = data.folder_name or folder_name,

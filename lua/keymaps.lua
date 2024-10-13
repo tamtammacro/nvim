@@ -1,12 +1,13 @@
 local defaults = {}
+
 local JSON = require("helper.json")
-local fmeta = require "helper.fmeta"
-local options = require "plugin_settings"
+
+local funcs = require "helper.func"
+local file_data = require "helper.file_data"
+
 local preferences = require "preferences"
 
 if not preferences then return print "failed to fetch preferences in keymaps.lua" end
-
-if type(options) ~= "table" then return end
 
 local io_funcs = require "helper.io_func"
 
@@ -145,9 +146,9 @@ local metadata = nil
 local keymaps = nil
 
 if preferences.conf.save_config then
-    metadata = fmeta.create_fmd({file_name = "keymaps.json"})
+    metadata = file_data.create({file_name = "keymaps.json"})
 
-    if not metadata then return print "Could not create metadata for keymaps" end
+    if not metadata then return error "Could not create metadata for keymaps" end
 
     local file_content = io_funcs.read_all_file(metadata.path)
     keymaps = not file_content and defaults or JSON.decode(file_content)
@@ -167,49 +168,10 @@ setmetatable(keymaps,{__index = function(self,key)
     return rawget(self,key)
 end})
 
-
-if preferences.conf.enable_plugin_check then
-coroutine.resume(coroutine.create(function()
-    for keymap_name,data in pairs(defaults) do
-        if keymap_name ~= "__metadata__" then
-            if keymaps[keymap_name] == nil and defaults[keymap_name] then
-                metadata.out_of_date = true
-                keymaps[keymap_name] = data
-            end
-        end
-        if type(data) == "table" then
-            for opt, default_value in pairs(data) do
-                if keymaps[keymap_name][opt] == nil then
-                    metadata.out_of_date = true
-                    keymaps[keymap_name][opt] = default_value
-                end
-            end
-        end
-    end
-
-    for keymap_category, category_data in pairs(keymaps) do
-        if defaults[keymap_category] == nil then
-            keymaps[keymap_category] = nil
-            metadata.out_of_date = true
-        end
-        if type(category_data) == "table" then
-            for keymap_name,keymap_data in pairs(category_data) do
-                if defaults[keymap_category][keymap_name] == nil then
-                    keymaps[keymap_category][keymap_name] = nil
-                    metadata.out_of_date = true
-                end
-                if defaults[keymap_category][keymap_name] then
-                   if defaults[keymap_category][keymap_name].desc ~= keymap_data.desc then
-                       keymaps[keymap_category][keymap_name].desc = defaults[keymap_category][keymap_name].desc
-                       metadata.out_of_date = true
-                   end
-                end
-            end
-        end
-    end
-
-    coroutine.yield()
-end))
+if preferences.conf.validate_config then
+    coroutine.resume(coroutine.create(function()
+        funcs.validate_config_table(defaults,keymaps,{},{"desc"})
+    end))
 end
 
 cmd_types.VIM_COMMAND_PREFIX = C

@@ -1,11 +1,12 @@
 local io_funcs = require("helper.io_func")
-local fmeta = require("helper.fmeta")
+local func = require "helper.func"
+local file_data = require("helper.file_data")
 
 local defaults = {
 	conf = {
 		template = "minimal",
-		enable_plugin_check = false,
-		save_config = false,
+		validate_config = false,
+		save_config_to_json = false,
 	},
 	editor = {
 		file_explorer = {
@@ -40,8 +41,8 @@ local defaults = {
 local preferences = nil
 local metadata = nil
 
-if defaults.conf.save_config then
-	metadata = fmeta.create_fmd({ file_name = "preferences.json" })
+if defaults.conf.save_config_to_json then
+	metadata = file_data.create({ file_name = "preferences.json" })
 
 	if not metadata then
 		return print("Could not create metadata for preferences")
@@ -69,50 +70,5 @@ setmetatable(preferences, {
 		return rawget(self, key)
 	end,
 })
-
-if preferences.conf.enable_plugin_check then
-	coroutine.resume(coroutine.create(function()
-		for pref_name, data in pairs(defaults) do
-			if pref_name ~= "__metadata__" then
-				if preferences[pref_name] == nil and defaults[pref_name] then
-					metadata.out_of_date = true
-					preferences[pref_name] = data
-				end
-			end
-			if type(data) == "table" then
-				for opt, default_value in pairs(data) do
-					if preferences[pref_name][opt] == nil then
-						metadata.out_of_date = true
-						preferences[pref_name][opt] = default_value
-					end
-				end
-			end
-		end
-
-		for pref_name, data in pairs(preferences) do
-			if pref_name ~= "__metadata__" then
-				if defaults[pref_name] == nil then
-					preferences[pref_name] = nil
-					metadata.out_of_date = true
-				end
-			end
-			if type(data) == "table" then
-				for opt, value in pairs(data) do
-					if defaults[pref_name][opt] == nil then
-						preferences[pref_name][opt] = nil
-						metadata.out_of_date = true
-					end
-					if type(value) ~= type(defaults[pref_name][opt]) then
-						print(
-							string.format("%s::%s is not the same type as reference table.", pref_name, opt, pref_name)
-						)
-					end
-				end
-			end
-		end
-
-		coroutine.yield()
-	end))
-end
 
 return preferences
