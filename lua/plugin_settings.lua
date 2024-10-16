@@ -38,15 +38,6 @@ local defaults = {
         module = "plugin_conf.numb"
     },
 
-    my_quick_actions = {
-        enabled = false,
-        module = "core.my_quick_actions"
-    },
-
-    split_controls = {
-        enabled = true
-    },
-
     ufo = {
         enabled = true,
         module = "plugin_conf.ufo"

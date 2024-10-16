@@ -128,9 +128,6 @@ defaults.split_controls = {
 
     switch_split_up = {key = CONTROL("k"),cmd = E.."<c-w><c-k>",desc = "splitview go to top one"},
     switch_split_down = {key = CONTROL("j"),cmd = E.."<c-w><c-j>",desc = "splitview go to bottom one"},
-
-    open_split = {key = CONTROL("s"),cmd=C.."split",desc="splitview open vertically"},
-    open_vsplit = {key = ALT("s"),cmd=C.."vsplit",desc="splitview open horizontally"}
 }
 
 defaults.tabs = {

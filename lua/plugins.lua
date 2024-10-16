@@ -14,23 +14,23 @@ end
 
 vim.opt.rtp:prepend(lazypath)
 
-local plugins_collection = {
-	require("plugin_collection.lsp_plugins"),
-	require("plugin_collection.dap_plugins"),
-	require("plugin_collection.functionality_plugins"),
-	require("plugin_collection.color_scheme_plugins"),
-	require("plugin_collection.visual_plugins"),
-	require("plugin_collection.file_manager_plugins"),
-	require("plugin_collection.tree_sitter_plugins"),
-	require("plugin_collection.telescope_plugins"),
-	require("plugin_collection.git_integration_plugins"),
-}
-
 local plugins_to_be_installed = {
 	require("plugin_collection.necessary_plugins"),
 }
 
 if preferences.conf.template == "everything" then
+	   local plugins_collection = {
+	       require("plugin_collection.lsp_plugins"),
+	       require("plugin_collection.dap_plugins"),
+	       require("plugin_collection.functionality_plugins"),
+	       require("plugin_collection.color_scheme_plugins"),
+	       require("plugin_collection.visual_plugins"),
+	       require("plugin_collection.file_manager_plugins"),
+	       require("plugin_collection.tree_sitter_plugins"),
+	       require("plugin_collection.telescope_plugins"),
+	       require("plugin_collection.git_integration_plugins"),
+	   }
+
 	for _, plugins in ipairs(plugins_collection) do
 		table.insert(plugins_to_be_installed, plugins)
 	end

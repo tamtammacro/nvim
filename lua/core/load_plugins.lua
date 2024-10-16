@@ -5,13 +5,16 @@ local io_funcs = require("helper.io_func")
 
 local plugin_settings = require("plugin_settings")
 local preferences = require("preferences")
+local load_keymaps = require("core.load_keymaps")
 
 if not preferences then
-	return print("failed to fetch preferences module in load_plugins.lua")
+	return error("failed to fetch preferences module in load_plugins.lua")
 end
+
 if not plugin_settings then
-	return print("failed to fetch plugin_settings module in load_plugins.lua")
+	return error("failed to fetch plugin_settings module in load_plugins.lua")
 end
+
 local keymaps = require("keymaps")
 
 local deferred_items = {}
@@ -94,7 +97,15 @@ local function init_plugins()
 		end
 	end
 
-	for _, obj in pairs(plugin_settings) do
+    local preferred_plugins = {}
+
+    if preferences.conf.template == "minimal" then
+        preferred_plugins.lsp = plugin_settings.lsp
+    else
+        preferred_plugins = plugin_settings
+    end
+
+	for _, obj in pairs(preferred_plugins) do
 		load_mod(obj)
 	end
 
@@ -106,32 +117,27 @@ local function init_plugins()
 	end
 end
 
-local function use_plugins(plugin_manager)
+local function use_plugins()
 	local function init()
-		if plugin_manager == "packer" then
-			require("packer_plugins")
-		else
-			require("plugins")
-		end
-		xpcall(init_plugins, function(error)
-			print(error)
-		end)
+        require("plugins")
+		xpcall(init_plugins,error)
 	end
 
-	local success, err = pcall(init)
+	local success,err = pcall(init)
 
 	if not success and err then
 		print(("Error with 'use_plugins': %s"):format(err))
 	end
-	xpcall(function()
-		require("core.load_keymaps").load_keymaps()
-	end, print)
+
+    if preferences.conf.template ~= "minimal" then
+        xpcall(load_keymaps.load_keymaps,error)
+    end
 end
 
 local function use_visuals()
 	local current_theme = vim.g.colors_name
 
-	local success, err = pcall(function()
+	local success,err = pcall(function()
 		local theme_full_name = preferences.editor.theme.style
 				and #plugin_settings.editor.theme.style > 0
 				and preferences.editor.theme.name .. "-" .. preferences.editor.theme.style
@@ -155,7 +161,7 @@ local function use_visuals()
 	end)
 
 	if not success and err then
-		print(err)
+		error(err)
 	end
 end
 
@@ -177,8 +183,8 @@ local function write_config_file(data)
 	end
 end
 
-function exports.init(plugin_manager)
-	use_plugins(plugin_manager)
+function exports.init()
+	use_plugins()
 	use_visuals()
 
 	if preferences.conf.save_config_to_json then
@@ -190,18 +196,20 @@ function exports.init(plugin_manager)
 		write_config_file(preferences)
 		write_config_file(keymaps)
 
-		vim.defer_fn(function()
-			if not preferences.git.gitblame_inline then
-				pcall(vim.cmd.GitBlameDisable)
-			end
-		end, 500)
+        if preferences.conf.template ~= "minimal" then
+            vim.defer_fn(function()
+                if not preferences.git.gitblame_inline then
+                    pcall(vim.cmd.GitBlameDisable)
+                end
+            end,500)
+        end
 	end
 
 	if not vim.v.argv[3] then
 		local success, persistance = pcall(require, "persistence")
 
 		if success and persistance then
-			persistance.load()
+			pcall(persistance.load)
 		end
 	end
 

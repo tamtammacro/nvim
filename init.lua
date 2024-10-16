@@ -1,9 +1,11 @@
-local ok,plugins = pcall(require, "core.load_plugins")
+local plugin_loader_path = "core.load_plugins"
+
+local ok,loader = pcall(require,plugin_loader_path)
 
 if not ok then
-	return error(plugins)
-elseif type(plugins) ~= "table" then
-	return error("core.load_plugins returned invalid data type")
+	return error(loader)
+elseif type(loader) ~= "table" then
+	return error(string.format("%s did not return a table",plugin_loader_path))
 end
 
-xpcall(plugins.init,error)
+xpcall(loader.init,error)

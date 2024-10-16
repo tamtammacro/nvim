@@ -1,74 +1,73 @@
-local vo = vim.o
+local vo = vim.opt
 local preferences = require("preferences")
-
-local SHIFT_TAB_SPACE = 4
 
 xpcall(function()
 	vo.number = true
 	vo.background = "dark"
 	vo.termguicolors = true
-	vo.tabstop = SHIFT_TAB_SPACE
-	vo.softtabstop = SHIFT_TAB_SPACE
-	vo.shiftwidth = SHIFT_TAB_SPACE
+
+	vo.tabstop = 4
+	vo.softtabstop = 4
+	vo.shiftwidth = 4
+
 	vo.smarttab = true
+	vo.smartindent = true
+	vo.expandtab = true
+
 	vo.autoindent = true
 	vo.mouse = "a"
 	vo.cursorline = true
+	vo.number = true
+	vo.nu = true
 	vo.relativenumber = true
-	--vo.scrolloff = 8
 	vo.numberwidth = 6
-	-- vo.timeoutlen = 500
+	vo.timeoutlen = 500
 	vo.updatetime = 200
 	vo.wrap = true
 	vo.clipboard = "unnamedplus"
 
-	vim.o.foldcolumn = "1" -- '0' is not bad
-	vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
-	vim.o.foldlevelstart = 99
-	vim.o.foldenable = true
+    vo.syntax = "on"
+    vo.ruler = true
+    vo.title = true
+    vo.hidden = true
+    vo.ttimeoutlen = 0
+    vo.wildmenu = true
+    vo.showcmd = true
+    vo.showmatch = true
+    vo.inccommand = "split"
+    vo.splitright = true
+    vo.splitbelow = true
 
-	vim.opt.guicursor = ""
-	vim.opt.inccommand = "split"
-	vim.opt.signcolumn = "yes"
-	vim.opt.splitbelow = true
-	vim.opt.splitright = true
-	vim.opt.encoding = "utf-8"
+	vo.foldcolumn = "1" 
+	vo.foldlevel = 99 
+	vo.foldlevelstart = 99
+	vo.foldenable = true
 
-	vim.opt.nu = true
-	vim.opt.relativenumber = true
-	vim.opt.number = true
+	vo.guicursor = ""
+	vo.inccommand = "split"
+	vo.signcolumn = "yes"
+	vo.splitbelow = true
+	vo.splitright = true
+	vo.encoding = "UTF-8"
 
-	vim.opt.tabstop = SHIFT_TAB_SPACE
-	vim.opt.softtabstop = SHIFT_TAB_SPACE
-	vim.opt.shiftwidth = SHIFT_TAB_SPACE
-	vim.opt.expandtab = true
+	vo.swapfile = false
+	vo.backup = false
+	vo.undofile = true
 
-	vim.opt.smartindent = true
+	vo.hlsearch = false
+	vo.incsearch = true
 
-	vim.opt.wrap = false
+	vo.tags = "./tags;/"
+	vo.omnifunc = "v:lua.vim.lsp.omnifunc"
 
-	vim.opt.swapfile = false
-	vim.opt.backup = false
-	vim.opt.undofile = true
-
-	vim.opt.hlsearch = false
-	vim.opt.incsearch = true
-
-	vim.opt.termguicolors = true
-
-	vim.opt.tags = "./tags;/"
-	vim.o.omnifunc = "v:lua.vim.lsp.omnifunc"
-
-	-- vim.opt.scrolloff = 8
-	--vim.opt.signcolumn = "yes"
-	vim.opt.isfname:append("@-@")
-	vim.opt.updatetime = 50
-	--vim.opt.colorcolumn = "80"
+	vim.scrolloff = 8
+	vo.isfname:append("@-@")
+	vo.updatetime = 50
 	vim.mapleader = " "
 
-	vim.g.barbar_auto_setup = false
-
-    preferences.editor.file_explorer.name = preferences.conf.template == "minimal" and "netrw" or preferences.editor.file_explorer.name
+    preferences.editor.file_explorer.name = preferences.conf.template == "minimal" and "netrw" 
+    or 
+    preferences.editor.file_explorer.name
 
 	if preferences.editor.file_explorer.name ~= "netrw" then
 		vim.g.loaded_netrwPlugin = 1
@@ -82,18 +81,14 @@ xpcall(function()
 
 	vim.cmd("highlight EndOfBuffer ctermbg=none guibg=none")
 
-	local INDENT_BLANK_LINE_LIST = {
+	for _, indent_name in ipairs({
 		"IndentBlanklineContextChar",
 		"IndentBlanklineChar",
 		"IndentBlanklineSpaceChar",
 		"IndentBlanklineSpaceCharBlankline",
 		"IndentBlanklineContextSpaceChar",
 		"IndentBlanklineContextStart",
-	}
-	local INDENT_BLANKLINE_BACKGROUND_COLOR = 0xFF0000
-	for _, indent_name in ipairs(INDENT_BLANK_LINE_LIST) do
-		vim.cmd("highlight " .. indent_name .. " guifg=" .. INDENT_BLANKLINE_BACKGROUND_COLOR .. " gui=nocombine")
+    }) do 
+        vim.cmd("highlight " .. indent_name .. " guifg=" .. 0xFF0000 .. " gui=nocombine")
 	end
-end, function(error_message)
-	print(error_message)
-end)
+end,error)

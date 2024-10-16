@@ -1,10 +1,11 @@
 return {
 	{
 		"windwp/nvim-autopairs",
-		event = "VeryLazy",
+		event = "InsertEnter",
 		config = true,
 	},
     {
-        "vimwiki/vimwiki"
+        "vimwiki/vimwiki",
+        event = "VeryLazy"
     },
 }
