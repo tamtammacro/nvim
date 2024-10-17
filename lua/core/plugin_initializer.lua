@@ -1,11 +1,10 @@
-local exports = {}
+local M = {}
 
 local strings = require("helper.utils.strings")
-local io_funcs = require("helper.io_func")
+local file = require("helper.file")
 
 local plugin_settings = require("plugin_settings")
 local preferences = require("preferences")
-local load_keymaps = require("core.load_keymaps")
 
 if not preferences then
 	return error("failed to fetch preferences module in load_plugins.lua")
@@ -19,7 +18,7 @@ local keymaps = require("keymaps")
 
 local deferred_items = {}
 
-local function init_plugins()
+local function _init_plugins()
 	local is_ok
 	local mod
 
@@ -117,10 +116,10 @@ local function init_plugins()
 	end
 end
 
-local function use_plugins()
+local function _use_plugins()
 	local function init()
         require("plugins")
-		xpcall(init_plugins,error)
+		xpcall(_init_plugins,error)
 	end
 
 	local success,err = pcall(init)
@@ -128,52 +127,15 @@ local function use_plugins()
 	if not success and err then
 		print(("Error with 'use_plugins': %s"):format(err))
 	end
-
-    if preferences.conf.template ~= "minimal" then
-        xpcall(load_keymaps.load_keymaps,error)
-    end
-end
-
-local function use_visuals()
-	local current_theme = vim.g.colors_name
-
-	local success,err = pcall(function()
-		local theme_full_name = preferences.editor.theme.style
-				and #plugin_settings.editor.theme.style > 0
-				and preferences.editor.theme.name .. "-" .. preferences.editor.theme.style
-			or preferences.editor.theme.name
-
-		if preferences.editor.theme and (current_theme ~= theme_full_name) then
-			local success, error_message = pcall(vim.cmd.colorscheme, theme_full_name)
-
-			if not success then
-				print(error_message)
-			end
-
-			if preferences.editor.theme.name == "material" then
-				vim.g.material_style = preferences.editor.theme.style
-			end
-		end
-
-		if preferences.editor.background.transparent then
-			vim.cmd["highlight"]("Normal guibg=none")
-		end
-	end)
-
-	if not success and err then
-		error(err)
-	end
 end
 
 local function write_config_file(data)
 	local metadata = data.__metadata__
 
-	if not io_funcs.file_exists(metadata.path) or metadata.out_of_date then
+	if not file.file_exists(metadata.path) or metadata.out_of_date then
 		local out_of_date_prev = metadata.out_of_date
 
-		local str = strings.table_to_json_string(data)
-
-		if io_funcs.write_file(metadata.path, str) then
+		if file.write_file(metadata.path,strings.table_to_json_string(data)) then
 			if out_of_date_prev then
 				print(("INFO: %s was updated"):format(metadata.file_name))
 			else
@@ -183,13 +145,12 @@ local function write_config_file(data)
 	end
 end
 
-function exports.init()
-	use_plugins()
-	use_visuals()
+function M.setup()
+	_use_plugins()
 
 	if preferences.conf.save_config_to_json then
-		if not io_funcs.isdir(plugin_settings.__metadata__.folder_path) then
-			io_funcs.mkdir(plugin_settings.__metadata__.folder_path)
+		if not file.isdir(plugin_settings.__metadata__.folder_path) then
+			file.mkdir(plugin_settings.__metadata__.folder_path)
 		end
 
 		write_config_file(plugin_settings)
@@ -212,8 +173,6 @@ function exports.init()
 			pcall(persistance.load)
 		end
 	end
-
-	require("vim_options")
 end
 
-return exports
+return M

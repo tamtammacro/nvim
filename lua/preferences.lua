@@ -1,5 +1,5 @@
-local io_funcs = require("helper.io_func")
-local func = require "helper.func"
+local file = require("helper.file")
+local table_e = require "helper.table_e"
 local file_data = require("helper.file_data")
 
 local defaults = {
@@ -48,7 +48,7 @@ if defaults.conf.save_config_to_json then
 		return print("Could not create metadata for preferences")
 	end
 
-	local file_content = io_funcs.read_all_file(metadata.path)
+	local file_content = file.read_all_file(metadata.path)
 	local JSON = require("helper.json")
 
 	preferences = not file_content and defaults or JSON.decode(file_content)

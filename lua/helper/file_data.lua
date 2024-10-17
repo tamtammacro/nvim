@@ -1,9 +1,9 @@
 local M = {}
 
-local io_funcs = require "helper.io_func"
+local file = require "helper.file"
 
 local folder_name = "settings"
-local folder_path = io_funcs.get_config_loc() .. (io_funcs.is_win32() and "\\" .. folder_name or "/" .. folder_name)
+local folder_path = file.get_config_loc() .. (file.is_win32() and "\\" .. folder_name or "/" .. folder_name)
 
 function M.create(data)
     if not data.file_name then return error "file_name field is nil" end

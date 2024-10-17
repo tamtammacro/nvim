@@ -1,6 +1,7 @@
 local plugin_settings = nil
-local funcs = require "helper.func"
-local io_funcs = require "helper.io_func"
+local table_e = require "helper.table_e"
+
+local file = require "helper.file"
 local file_data = require "helper.file_data"
 local preferences = require "preferences"
 local JSON = require("helper.json")
@@ -152,7 +153,7 @@ local metadata = nil
 if preferences.conf.save_config then
     metadata = file_data.create({file_name = "plugins.json"})
     if not metadata then return print "failed to create metadata in plugin_settings.lua" end
-    local file_content = io_funcs.read_all_file(metadata.path)
+    local file_content = file.read_all_file(metadata.path)
     plugin_settings = not file_content and defaults or JSON.decode(file_content)
 else
     plugin_settings = defaults
@@ -166,20 +167,24 @@ setmetatable(plugin_settings,{__index = function(self,key)
     return rawget(self,key)
 end})
 
-for key in pairs(plugin_settings) do
-    if key ~= "lsp" and plugin_settings[key].enabled then
-        plugin_settings[key].enabled = preferences.conf.template ~= "minimal"
+do 
+    local new_state = preferences.conf.template ~= "minimal"
+
+    for key in pairs(plugin_settings) do
+        if key ~= "lsp" and plugin_settings[key].enabled then
+            plugin_settings[key].enabled = new_state
+        end
     end
 end
 
 if not plugin_settings then
-    error "Something went wrong in plugin_settings.lua"
+    print "Something went wrong in plugin_settings.lua"
     return defaults
 end
 
 if preferences.conf.validate_config then
     coroutine.resume(coroutine.create(function()
-        -- funcs.validate_config_table(defaults,plugin_settings,{},{})
+        -- table_e.validate_config_table(defaults,plugin_settings,{},{})
     end))
 end
 

@@ -1,11 +1,9 @@
-local plugin_loader_path = "core.load_plugins"
+local init_path = "core.init"
 
-local ok,loader = pcall(require,plugin_loader_path)
+local ok,init = pcall(require,init_path)
 
-if not ok then
-	return error(loader)
-elseif type(loader) ~= "table" then
-	return error(string.format("%s did not return a table",plugin_loader_path))
+if not ok or type(init) ~= "table" then
+	return print(string.format("Error: %s:%s",init_path,tostring(init)))
 end
 
-xpcall(loader.init,error)
+xpcall(init.setup,print)

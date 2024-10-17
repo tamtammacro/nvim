@@ -1,6 +1,8 @@
-local module_export = {}
+local M = {}
+
 local plugin_settings = require "plugin_settings"
 local keymaps = require "keymaps"
+local preferences = require("preferences")
 
 if type(plugin_settings) ~= "table" or type(keymaps) ~= "table" then return print "Failed to load keymaps: obj invalid type" end
 
@@ -36,7 +38,9 @@ local function set_keymap(obj, func, opts, args)
 end
 
 -- TODO: add keymap target category --
-function module_export.load_keymaps(_, external_opts)
+function M.setup(_, external_opts)
+    if preferences.conf.template == "minimal" then return end
+
     local function load_module(t)
         mod = modules[t.category_name] or select(2, pcall(require, t.module))
         mod_ok = type(mod) == "table"
@@ -103,4 +107,4 @@ function module_export.load_keymaps(_, external_opts)
     end
 end
 
-return module_export
+return M

@@ -1,6 +1,6 @@
-local exports = {}
+local M = {}
 
-function exports.deepcopy(o, seen)
+function M.deepcopy(o, seen)
     seen = seen or {}
     if o == nil then return end
     if seen[o] then return seen[o] end
@@ -22,7 +22,7 @@ function exports.deepcopy(o, seen)
     return no
 end
 
-function exports.find_value_in_t(t,what)
+function find_value_in_t(t,what)
     for _,value in ipairs(t) do
         if value == what then
             return what
@@ -30,9 +30,7 @@ function exports.find_value_in_t(t,what)
     end
 end
 
-local find_value_in_t = exports.find_value_in_t
-
-function exports.validate_config_table(original_t,current_t,exceptions_t,inclusion_t,check_datatype)
+function M.validate_config_table(original_t,current_t,exceptions_t,inclusion_t,check_datatype)
     for name,data_t in pairs(original_t) do
         if current_t[name] == nil and original_t[name] then
             current_t.__metadata__.out_of_date = true
@@ -96,4 +94,4 @@ function exports.validate_config_table(original_t,current_t,exceptions_t,inclusi
     end -- current_t end --
 end
 
-return exports
+return M

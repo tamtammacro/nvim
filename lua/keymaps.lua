@@ -2,14 +2,14 @@ local defaults = {}
 
 local JSON = require("helper.json")
 
-local funcs = require "helper.func"
+local table_e = require "helper.table_e"
 local file_data = require "helper.file_data"
 
 local preferences = require "preferences"
 
 if not preferences then return print "failed to fetch preferences in keymaps.lua" end
 
-local io_funcs = require "helper.io_func"
+local file = require "helper.file"
 
 local SPACE_S = "<Space>"
 local LEADER_S = "<leader>"
@@ -147,7 +147,7 @@ if preferences.conf.save_config then
 
     if not metadata then return error "Could not create metadata for keymaps" end
 
-    local file_content = io_funcs.read_all_file(metadata.path)
+    local file_content = file.read_all_file(metadata.path)
     keymaps = not file_content and defaults or JSON.decode(file_content)
 else
     keymaps = defaults
@@ -167,7 +167,7 @@ end})
 
 if preferences.conf.validate_config then
     coroutine.resume(coroutine.create(function()
-        funcs.validate_config_table(defaults,keymaps,{},{"desc"})
+        table_e.validate_config_table(defaults,keymaps,{},{"desc"})
     end))
 end
 

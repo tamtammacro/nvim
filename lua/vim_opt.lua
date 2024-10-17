@@ -1,7 +1,7 @@
+local M = {}
 local vo = vim.opt
-local preferences = require("preferences")
 
-xpcall(function()
+function M.setup()
 	vo.number = true
 	vo.background = "dark"
 	vo.termguicolors = true
@@ -63,32 +63,6 @@ xpcall(function()
 	vim.scrolloff = 8
 	vo.isfname:append("@-@")
 	vo.updatetime = 50
-	vim.mapleader = " "
+end
 
-    preferences.editor.file_explorer.name = preferences.conf.template == "minimal" and "netrw" 
-    or 
-    preferences.editor.file_explorer.name
-
-	if preferences.editor.file_explorer.name ~= "netrw" then
-		vim.g.loaded_netrwPlugin = 1
-		vim.g.loaded_netrw = 1
-	end
-
-	vim.g.netrw_banner = 0
-	vim.g.netrw_liststyle = 3
-	vim.g.netrw_sftp_cmd = "scp"
-	vim.g.netrw_http_cmd = "curl"
-
-	vim.cmd("highlight EndOfBuffer ctermbg=none guibg=none")
-
-	for _, indent_name in ipairs({
-		"IndentBlanklineContextChar",
-		"IndentBlanklineChar",
-		"IndentBlanklineSpaceChar",
-		"IndentBlanklineSpaceCharBlankline",
-		"IndentBlanklineContextSpaceChar",
-		"IndentBlanklineContextStart",
-    }) do 
-        vim.cmd("highlight " .. indent_name .. " guifg=" .. 0xFF0000 .. " gui=nocombine")
-	end
-end,error)
+return M
