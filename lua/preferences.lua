@@ -4,7 +4,7 @@ local file_data = require("helper.file_data")
 
 local defaults = {
 	conf = {
-		template = "minimal",
+		template = "everything",
 		validate_config = false,
 		save_config_to_json = false,
 	},
@@ -13,7 +13,7 @@ local defaults = {
 			name = "netrw",
 		},
 		theme = {
-			name = "desert",
+			name = "onedark",
 		},
 		background = {
 			transparent = false,
