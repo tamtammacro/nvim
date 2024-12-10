@@ -27,6 +27,7 @@ return {
 		end,
 		opts = {},
 	},
+
 	{
 		"echasnovski/mini.icons",
 		opts = {},
@@ -104,6 +105,7 @@ return {
 
 	{
 		"romgrk/barbar.nvim",
+        enabled = false,
 		event = "VeryLazy",
 		init = function()
 			vim.g.barbar_auto_setup = false

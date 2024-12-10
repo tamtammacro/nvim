@@ -20,7 +20,7 @@ local function set_keymap(obj, func, opts, args)
     opts.silent = true
     opts.desc = obj.desc or "No description"
 
-    local command = type(func) == "string" and func:match("^" .. keymaps.__cmd_types__.EDITOR_COMMAND_PREFIX) and
+    local command = type(func) == "function" and func or type(func) == "string" and func:match("^" .. keymaps.__cmd_types__.EDITOR_COMMAND_PREFIX) and
         func:sub(#keymaps.__cmd_types__.EDITOR_COMMAND_PREFIX + 1, #func)
 
     xpcall(function()
@@ -56,7 +56,7 @@ function M.setup(_, external_opts)
 
         if mod_ok and rawget(mod, t.action_name) then
             set_keymap(t.data, rawget(mod, t.action_name), t.opts)
-        elseif mod_ok and t.data.cmd and not t.data.cmd:match("^" .. keymaps.__cmd_types__.VIM_COMMAND_PREFIX) and mod[t.data.cmd] then
+        elseif mod_ok and t.data.cmd and type(t.data.cmd) ~= "function" and not t.data.cmd:match("^" .. keymaps.__cmd_types__.VIM_COMMAND_PREFIX) and mod[t.data.cmd] then
             set_keymap(t.data, mod[t.data.cmd], t.opts, t.action_name)
         end
     end
@@ -88,16 +88,20 @@ function M.setup(_, external_opts)
                             end
                         end
 
-                        if data.cmd and data.cmd:match("^" .. keymaps.__cmd_types__.VIM_COMMAND_PREFIX) then
+                        if data.cmd and type(data.cmd) == "function" then 
+                            set_keymap(data,data.cmd)
+                        end
+
+                        if data.cmd and type(data.cmd) ~= "function" and data.cmd:match("^" .. keymaps.__cmd_types__.VIM_COMMAND_PREFIX) then
                             set_keymap(data, vim.cmd
                                 [data.cmd:sub(#keymaps.__cmd_types__.VIM_COMMAND_PREFIX + 1, #data.cmd)])
                         end
 
-                        if data.cmd and data.cmd:match("^" .. keymaps.__cmd_types__.LUA_COMMAND_PREFIX) then
+                        if data.cmd and type(data.cmd) ~= "function" and data.cmd:match("^" .. keymaps.__cmd_types__.LUA_COMMAND_PREFIX) then
                             set_keymap(data, data.cmd:sub(#keymaps.__cmd_types__.LUA_COMMAND_PREFIX + 1, #data.cmd))
                         end
 
-                        if data.cmd and data.cmd:match("^" .. keymaps.__cmd_types__.EDITOR_COMMAND_PREFIX) then
+                        if data.cmd and type(data.cmd) ~= "function" and data.cmd:match("^" .. keymaps.__cmd_types__.EDITOR_COMMAND_PREFIX) then
                             set_keymap(data, data.cmd)
                         end
                     end

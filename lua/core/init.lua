@@ -16,6 +16,10 @@ function M.setup()
 
     vim_opt.setup()
     vim_g.setup()
+
+    vim.defer_fn(function()
+        vim.cmd.GitBlameDisable()
+    end,100)
 end
 
 return M

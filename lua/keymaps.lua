@@ -86,9 +86,32 @@ defaults.conform = {
     format = { key = SPACE_S.."kf", cmd=L.."vim.lsp.buf.format()", desc="document format" },
 }
 
+function isDiffviewOpen()
+    for _, win in ipairs(vim.api.nvim_list_wins()) do
+        local buf = vim.api.nvim_win_get_buf(win)
+        local buf_name = vim.api.nvim_buf_get_name(buf)
+        if buf_name:match("^diffview://") then return true end
+    end
+end
+
+function isGitRepo()
+  local handle = io.popen('git rev-parse --is-inside-work-tree 2>/dev/null')
+  local result = handle:read('*a')
+  handle:close()
+  return result:match('true') ~= nil
+end
+
+function toggleGitDiffview()
+    if isDiffviewOpen() then
+        vim.cmd.DiffviewClose() 
+    elseif not isDiffviewOpen() and isGitRepo() then
+        vim.cmd.DiffviewOpen()
+    end
+end
+
 defaults.git = {
     git_window = { key = nil, cmd=C.."Git", desc="git window" },
-    diff_view_open = { key = ALT("g"), cmd=C.."DiffviewOpen", desc="git diffviewopen" },
+    diff_view_open = { key = ALT("g"), cmd=toggleGitDiffview,desc="git diffviewopen" },
 }
 
 defaults.symbols_outline = {

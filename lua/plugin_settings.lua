@@ -133,7 +133,7 @@ local defaults = {
     },
 
     tabs = {
-        enabled = true,
+        enabled = false,
         module = "plugin_conf.barbar",
     },
 

@@ -30,6 +30,10 @@ return {
 
 	{ "folke/trouble.nvim", event = "VeryLazy", opts = {}, cmd = "Trouble" },
 
+    {
+        "alaviss/nim.nvim"
+    },
+
 	{
 		"VonHeikemen/lsp-zero.nvim",
 		event = "VeryLazy",
