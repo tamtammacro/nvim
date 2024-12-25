@@ -2,6 +2,16 @@ local M = {}
 local preferences = require "preferences"
 
 function M.setup()
+    vim.api.nvim_create_augroup('MyColorSchemeGroup', { clear = true })
+
+    vim.api.nvim_create_autocmd('ColorScheme', {
+      group = 'MyColorSchemeGroup',
+      pattern = '*',
+      callback = function()
+        vim.cmd('highlight EndOfBuffer ctermbg=NONE guibg=NONE')
+      end
+    })
+
 	local current_theme = vim.g.colors_name
 
 	local success,err = pcall(function()

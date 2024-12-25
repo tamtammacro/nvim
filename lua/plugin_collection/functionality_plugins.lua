@@ -7,6 +7,20 @@ return {
 		},
 	},
 
+    {
+      'Wansmer/treesj',
+      keys = { '<space>m', '<space>j', '<space>s' },
+      dependencies = { 'nvim-treesitter/nvim-treesitter' },
+      config = function()
+        require('treesj').setup({use_default_keymaps = false})
+      end,
+    },
+
+    {
+        "farmergreg/vim-lastplace",
+        event = {"BufReadPre"},
+    },
+
 	{
 		"folke/which-key.nvim",
 		event = "VeryLazy",
@@ -17,21 +31,7 @@ return {
 		opts = {},
 	},
 
-	{
-		"echasnovski/mini.icons",
-		opts = {},
-		lazy = true,
-		specs = {
-			{ "nvim-tree/nvim-web-devicons", enabled = false, optional = true },
-		},
-		init = function()
-			package.preload["nvim-web-devicons"] = function()
-				require("mini.icons").mock_nvim_web_devicons()
-				return package.loaded["nvim-web-devicons"]
-			end
-		end,
-	},
-
+	{"kevinhwang91/promise-async"},
 	{ "mbbill/undotree", event = "VeryLazy" },
 
 	{
@@ -39,7 +39,6 @@ return {
 		event = "BufReadPre", -- this will only start session saving when an actual file was opened
 		opts = {},
 	},
-
 	{
 		"kylechui/nvim-surround",
 		version = "*",

@@ -13,10 +13,10 @@ local defaults = {
 			name = "oil",
 		},
 		theme = {
-			name = "onedark",
+			name = "rose-pine-main",
 		},
 		background = {
-			transparent = false,
+			transparent = true,
 			termguicolors = true,
 			mode = "dark",
 		},

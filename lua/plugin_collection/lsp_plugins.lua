@@ -1,13 +1,21 @@
+local function startlsp()
+    vim.api.nvim_create_autocmd("BufReadPre",{
+        pattern = "*",
+        callback = function() 
+            require("plugin_conf.lsp").setup() 
+            require("plugin_conf.cmp")
+        end,
+    })
+end
+
 return {
 	{
 		"williamboman/mason.nvim",
 		run = ":MasonUpdate",
-		event = "InsertEnter",
+		event = "VeryLazy",
 	},
 
 	{ "folke/neodev.nvim", event = "InsertEnter", opts = {} },
-
-	{ "folke/nvim-ts-autotag", event = "VeryLazy" },
 
 	{ "hrsh7th/cmp-nvim-lsp", event = "InsertEnter" },
 	{ "hrsh7th/cmp-buffer", event = "InsertEnter" },
@@ -16,11 +24,14 @@ return {
 
 	{ "hrsh7th/nvim-cmp", event = "InsertEnter" },
 
-	{ "hrsh7th/cmp-nvim-lsp-signature-help", event = "InsertEnter" },
+	{ "hrsh7th/cmp-nvim-lsp-signature-help", event = "VeryLazy" },
 
 	{ "hrsh7th/cmp-cmdline", event = "VeryLazy" },
-	{ "neovim/nvim-lspconfig", event = "InsertEnter" },
-
+	{ 
+        "neovim/nvim-lspconfig", 
+        init = startlsp,
+        event = "VeryLazy" 
+    },
 	{
 		"williamboman/mason.nvim",
 		"williamboman/mason-lspconfig.nvim",

@@ -19,15 +19,15 @@ local defaults = {
         modules = {gitsigns = "gitsigns",gitcore = "plugin_conf.git"},
     },
 
+    tmux_nav = {
+        enabled = true,
+        module = "plugin_conf.tmux_nav"
+    },
+
     which_key = {
         enabled = true,
         module = "plugin_conf.which_key"
     },
-
-    -- goto = {
-    --     enabled = true,
-    --     module = "goto-preview"
-    -- },
 
     harpoon = {
         enabled = true,
@@ -53,41 +53,16 @@ local defaults = {
         module = "refactoring",
     },
 
-    -- ibl = {
-    --     enabled = true,
-    --     module = "ibl",
-    -- },
-
-    -- symbols_outline = {
-    --     enabled = true,
-    --     module = "symbols-outline",
-    -- },
-
-    -- illuminate = {
-    --     enabled = true,
-    --     module = "plugin_conf.illuminate",
-    -- },
-
-    -- status_line = {
-    --     enabled = true,
-    --     module = "plugin_conf.status_line",
-    -- },
-
-    tree_sitter = {
-        enabled = true,
-        module = "plugin_conf.treesitter",
-    },
-
     webdev_icons = {
         enabled = true,
         module = "plugin_conf.webdev_icons"
     },
 
-    -- treesj = {
-    --     enabled = true,
-    --     modules = {base = "treesj",_ = "plugin_conf.treesj"}
-    -- },
-    --
+    treesj = {
+        enabled = true,
+        modules = {base = "treesj",_ = "plugin_conf.treesj"}
+    },
+
     nvim_tree = {
         enabled = true,
         module = "plugin_conf.nvim_tree",
@@ -106,11 +81,6 @@ local defaults = {
     file_explorer = {
         enabled = true,
         module = "plugin_conf.oil"
-    },
-
-    lsp = {
-        enabled = true,
-        modules = {lsp = "plugin_conf.lsp",cmp = "plugin_conf.cmp"}
     },
 }
 
