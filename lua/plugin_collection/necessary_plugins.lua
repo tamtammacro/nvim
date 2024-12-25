@@ -4,10 +4,10 @@ return {
 		event = "InsertEnter",
 		config = true,
 	},
-    {
-        "vimwiki/vimwiki",
-        event = "VeryLazy"
-    },
+    -- {
+    --     "vimwiki/vimwiki",
+    --     event = "VeryLazy"
+    -- },
     {
       "christoomey/vim-tmux-navigator",
       cmd = {

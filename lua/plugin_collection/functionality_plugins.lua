@@ -1,16 +1,5 @@
 return {
 	{
-		"mg979/vim-visual-multi",
-		event = "VeryLazy",
-	},
-
-	{
-		"stevearc/conform.nvim",
-		event = "VeryLazy",
-		opts = {},
-	},
-
-	{
 		"ThePrimeagen/refactoring.nvim",
 		event = "VeryLazy",
 		dependancies = {
@@ -43,18 +32,7 @@ return {
 		end,
 	},
 
-	{
-		"xeluxee/competitest.nvim",
-		event = "VeryLazy",
-		dependencies = "MunifTanjim/nui.nvim",
-		config = function()
-			require("competitest").setup()
-		end,
-	},
-
 	{ "mbbill/undotree", event = "VeryLazy" },
-
-	{ "nvim-pack/nvim-spectre", event = "VeryLazy" },
 
 	{
 		"folke/persistence.nvim",
@@ -63,92 +41,11 @@ return {
 	},
 
 	{
-		"folke/twilight.nvim",
-		event = "VeryLazy",
-		opts = {},
-	},
-
-	{
-		"folke/zen-mode.nvim",
-		event = "VeryLazy",
-		opts = {},
-	},
-
-	{
 		"kylechui/nvim-surround",
 		version = "*",
-		event = "VeryLazy",
+		event = "InsertEnter",
 		config = function()
 			require("nvim-surround").setup({})
 		end,
-	},
-
-	{ "simrat39/symbols-outline.nvim", event = "VeryLazy" },
-
-	{
-		"phaazon/hop.nvim",
-		event = "VeryLazy",
-		branch = "v2",
-		config = function()
-			require("hop").setup({ keys = "etovxqpdygfblzhckisuran" })
-		end,
-	},
-
-	{
-		"rmagatti/goto-preview",
-		event = "VeryLazy",
-		config = function()
-			require("goto-preview").setup({})
-		end,
-	},
-
-	{
-		"romgrk/barbar.nvim",
-        enabled = false,
-		event = "VeryLazy",
-		init = function()
-			vim.g.barbar_auto_setup = false
-		end,
-		opts = {},
-		version = "^1.0.0",
-	},
-
-	{ "akinsho/bufferline.nvim", version = "*", dependencies = "nvim-tree/nvim-web-devicons" },
-
-	{
-		"numToStr/Comment.nvim",
-		config = function()
-			require("Comment").setup()
-		end,
-	},
-
-	{
-		"Wansmer/treesj",
-		event = "VeryLazy",
-		config = function()
-			require("treesj").setup({ use_default_keymaps = false })
-		end,
-	},
-
-	{ "akinsho/toggleterm.nvim", version = "*", config = true },
-
-	{
-		"Zeioth/makeit.nvim",
-		cmd = { "MakeitOpen", "MakeitToggleResults", "MakeitRedo" },
-		dependencies = { "stevearc/overseer.nvim" },
-		opts = {},
-	},
-	{
-		"stevearc/overseer.nvim",
-		commit = "400e762648b70397d0d315e5acaf0ff3597f2d8b",
-		cmd = { "MakeitOpen", "MakeitToggleResults", "MakeitRedo" },
-		opts = {
-			task_list = {
-				direction = "bottom",
-				min_height = 25,
-				max_height = 25,
-				default_detail = 1,
-			},
-		},
 	},
 }

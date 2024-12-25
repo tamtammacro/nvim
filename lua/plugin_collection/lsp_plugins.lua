@@ -2,41 +2,35 @@ return {
 	{
 		"williamboman/mason.nvim",
 		run = ":MasonUpdate",
-		event = "VeryLazy",
+		event = "InsertEnter",
 	},
 
-	{ "folke/neodev.nvim", event = "VeryLazy", opts = {} },
+	{ "folke/neodev.nvim", event = "InsertEnter", opts = {} },
 
 	{ "folke/nvim-ts-autotag", event = "VeryLazy" },
 
-	{ "hrsh7th/cmp-nvim-lsp", event = "VeryLazy" },
-	{ "hrsh7th/cmp-buffer", event = "VeryLazy" },
+	{ "hrsh7th/cmp-nvim-lsp", event = "InsertEnter" },
+	{ "hrsh7th/cmp-buffer", event = "InsertEnter" },
 
 	{ "hrsh7th/cmp-path", event = "VeryLazy" },
 
-	{ "hrsh7th/nvim-cmp" },
+	{ "hrsh7th/nvim-cmp", event = "InsertEnter" },
 
-	{ "hrsh7th/cmp-nvim-lsp-signature-help", event = "VeryLazy" },
+	{ "hrsh7th/cmp-nvim-lsp-signature-help", event = "InsertEnter" },
 
 	{ "hrsh7th/cmp-cmdline", event = "VeryLazy" },
-	{ "neovim/nvim-lspconfig", event = "VeryLazy" },
+	{ "neovim/nvim-lspconfig", event = "InsertEnter" },
 
 	{
 		"williamboman/mason.nvim",
 		"williamboman/mason-lspconfig.nvim",
 		"neovim/nvim-lspconfig",
-		event = "VeryLazy",
+		event = "InsertEnter",
 	},
-
-	{ "folke/trouble.nvim", event = "VeryLazy", opts = {}, cmd = "Trouble" },
-
-    {
-        "alaviss/nim.nvim"
-    },
 
 	{
 		"VonHeikemen/lsp-zero.nvim",
-		event = "VeryLazy",
+		event = "InsertEnter",
 		branch = "v1.x",
 		dependancies = {
 

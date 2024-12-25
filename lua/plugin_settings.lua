@@ -24,10 +24,10 @@ local defaults = {
         module = "plugin_conf.which_key"
     },
 
-    goto = {
-        enabled = true,
-        module = "goto-preview"
-    },
+    -- goto = {
+    --     enabled = true,
+    --     module = "goto-preview"
+    -- },
 
     harpoon = {
         enabled = true,
@@ -44,18 +44,8 @@ local defaults = {
         module = "plugin_conf.numb"
     },
 
-    ufo = {
-        enabled = true,
-        module = "plugin_conf.ufo"
-    },
-
     undotree = {
         enabled = true,
-    },
-
-    noice = {
-        enabled = true,
-        module = "plugin_conf.noice",
     },
 
     refactoring = {
@@ -63,30 +53,25 @@ local defaults = {
         module = "refactoring",
     },
 
-    ibl = {
-        enabled = true,
-        module = "ibl",
-    },
+    -- ibl = {
+    --     enabled = true,
+    --     module = "ibl",
+    -- },
 
-    colorizer = {
-        enabled = true,
-        module = "colorizer",
-    },
+    -- symbols_outline = {
+    --     enabled = true,
+    --     module = "symbols-outline",
+    -- },
 
-    symbols_outline = {
-        enabled = true,
-        module = "symbols-outline",
-    },
+    -- illuminate = {
+    --     enabled = true,
+    --     module = "plugin_conf.illuminate",
+    -- },
 
-    illuminate = {
-        enabled = true,
-        module = "plugin_conf.illuminate",
-    },
-
-    status_line = {
-        enabled = true,
-        module = "plugin_conf.status_line",
-    },
+    -- status_line = {
+    --     enabled = true,
+    --     module = "plugin_conf.status_line",
+    -- },
 
     tree_sitter = {
         enabled = true,
@@ -98,21 +83,11 @@ local defaults = {
         module = "plugin_conf.webdev_icons"
     },
 
-    treesj = {
-        enabled = true,
-        modules = {base = "treesj",_ = "plugin_conf.treesj"}
-    },
-
-    alpha = {
-       enabled = false,
-       module = "plugin_conf.alpha",
-    },
-
-    conform = {
-        enabled = true,
-        module = "plugin_conf.conform"
-    },
-
+    -- treesj = {
+    --     enabled = true,
+    --     modules = {base = "treesj",_ = "plugin_conf.treesj"}
+    -- },
+    --
     nvim_tree = {
         enabled = true,
         module = "plugin_conf.nvim_tree",
@@ -126,21 +101,6 @@ local defaults = {
     godot = {
         enabled = false,
         module = "plugin_conf.godot"
-    },
-
-    trouble = {
-        enabled = false,
-        module = "trouble",
-    },
-
-    terminal = {
-        enabled = true,
-        module = "plugin_conf.toggleterm",
-    },
-
-    barbar = {
-        enabled = false,
-        module = "plugin_conf.barbar",
     },
 
     file_explorer = {

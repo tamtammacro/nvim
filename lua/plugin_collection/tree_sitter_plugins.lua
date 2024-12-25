@@ -9,6 +9,5 @@ return {
             M.update({ with_sync = true })
         end,
     },
-    {"nvim-treesitter/playground", event = "VeryLazy"},
     {"nvim-treesitter/nvim-treesitter-context", event = "VeryLazy"},
 }
