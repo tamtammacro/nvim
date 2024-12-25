@@ -37,55 +37,6 @@ local CONTROL_SHIFT = function(key)
     return "<C-S-"..key..">"
 end
 
-local C = ":"
-local L = "lua ->"
-local E = "v."
-
-local cmd_types = {}
-
-defaults.goto = {
-    preview = { key = "gp", cmd="goto_preview_definition", desc = "goto signature preview" },
-}
-
-defaults.telescope = {
-    find_files = { key = SPACE_S.."ff" , desc = "find files"},
-    live_grep = { key = SPACE_S.."fg", desc = "file with live grep" },
-    lsp_document_symbols = {key = SPACE_S.."fs", desc = "find lsp symbols"},
-    oldfiles = {key = SPACE_S.."fo", desc = "find old files"},
-    grep_string = {key = SPACE_S.."fw"},
-    buffers = {key = SPACE_S.."fb",desc = "find file buffers"},
-    keymaps = {key = ALT("8"),desc = "show key maps"},
-}
-
-defaults.lsp = {
-    signature = {key = SPACE_S.."fk",desc="lsp help signature",mode="i",cmd = L.."vim.lsp.buf.signature_help()"},
-    code_action = {key=ALT(ENTER),cmd = L.."vim.lsp.buf.code_action()",desc = "code action"},
-
-    goto_defination = {key = "gd",desc="goto symbol defination",cmd = L.."vim.lsp.buf.definition()"},
-    goto_defination_intellij_idea = {key = CONTROL("b"),desc="goto symbol defination, Intellij idea",cmd = L.."vim.lsp.buf.definition()"},
-
-    goto_next = {key = SPACE_S.."d.",cmd = L.."vim.diagnostic.goto_next()"},
-    goto_prev = {key = SPACE_S.."d,",cmd = L.."vim.diagnostic.goto_prev()"},
-    rename = {key = SPACE_S.."rr",cmd = L.."vim.lsp.buf.rename()",desc="rename"}, -- f2 key does the same action -- 
-    open_float = {key = LEADER_S.."vd",cmd=L.."vim.diagnostic.open_float()"},
-    workspace_symbol = {key = nil,cmd=L.."vim.lsp.buf.workspace_symbol()"},
-    hover = {key = SPACE_S.."fq",cmd=L.."vim.lsp.buf.hover()",desc = "find symbol information (hover)"},
-    references = {key=SPACE_S.."fr",cmd = L.."vim.lsp.buf.references()",desc="find references"},
-}
-
-defaults.dap = {
-    breakpoint = {key = SPACE_S.."db",cmd = C.."DapToggleBreakpoint",desc="debug toggle breakpoint"},
-    continue = {key = SPACE_S.."dc",cmd = C.."DapContinue",desc="debug continue"},
-}
-
-defaults.undotree = {
-    toggle = {key = ALT("5"),cmd=C.."UndotreeToggle",desc="undo tree toggle"}
-}
-
-defaults.conform = {
-    format = { key = SPACE_S.."kf", cmd=L.."vim.lsp.buf.format()", desc="document format" },
-}
-
 function isDiffviewOpen()
     for _, win in ipairs(vim.api.nvim_list_wins()) do
         local buf = vim.api.nvim_win_get_buf(win)
@@ -109,32 +60,82 @@ function toggleGitDiffview()
     end
 end
 
-defaults.git = {
-    git_window = { key = nil, cmd=C.."Git", desc="git window" },
-    diff_view_open = { key = ALT("g"), cmd=toggleGitDiffview,desc="git diffviewopen" },
+local C = ":"
+local L = "lua ->"
+local E = "v."
+
+local cmd_types = {}
+
+defaults.goto = {
+    preview = { key = "gp", cmd="goto_preview_definition", desc = "goto signature preview" },
 }
+
+-- defaults.telescope = {
+--     find_files = { key = SPACE_S.."ff" , desc = "find files"},
+--     live_grep = { key = SPACE_S.."fg", desc = "file with live grep" },
+--     lsp_document_symbols = {key = SPACE_S.."fs", desc = "find lsp symbols"},
+--     oldfiles = {key = SPACE_S.."fo", desc = "find old files"},
+--     grep_string = {key = SPACE_S.."fw"},
+--     buffers = {key = SPACE_S.."fb",desc = "find file buffers"},
+--     keymaps = {key = ALT("8"),desc = "show key maps"},
+-- }
+
+defaults.lsp_ = {
+    signature = {key = SPACE_S.."fk",desc="lsp help signature",cmd = L.."vim.lsp.buf.signature_help()"},
+
+    code_action = {key=ALT(ENTER),cmd = L.."vim.lsp.buf.code_action()",desc = "code action"},
+
+    goto_defination = {key = "gd",desc="goto symbol defination",cmd = L.."vim.lsp.buf.definition()"},
+    goto_defination_intellij_idea = {key = CONTROL("b"),desc="goto symbol defination, Intellij idea",cmd = L.."vim.lsp.buf.definition()"},
+
+    goto_next = {key = SPACE_S.."d.",cmd = L.."vim.diagnostic.goto_next()"},
+    goto_prev = {key = SPACE_S.."d,",cmd = L.."vim.diagnostic.goto_prev()"},
+    rename = {key = SPACE_S.."rr",cmd = L.."vim.lsp.buf.rename()",desc="rename"}, -- f2 key does the same -- 
+    open_float = {key = LEADER_S.."vd",cmd=L.."vim.diagnostic.open_float()"},
+    workspace_symbol = {key = nil,cmd=L.."vim.lsp.buf.workspace_symbol()"},
+    hover = {key = SPACE_S.."fq",cmd=L.."vim.lsp.buf.hover()",desc = "find symbol information (hover)"},
+    references = {key=SPACE_S.."fr",cmd = L.."vim.lsp.buf.references()",desc="find references"},
+}
+
+defaults.dap = {
+    breakpoint = {key = SPACE_S.."db",cmd = C.."DapToggleBreakpoint",desc="debug toggle breakpoint"},
+    continue = {key = SPACE_S.."dc",cmd = C.."DapContinue",desc="debug continue"},
+}
+
+defaults.undotree = {
+    toggle = {key = ALT("5"),cmd=C.."UndotreeToggle",desc="undo tree toggle"}
+}
+
+defaults.conform = {
+    format = { key = SPACE_S.."kf", cmd=L.."vim.lsp.buf.format()", desc="document format" },
+}
+
+-- defaults.git = {
+--     git_window = { key = nil, cmd=C.."Git", desc="git window" },
+--     diff_view_toggle = { key = ALT("g"), cmd=toggleGitDiffview,desc="git toggle diffview" },
+-- }
 
 defaults.symbols_outline = {
     toggle = {key = ALT("7"),cmd=C.."SymbolsOutline",desc="symbols outline"}
 }
 
-defaults.file_explorer = {
-    toggle = {key = SPACE_S.."fm",cmd=preferences.editor.file_explorer.name == "netrw" and C.."Ex" or C.."Oil",desc = "file manager"}
-}
+-- defaults.file_explorer = {
+--     toggle = {key = SPACE_S.."fm",cmd=preferences.editor.file_explorer.name == "netrw" and C.."Ex" or C.."Oil",desc = "file manager"}
+-- }
 
-defaults.treesj = {
-    join = { key = SPACE_S.."k{", cmd=C.."TSJJoin", desc="document join" },
-    split = { key = SPACE_S.."k}", cmd=C.."TSJSplit", desc="document split" }
-}
+-- defaults.treesj = {
+--     join = { key = SPACE_S.."k{", cmd=C.."TSJJoin", desc="document join" },
+--     split = { key = SPACE_S.."k}", cmd=C.."TSJSplit", desc="document split" }
+-- }
 
 defaults.my_quick_actions = {
     config = { key = LEADER_S..".", cmd="goto_config" },
     show_notifications = {key = LEADER_S.."n",cmd=C.."Notifications"}
 }
 
-defaults.nvim_tree = {
-    toggle = { key = ALT"1", cmd=C.."NvimTreeToggle", desc = "nvim-tree toggle" }
-}
+-- defaults.nvim_tree = {
+--     toggle = { key = ALT"1", cmd=C.."NvimTreeToggle", desc = "nvim-tree toggle" }
+-- }
 
 defaults.terminal = {
     toggle = {key = ALT"3",cmd="toggle",desc="terminal open"}
@@ -176,7 +177,7 @@ else
     keymaps = defaults
 end
 
-keymaps.file_explorer.toggle = {key = SPACE_S.."fm",cmd=preferences.editor.file_explorer.name == "netrw" and C.."Ex" or C.."Oil",desc = "file manager"}
+-- keymaps.file_explorer.toggle = {key = SPACE_S.."fm",cmd=preferences.editor.file_explorer.name == "netrw" and C.."Ex" or C.."Oil",desc = "file manager"}
 
 setmetatable(keymaps,{__index = function(self,key)
 	if key == "__metadata__" then
@@ -194,8 +195,8 @@ if preferences.conf.validate_config then
     end))
 end
 
-cmd_types.VIM_COMMAND_PREFIX = C
-cmd_types.LUA_COMMAND_PREFIX = L
-cmd_types.EDITOR_COMMAND_PREFIX = E
+cmd_types.VCP = C
+cmd_types.LCP = L
+cmd_types.ECP = E
 
 return keymaps

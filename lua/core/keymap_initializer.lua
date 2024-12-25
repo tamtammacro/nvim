@@ -20,8 +20,8 @@ local function set_keymap(obj, func, opts, args)
     opts.silent = true
     opts.desc = obj.desc or "No description"
 
-    local command = type(func) == "function" and func or type(func) == "string" and func:match("^" .. keymaps.__cmd_types__.EDITOR_COMMAND_PREFIX) and
-        func:sub(#keymaps.__cmd_types__.EDITOR_COMMAND_PREFIX + 1, #func)
+    local command = type(func) == "function" and func or type(func) == "string" and func:match("^" .. keymaps.__cmd_types__.ECP) and
+        func:sub(#keymaps.__cmd_types__.ECP + 1, #func)
 
     xpcall(function()
         vim.keymap.set(obj.mode or "n", obj.key, command or function()
@@ -46,7 +46,7 @@ function M.setup(_, external_opts)
         mod_ok = type(mod) == "table"
 
         if not mod_ok then
-            mod = modules[t.category_name] or select(2, pcall(require, "plugin_config." .. t.module))
+            mod = modules[t.category_name] or select(2, pcall(require, "plugin_conf." .. t.module))
             mod_ok = type(mod) == "table"
         end
 
@@ -56,23 +56,26 @@ function M.setup(_, external_opts)
 
         if mod_ok and rawget(mod, t.action_name) then
             set_keymap(t.data, rawget(mod, t.action_name), t.opts)
-        elseif mod_ok and t.data.cmd and type(t.data.cmd) ~= "function" and not t.data.cmd:match("^" .. keymaps.__cmd_types__.VIM_COMMAND_PREFIX) and mod[t.data.cmd] then
+        elseif mod_ok and t.data.cmd and type(t.data.cmd) ~= "function" and not t.data.cmd:match("^" .. keymaps.__cmd_types__.VCP) and mod[t.data.cmd] then
             set_keymap(t.data, mod[t.data.cmd], t.opts, t.action_name)
         end
     end
 
     for category_name, keymap_category_table in pairs(keymaps) do
+
         if type(keymap_category_table) == "table" then
+
             for action_name, data in pairs(keymap_category_table) do
+
                 if type(data) == "table" then
+
                     if plugin_settings[category_name] ~= nil and plugin_settings[category_name].enabled then
                         if plugin_settings[category_name].module then
                             load_module({
                                 category_name = category_name,
                                 data = data,
                                 action_name = action_name,
-                                module =
-                                    plugin_settings[category_name].module,
+                                module = plugin_settings[category_name].module,
                                 opts = external_opts
                             })
                         elseif plugin_settings[category_name].modules then
@@ -81,8 +84,7 @@ function M.setup(_, external_opts)
                                     category_name = category_name,
                                     data = data,
                                     action_name = action_name,
-                                    module =
-                                        module,
+                                    module = module,
                                     opts = external_opts
                                 })
                             end
@@ -90,18 +92,25 @@ function M.setup(_, external_opts)
 
                         if data.cmd and type(data.cmd) == "function" then 
                             set_keymap(data,data.cmd)
+                        elseif data.cmd and data.cmd:match("^"..keymaps.__cmd_types__.VCP) then
+                            set_keymap(data,vim.cmd[data.cmd:sub(#keymaps.__cmd_types__.VCP + 1, #data.cmd)])
+                        elseif data.cmd and data.cmd:match("^"..keymaps.__cmd_types__.LCP) then
+                            set_keymap(data, data.cmd:sub(#keymaps.__cmd_types__.LCP + 1, #data.cmd))
+                        elseif data.cmd and data.cmd:match("^"..keymaps.__cmd_types__.ECP) then
+                            set_keymap(data, data.cmd)
                         end
-
-                        if data.cmd and type(data.cmd) ~= "function" and data.cmd:match("^" .. keymaps.__cmd_types__.VIM_COMMAND_PREFIX) then
-                            set_keymap(data, vim.cmd
-                                [data.cmd:sub(#keymaps.__cmd_types__.VIM_COMMAND_PREFIX + 1, #data.cmd)])
+                    else
+                        -- case where no plugin category is found or enabled
+                        if data.cmd and type(data.cmd) == "function" then 
+                            set_keymap(data,data.cmd)
                         end
-
-                        if data.cmd and type(data.cmd) ~= "function" and data.cmd:match("^" .. keymaps.__cmd_types__.LUA_COMMAND_PREFIX) then
-                            set_keymap(data, data.cmd:sub(#keymaps.__cmd_types__.LUA_COMMAND_PREFIX + 1, #data.cmd))
+                        if data.cmd and data.cmd:match("^"..keymaps.__cmd_types__.VCP) then
+                            set_keymap(data,vim.cmd[data.cmd:sub(#keymaps.__cmd_types__.VCP + 1, #data.cmd)])
                         end
-
-                        if data.cmd and type(data.cmd) ~= "function" and data.cmd:match("^" .. keymaps.__cmd_types__.EDITOR_COMMAND_PREFIX) then
+                        if data.cmd and data.cmd:match("^"..keymaps.__cmd_types__.LCP) then
+                            set_keymap(data, data.cmd:sub(#keymaps.__cmd_types__.LCP + 1, #data.cmd))
+                        end
+                        if data.cmd and data.cmd:match("^"..keymaps.__cmd_types__.ECP) then
                             set_keymap(data, data.cmd)
                         end
                     end

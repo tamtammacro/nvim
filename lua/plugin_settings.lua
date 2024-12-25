@@ -20,7 +20,7 @@ local defaults = {
     },
 
     which_key = {
-        enabled = false,
+        enabled = true,
         module = "plugin_conf.which_key"
     },
 
@@ -30,7 +30,7 @@ local defaults = {
     },
 
     dap = {
-        enabled = true,
+        enabled = false,
         module = "plugin_conf.dap"
     },
 
@@ -95,6 +95,7 @@ local defaults = {
 
     treesj = {
         enabled = true,
+        modules = {base = "treesj",_ = "plugin_conf.treesj"}
     },
 
     alpha = {

@@ -12,7 +12,7 @@ local vim_g = require("vim_g")
 function M.setup()
 	plugin_init.setup()
 	visuals_init.setup()
-    keymap_init.setup()
+    -- keymap_init.setup()
 
     vim_opt.setup()
     vim_g.setup()

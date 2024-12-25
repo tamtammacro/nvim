@@ -10,7 +10,7 @@ local defaults = {
 	},
 	editor = {
 		file_explorer = {
-			name = "netrw",
+			name = "oil",
 		},
 		theme = {
 			name = "onedark",

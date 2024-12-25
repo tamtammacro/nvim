@@ -62,3 +62,5 @@ vim.defer_fn(function()
         vim.api.nvim_set_current_win(main_window)
     end
 end, 50)
+
+vim.keymap.set('n', '<M-1>',":NvimTreeToggle<cr>", { desc = 'nvim tree toggle' })
