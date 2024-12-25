@@ -224,12 +224,8 @@ if preferences.editor.status_line.name == "lualine" then
         }
 
 
-        vim.defer_fn(function()
-            lualine.setup(config)
-        end, plugin_settings.noice.enabled and DELAY or 0)
-        return
+        return lualine.setup(config)
     end
-    vim.defer_fn(function()
-        lualine.setup({})
-    end, plugin_settings.noice.enabled and DELAY or 0)
+
+    lualine.setup({})
 end

@@ -17,31 +17,33 @@ return {
 
 	{ "folke/neodev.nvim", event = "InsertEnter", opts = {} },
 
-	{ "hrsh7th/cmp-nvim-lsp", event = "InsertEnter" },
-	{ "hrsh7th/cmp-buffer", event = "InsertEnter" },
+	{ "hrsh7th/cmp-nvim-lsp", event = "VeryLazy" },
+	{ "hrsh7th/cmp-buffer", event = "VeryLazy" },
 
 	{ "hrsh7th/cmp-path", event = "VeryLazy" },
 
-	{ "hrsh7th/nvim-cmp", event = "InsertEnter" },
+	{ "hrsh7th/nvim-cmp", event = "VeryLazy" },
 
 	{ "hrsh7th/cmp-nvim-lsp-signature-help", event = "VeryLazy" },
 
 	{ "hrsh7th/cmp-cmdline", event = "VeryLazy" },
+
 	{ 
         "neovim/nvim-lspconfig", 
-        init = startlsp,
+        -- init = startlsp,
         event = "VeryLazy" 
     },
+
 	{
 		"williamboman/mason.nvim",
 		"williamboman/mason-lspconfig.nvim",
 		"neovim/nvim-lspconfig",
-		event = "InsertEnter",
+		event = "VeryLazy",
 	},
 
 	{
 		"VonHeikemen/lsp-zero.nvim",
-		event = "InsertEnter",
+		event = "VeryLazy",
 		branch = "v1.x",
 		dependancies = {
 

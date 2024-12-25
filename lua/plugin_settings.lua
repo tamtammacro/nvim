@@ -48,6 +48,11 @@ local defaults = {
         enabled = true,
     },
 
+    lualine = {
+        enabled = true,
+        module = "plugin_conf.status_line"
+    },
+
     refactoring = {
         enabled = true,
         module = "refactoring",
@@ -60,7 +65,7 @@ local defaults = {
 
     treesj = {
         enabled = true,
-        modules = {base = "treesj",_ = "plugin_conf.treesj"}
+        modules = {_ = "plugin_conf.treesj"}
     },
 
     nvim_tree = {
@@ -81,6 +86,11 @@ local defaults = {
     file_explorer = {
         enabled = true,
         module = "plugin_conf.oil"
+    },
+
+    lsp = {
+        enabled = true,
+        modules = {lsp = "plugin_conf.lsp",cmp = "plugin_conf.cmp"}
     },
 }
 

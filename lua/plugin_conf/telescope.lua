@@ -21,6 +21,8 @@ telescope.setup({
 
 xpcall(function()
     telescope.load_extension("ui-select")
+    telescope.load_extension('harpoon')
+
     --telescope.load_extension("noice")
 end,print)
 
@@ -31,4 +33,4 @@ vim.keymap.set('n', '<Space>fg', builtin.live_grep, { desc = 'Telescope live gre
 vim.keymap.set('n', '<Space>fs', builtin.lsp_document_symbols, { desc = 'Telescope document symbols' })
 vim.keymap.set('n', '<Space>fb', builtin.buffers, { desc = 'Telescope buffers' })
 vim.keymap.set('n', '<Space>fh', builtin.help_tags, { desc = 'Telescope help tags' })
-vim.keymap.set('n', '<M-8>', builtin.keymaps, { desc = 'Telescope keymaps' })
+vim.keymap.set('n', '<M-k>', builtin.keymaps, { desc = 'Telescope keymaps' })

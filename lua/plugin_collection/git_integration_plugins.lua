@@ -5,4 +5,9 @@ return {
     {"f-person/git-blame.nvim",enabled=false, event = "InsertEnter"},
 
     {"sindrets/diffview.nvim",cmd="DiffviewOpen"},
+
+    {
+        "github/copilot.vim",
+        event = "VeryLazy",
+    }
 }

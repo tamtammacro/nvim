@@ -4,6 +4,13 @@ return {
         event = "VeryLazy" 
     },
 	{ "nacro90/numb.nvim" },
+
+    {
+        'nvim-lualine/lualine.nvim',
+        event = "VeryLazy",
+        dependencies = { 'nvim-tree/nvim-web-devicons' }
+    },
+
 	{
 		"folke/todo-comments.nvim",
 		event = "InsertEnter",
