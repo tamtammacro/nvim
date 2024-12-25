@@ -83,7 +83,6 @@ return {
 		end,
 	},
 
-	{ "theprimeagen/harpoon", event = "VeryLazy" },
 	{ "simrat39/symbols-outline.nvim", event = "VeryLazy" },
 
 	{

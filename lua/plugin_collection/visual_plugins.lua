@@ -12,6 +12,8 @@ return {
 	{ "anuvyklack/middleclass", event = "VeryLazy" },
 	{ "anuvyklack/animation.nvim", event = "VeryLazy" },
 
+    { "kshenoy/vim-signature", event = "VeryLazy" },
+
 	-- discord
 	-- { "andweeb/presence.nvim" },
 

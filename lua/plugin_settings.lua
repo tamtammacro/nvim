@@ -29,6 +29,11 @@ local defaults = {
         module = "goto-preview"
     },
 
+    harpoon = {
+        enabled = true,
+        module = "plugin_conf.harpoon"
+    },
+
     dap = {
         enabled = false,
         module = "plugin_conf.dap"
@@ -133,7 +138,7 @@ local defaults = {
         module = "plugin_conf.toggleterm",
     },
 
-    tabs = {
+    barbar = {
         enabled = false,
         module = "plugin_conf.barbar",
     },
