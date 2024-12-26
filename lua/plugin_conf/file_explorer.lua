@@ -6,14 +6,14 @@ if not success then
 end
 
 if choice == "netrw" then
-    vim.keymap.set('n', '<Space>fm',":Ex<cr>", { desc = 'File manager' })
+    vim.keymap.set('n', '<Space>fm',":Ex<cr>", { desc = 'Find file explorer' })
     return
 end
 
 if choice ~= "netrw" then
 	vim.g.loaded_netrwPlugin = 1
 	vim.g.loaded_netrw = 1
-    vim.keymap.set('n', '<Space>fm',":Oil<cr>", { desc = 'File manager' })
+    vim.keymap.set('n', '<Space>fm',":Oil<cr>", { desc = 'Find file explorer' })
 end
 
 oil.setup({

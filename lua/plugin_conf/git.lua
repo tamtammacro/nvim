@@ -1,3 +1,5 @@
+local notify = nil
+
 function isDiffviewOpen()
     for _, win in ipairs(vim.api.nvim_list_wins()) do
         local buf = vim.api.nvim_win_get_buf(win)
@@ -16,8 +18,15 @@ end
 function toggleGitDiffview()
     if isDiffviewOpen() then
         vim.cmd.DiffviewClose() 
-    elseif not isDiffviewOpen() and isGitRepo() then
-        vim.cmd.DiffviewOpen()
+    elseif not isDiffviewOpen() then
+        if isGitRepo() then
+            vim.cmd.DiffviewOpen()
+        else
+            if not notify then
+                notify = require "notify"
+            end
+            notify("This project does not have a git repo")
+        end
     end
 end
 

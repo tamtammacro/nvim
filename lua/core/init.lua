@@ -14,6 +14,9 @@ function M.setup()
 
     vim_opt.setup()
     vim_g.setup()
+
+    vim.cmd"autocmd BufLeave,BufWinLeave * silent! mkview"
+    vim.cmd"autocmd BufReadPost * silent! loadview"
 end
 
 return M

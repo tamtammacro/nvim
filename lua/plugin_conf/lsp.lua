@@ -127,4 +127,12 @@ function M.setup()
 	})
 end
 
+vim.keymap.set('n', '<Space>fsr', ":lua vim.lsp.buf.references()<cr>", { desc = 'Find Symbol references' })
+
+vim.keymap.set('n', '<Space>fsw', ":lua vim.lsp.buf.workspace_symbol()<cr>", { desc = 'Find Symbol workspace' })
+
+vim.keymap.set('n', '<Space>rr', ":lua vim.lsp.buf.rename()<cr>", { desc = 'Refactor rename' })
+
+vim.keymap.set('n', '<Space>r.', ":lua vim.lsp.buf.code_action()<cr>", { desc = 'Refactor code action' })
+
 return M
