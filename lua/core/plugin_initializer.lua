@@ -6,17 +6,9 @@ local file = require("helper.file")
 local plugin_settings = require("plugin_settings")
 local preferences = require("preferences")
 
-if not preferences then
-	return error("failed to fetch preferences module in load_plugins.lua")
-end
-
 if not plugin_settings then
 	return error("failed to fetch plugin_settings module in load_plugins.lua")
 end
-
-local keymaps = require("keymaps")
-
-local deferred_items = {}
 
 local function _init_plugins()
 	local is_ok
@@ -49,7 +41,7 @@ local function _init_plugins()
 			if mod then
 				print(string.format("core.load_plugins, could not load module error: %s", mod))
 			end
-			setup_mod("plugin_config." .. filename)
+			setup_mod("plugin_conf." .. filename)
 		end
 	end
 
@@ -64,35 +56,26 @@ local function _init_plugins()
 
 	local function load_mod(data)
 		is_table = type(data) == "table"
+
+        if not is_table then return print "data is not of type table" end
 		is_enabled = is_table and data.enabled or not is_table and data
 
 		if not is_enabled then
 			return
 		end
+
 		path = (is_table and (data.module or data.modules))
+
 		if not path then
 			return
 		end
 
-		defer = is_table and data.defer and data.defer * 1000 or 0
 		is_multi_path = type(path) == "table"
 
-		if is_multi_path and is_table then
-			if defer > 0 then
-				if type(path) == "table" then
-					for _, path_v in pairs(path) do
-						table.insert(deferred_items, { path = path_v, defer = defer })
-					end
-				end
-			else
-				require_sub_mods(path)
-			end
-		elseif not is_multi_path and is_table then
-			if defer > 0 then
-				table.insert(deferred_items, { path = path, defer = defer, is_multi = false })
-			else
-				require_mod(path)
-			end
+		if is_multi_path then
+            require_sub_mods(path)
+		elseif not is_multi_path then
+            require_mod(path)
 		end
 	end
 
@@ -106,13 +89,6 @@ local function _init_plugins()
 
 	for _, obj in pairs(preferred_plugins) do
 		load_mod(obj)
-	end
-
-	for index, element in ipairs(deferred_items) do
-		vim.defer_fn(function()
-			require_mod(element.path)
-			table.remove(deferred_items, index)
-		end, element.defer)
 	end
 end
 
@@ -155,7 +131,6 @@ function M.setup()
 
 		write_config_file(plugin_settings)
 		write_config_file(preferences)
-		write_config_file(keymaps)
 
         if preferences.conf.template ~= "minimal" then
             vim.defer_fn(function()
@@ -167,11 +142,11 @@ function M.setup()
 	end
 
 	if not vim.v.argv[3] then
-		local success, persistance = pcall(require, "persistence")
-
-		if success and persistance then
-			pcall(persistance.load)
-		end
+		-- local success, persistance = pcall(require, "persistence")
+		--
+		-- if success and persistance then
+		-- 	pcall(persistance.load)
+		-- end
 	end
 end
 

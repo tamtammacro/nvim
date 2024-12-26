@@ -1,3 +1,4 @@
+-- Deprecated (kept for future reference) --
 local defaults = {}
 
 local JSON = require("helper.json")
@@ -70,17 +71,7 @@ defaults.goto = {
     preview = { key = "gp", cmd="goto_preview_definition", desc = "goto signature preview" },
 }
 
--- defaults.telescope = {
---     find_files = { key = SPACE_S.."ff" , desc = "find files"},
---     live_grep = { key = SPACE_S.."fg", desc = "file with live grep" },
---     lsp_document_symbols = {key = SPACE_S.."fs", desc = "find lsp symbols"},
---     oldfiles = {key = SPACE_S.."fo", desc = "find old files"},
---     grep_string = {key = SPACE_S.."fw"},
---     buffers = {key = SPACE_S.."fb",desc = "find file buffers"},
---     keymaps = {key = ALT("8"),desc = "show key maps"},
--- }
-
-defaults.lsp_ = {
+defaults.lsp = {
     signature = {key = SPACE_S.."fk",desc="lsp help signature",cmd = L.."vim.lsp.buf.signature_help()"},
 
     code_action = {key=ALT(ENTER),cmd = L.."vim.lsp.buf.code_action()",desc = "code action"},
@@ -110,48 +101,8 @@ defaults.conform = {
     format = { key = SPACE_S.."kf", cmd=L.."vim.lsp.buf.format()", desc="document format" },
 }
 
--- defaults.git = {
---     git_window = { key = nil, cmd=C.."Git", desc="git window" },
---     diff_view_toggle = { key = ALT("g"), cmd=toggleGitDiffview,desc="git toggle diffview" },
--- }
-
 defaults.symbols_outline = {
     toggle = {key = ALT("7"),cmd=C.."SymbolsOutline",desc="symbols outline"}
-}
-
--- defaults.file_explorer = {
---     toggle = {key = SPACE_S.."fm",cmd=preferences.editor.file_explorer.name == "netrw" and C.."Ex" or C.."Oil",desc = "file manager"}
--- }
-
--- defaults.treesj = {
---     join = { key = SPACE_S.."k{", cmd=C.."TSJJoin", desc="document join" },
---     split = { key = SPACE_S.."k}", cmd=C.."TSJSplit", desc="document split" }
--- }
-
-defaults.my_quick_actions = {
-    config = { key = LEADER_S..".", cmd="goto_config" },
-    show_notifications = {key = LEADER_S.."n",cmd=C.."Notifications"}
-}
-
--- defaults.nvim_tree = {
---     toggle = { key = ALT"1", cmd=C.."NvimTreeToggle", desc = "nvim-tree toggle" }
--- }
-
-defaults.terminal = {
-    toggle = {key = ALT"3",cmd="toggle",desc="terminal open"}
-}
-
-defaults.split_controls = {
-    set_size_left = {key = ALT(","),cmd = E.."<c-w>5<",desc = "splitview append size to the left"},
-    set_size_right = {key = ALT("."),cmd = E.."<c-w>5>",desc = "splitview append size to the right"},
-    set_size_up = {key = ALT(";"),cmd = E.."<C-W>+",desc = "splitview append size upwards"},
-    set_size_down = {key = ALT("'"),cmd = E.."<C-W>-",desc = "splitview append size downwards"},
-
-    switch_split_left = {key = CONTROL("h"),cmd = E.."<c-w><c-h>",desc = "splitview set to the left"},
-    switch_split_right = {key = CONTROL("l"),cmd = E.."<c-w><c-l>",desc = "splitview set to the right"},
-
-    switch_split_up = {key = CONTROL("k"),cmd = E.."<c-w><c-k>",desc = "splitview go to top one"},
-    switch_split_down = {key = CONTROL("j"),cmd = E.."<c-w><c-j>",desc = "splitview go to bottom one"},
 }
 
 defaults.tabs = {

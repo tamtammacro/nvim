@@ -1,13 +1,3 @@
-local plugin_settings = nil
-local table_e = require "helper.table_e"
-
-local file = require "helper.file"
-local file_data = require "helper.file_data"
-local preferences = require "preferences"
-local JSON = require("helper.json")
-
-if not preferences then return error "Failed to fetch prefernces in plugin_settings.lua" end
-
 local defaults = {
     telescope = {
         enabled = true,
@@ -32,11 +22,6 @@ local defaults = {
     harpoon = {
         enabled = true,
         module = "plugin_conf.harpoon"
-    },
-
-    dap = {
-        enabled = false,
-        module = "plugin_conf.dap"
     },
 
     numb = {
@@ -85,7 +70,7 @@ local defaults = {
 
     file_explorer = {
         enabled = true,
-        module = "plugin_conf.oil"
+        module = "plugin_conf.file_explorer"
     },
 
     lsp = {
@@ -94,48 +79,4 @@ local defaults = {
     },
 }
 
-local metadata = nil
-
-if preferences.conf.save_config then
-    metadata = file_data.create({file_name = "plugins.json"})
-    if not metadata then return print "failed to create metadata in plugin_settings.lua" end
-    local file_content = file.read_all_file(metadata.path)
-    plugin_settings = not file_content and defaults or JSON.decode(file_content)
-else
-    plugin_settings = defaults
-end
-
-setmetatable(plugin_settings,{__index = function(self,key)
-	if key == "__metadata__" then
-		return metadata or {}
-	end
-
-    return rawget(self,key)
-end})
-
-do 
-    local new_state = preferences.conf.template ~= "minimal"
-
-    for key in pairs(plugin_settings) do
-        if key ~= "lsp" and plugin_settings[key].enabled then
-            plugin_settings[key].enabled = new_state
-        end
-    end
-end
-
-if not plugin_settings then
-    print "Something went wrong in plugin_settings.lua"
-    return defaults
-end
-
-if preferences.conf.validate_config then
-    coroutine.resume(coroutine.create(function()
-        -- table_e.validate_config_table(defaults,plugin_settings,{},{})
-    end))
-end
-
-if preferences.conf.template == "minimal" then
-    plugin_settings.lsp.module = "plugin_conf.lsp_minimal"
-end
-
-return plugin_settings
+return defaults

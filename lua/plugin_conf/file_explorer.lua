@@ -1,23 +1,16 @@
-local preferences = require("preferences")
-
-if not preferences then
-	return
-end
-
+local choice = "oil"
 local success, oil = pcall(require, "oil")
 
 if not success then
 	return print("oil is not installed")
 end
 
-preferences.editor.file_explorer.name = preferences.conf.template == "minimal" and "netrw" or preferences.editor.file_explorer.name
-
-if preferences.editor.file_explorer.name == "netrw" then
+if choice == "netrw" then
     vim.keymap.set('n', '<Space>fm',":Ex<cr>", { desc = 'File manager' })
     return
 end
 
-if preferences.editor.file_explorer.name ~= "netrw" then
+if choice ~= "netrw" then
 	vim.g.loaded_netrwPlugin = 1
 	vim.g.loaded_netrw = 1
     vim.keymap.set('n', '<Space>fm',":Oil<cr>", { desc = 'File manager' })
@@ -26,7 +19,7 @@ end
 oil.setup({
 	-- Oil will take over directory buffers (e.g. `vim .` or `:e src/`)
 	-- Set to false if you still want to use netrw.
-	default_file_explorer = preferences.editor.file_explorer.name ~= "netrw",
+	default_file_explorer = choice ~= "netrw",
 	-- Id is automatically added at the beginning, and name at the end
 	-- See :help oil-columns
 	columns = {

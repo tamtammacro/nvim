@@ -17,10 +17,10 @@ return {
       },
     },
 
-    {
-        "farmergreg/vim-lastplace",
-        event = {"BufReadPre"},
-    },
+    -- {
+    --     "farmergreg/vim-lastplace",
+    --     event = {"BufReadPre"},
+    -- },
 
 	{
 		"folke/which-key.nvim",
@@ -35,11 +35,6 @@ return {
 	{"kevinhwang91/promise-async"},
 	{ "mbbill/undotree", event = "VeryLazy" },
 
-	{
-		"folke/persistence.nvim",
-		event = "BufReadPre", -- this will only start session saving when an actual file was opened
-		opts = {},
-	},
 	{
 		"kylechui/nvim-surround",
 		version = "*",
