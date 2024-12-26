@@ -142,11 +142,8 @@ function M.setup()
 	end
 
 	if not vim.v.argv[3] then
-		-- local success, persistance = pcall(require, "persistence")
-		--
-		-- if success and persistance then
-		-- 	pcall(persistance.load)
-		-- end
+        local startify = require("alpha.themes.startify")
+        require "alpha".setup(startify.config)
 	end
 end
 

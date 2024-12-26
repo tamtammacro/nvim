@@ -25,7 +25,7 @@ function toggleGitDiffview()
             if not notify then
                 notify = require "notify"
             end
-            notify("This project does not have a git repo")
+            notify("This workspace does not have a git repo","error")
         end
     end
 end

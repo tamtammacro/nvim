@@ -131,7 +131,28 @@ vim.keymap.set('n', '<Space>fsr', ":lua vim.lsp.buf.references()<cr>", { desc = 
 
 vim.keymap.set('n', '<Space>fsw', ":lua vim.lsp.buf.workspace_symbol()<cr>", { desc = 'Find Symbol workspace' })
 
-vim.keymap.set('n', '<Space>rr', ":lua vim.lsp.buf.rename()<cr>", { desc = 'Refactor rename' })
+vim.keymap.set('n', '<Space>rr',function()
+    local clients = vim.lsp.get_active_clients()
+
+    if #clients > 0 then
+        vim.lsp.buf.rename()
+    else
+        local word = vim.fn.expand('<cword>')
+        word = vim.fn.escape(word, "/")
+        if not word or word == "" then return end
+        local replace_with = vim.fn.input(word .. " -> ")
+        local extra_flags = ""
+        local found_index = string.find(replace_with," !!") 
+
+        if found_index then
+            replace_with = string.gsub(string.sub(replace_with,1,found_index)," ","")
+            extra_flags = extra_flags .. "c"
+        end
+
+        vim.cmd(string.format("silent vimgrep /%s/ `find . -type f`",word))
+        vim.cmd(string.format("cdo :s/%s/%s/g"..extra_flags,word,replace_with))
+    end
+end, { desc = 'Refactor rename' })
 
 vim.keymap.set('n', '<Space>r.', ":lua vim.lsp.buf.code_action()<cr>", { desc = 'Refactor code action' })
 

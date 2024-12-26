@@ -17,10 +17,9 @@ return {
       },
     },
 
-    -- {
-    --     "farmergreg/vim-lastplace",
-    --     event = {"BufReadPre"},
-    -- },
+    {
+        "goolord/alpha-nvim",
+    },
 
 	{
 		"folke/which-key.nvim",
