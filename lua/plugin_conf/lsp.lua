@@ -139,18 +139,30 @@ vim.keymap.set('n', '<Space>rr',function()
     else
         local word = vim.fn.expand('<cword>')
         word = vim.fn.escape(word, "/")
-        if not word or word == "" then return end
-        local replace_with = vim.fn.input(word .. " -> ")
-        local extra_flags = ""
-        local found_index = string.find(replace_with," !!") 
+        if not word or word == "" then return print("Error: no word selected") end
+    
+        if #word == 1 or word == " " then return print("Error: selection too small (1 char)") end
 
-        if found_index then
-            replace_with = string.gsub(string.sub(replace_with,1,found_index)," ","")
+        local replace_with = vim.fn.input(word .. " -> ")
+
+        if not replace_with then return print("Error: replace-with is nil") end
+
+        if #replace_with == 1 or replace_with == "" or replace_with == " " then return print("Cancelled: replacement too small") end
+
+        local extra_flags = ""
+
+        if string.find(replace_with," !!g") then
+            replace_with = string.gsub(replace_with," !!g","")
+            extra_flags = extra_flags .. "g"
+        end
+
+        if string.find(replace_with," !!c") then
+            replace_with = string.gsub(replace_with," !!c","")
             extra_flags = extra_flags .. "c"
         end
 
         vim.cmd(string.format("silent vimgrep /%s/ `find . -type f`",word))
-        vim.cmd(string.format("cdo :s/%s/%s/g"..extra_flags,word,replace_with))
+        vim.cmd(string.format("cdo :s/%s/%s/"..extra_flags,word,replace_with))
     end
 end, { desc = 'Refactor rename' })
 
