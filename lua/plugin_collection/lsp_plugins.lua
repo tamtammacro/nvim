@@ -41,6 +41,11 @@ return {
 		event = "VeryLazy",
 	},
 
+    {
+        "habamax/vim-godot",
+        event = "VimEnter"
+    },
+
 	{
 		"VonHeikemen/lsp-zero.nvim",
 		event = "VeryLazy",

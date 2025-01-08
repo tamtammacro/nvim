@@ -64,7 +64,7 @@ local defaults = {
     },
 
     godot = {
-        enabled = false,
+        enabled = true,
         module = "plugin_conf.godot"
     },
 

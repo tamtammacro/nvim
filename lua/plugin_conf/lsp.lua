@@ -166,6 +166,8 @@ vim.keymap.set('n', '<Space>rr',function()
     end
 end, { desc = 'Refactor rename' })
 
-vim.keymap.set('n', '<Space>r.', ":lua vim.lsp.buf.code_action()<cr>", { desc = 'Refactor code action' })
+vim.keymap.set('n', '<Space>r.', ":lua vim.lsp.buf.code_action()<cr>", {
+    desc = 'Refactor code action',
+})
 
 return M
