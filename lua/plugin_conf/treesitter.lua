@@ -3,26 +3,24 @@ local success, config = pcall(require, "nvim-treesitter.configs")
 if not success then return print "something is wrong with treesitter.configs" end
 
 config.setup {
-    ensure_installed = { "c", "go", "lua", "vim", "vimdoc", "query", "markdown", "rust", "javascript" },
-
-    -- rainbow = {
-    --     enable = true,
-    --     disable = { 'jsx', 'cpp', "c" },
-    --     query = 'rainbow-parens',
-    --     strategy = require('ts-rainbow').strategy.global,
-    -- },
-
-    autotag = {
-        enable = true,
-        enable_rename = true,
-        enable_close = true,
-        enable_close_on_slash = true,
-        filetypes = { "html", "xml" },
+    build = ":TSUpdate",
+    ensure_installed = {
+        "c",
+        "go",
+        "lua",
+        "vim",
+        "vimdoc",
+        "query",
+        "markdown",
+        "rust",
+        "javascript",
+        "gdscript"
     },
-
     sync_install = false,
     auto_install = true,
     ignore_install = { "javascript" },
+
+    indent = { enable = true },
 
     highlight = {
         enable = true,

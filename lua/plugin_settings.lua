@@ -77,6 +77,11 @@ local defaults = {
         enabled = true,
         modules = {lsp = "plugin_conf.lsp",cmp = "plugin_conf.cmp"}
     },
+
+    dap = {
+        enabled = true,
+        module = "plugin_conf.dap"
+    }
 }
 
 return defaults

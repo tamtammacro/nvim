@@ -1,12 +1,23 @@
-local projectFolder = vim.fn.getcwd() .. "/project.godot"
+-- INFO: -- server ./godothost --remote-send "<C-\><C-N>:n {file} <CR>{line}G{col}|"
+-- INFO: Godot Editor -> Script -> Debug -> Debug with external editor
+-- INFO: Godot Editor -> Editor Settings -> Network -> Debug Adapter -> Sync breakpoint
+-- INFO: Godot Editor -> Editor Settings -> Network -> Debug Adapter -> Remote Port: 6006
 
-if not projectFolder then return end
+local gdproject = io.open(vim.fn.getcwd()..'/project.godot', 'r')
+
+if gdproject then
+    io.close(gdproject)
+    -- vim.fn.serverstart './godothost'
+end
+
+if not gdproject then return end
 
 local os_info = vim.loop.os_uname()
--- vim.fn.serverstart "./godothost"
 
-if os_info.sysname == "Linux" or os_info.sysname == "Darwin" then
+if os_info.sysname == "Linux" then
     vim.g.godot_executable = os.getenv("HOME") .. "/godot/Godot"
+elseif os_info.sysname == "Darwin" then
+    vim.g.godot_executable = "/Applications/Godot.app/Contents/MacOS/Godot"
 elseif os_info.sysname == "Windows" then
     vim.g.godot_executable = "C:/godot/Godot.exe"
 end
@@ -18,14 +29,6 @@ if not capabilities then
 end
 
 capabilities.textDocument.completion.completionItem.snippetSupport = true
-
-capabilities.textDocument.signatureHelp = {
-    dynamicRegistration = true,
-    signatureInformation = {
-        documentationFormat = { "markdown", "plaintext" },
-        parameterInformation = { labelOffsetSupport = true },
-    },
-}
 
 if os_info.sysname == "Windows"  then
     capabilities.cmd = {"ncat","localhost",os.getenv "GDScript_Port" or "6005"}
@@ -40,3 +43,23 @@ if lspconfig.gdscript then
 else
     print("No property 'gdscript' for lspconfig")
 end
+
+local dap = require "dap"
+
+if not dap then return print "dap is not installed" end
+
+dap.set_log_level("TRACE")
+
+dap.adapters.godot = {
+    type = "server",
+    host = "127.0.0.1",
+    port = 6006
+}
+
+dap.configurations.gdscript = {{
+    type = "godot",
+    request = "launch",
+    name = "Launch scene",
+    project = "${workspaceFolder}",
+    launch_scene = true
+}}
