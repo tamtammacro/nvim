@@ -6,5 +6,9 @@ return {
     {
         "rcarriga/nvim-dap-ui",
         event = "VeryLazy"
+    },
+    {
+        "nvim-neotest/nvim-nio",
+        event = "VeryLazy"
     }
 }

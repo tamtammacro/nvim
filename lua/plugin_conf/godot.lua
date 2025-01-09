@@ -1,6 +1,5 @@
--- INFO: -- server ./godothost --remote-send "<C-\><C-N>:n {file} <CR>{line}G{col}|"
+-- INFO: Godot Editor -> Editor Settings -> Text Editor -> External -> Exec Flag -- server ./godothost --remote-send "<C-\><C-N>:n {file} <CR>{line}G{col}|"
 -- INFO: Godot Editor -> Script -> Debug -> Debug with external editor
--- INFO: Godot Editor -> Editor Settings -> Network -> Debug Adapter -> Sync breakpoint
 -- INFO: Godot Editor -> Editor Settings -> Network -> Debug Adapter -> Remote Port: 6006
 
 local gdproject = io.open(vim.fn.getcwd()..'/project.godot', 'r')
@@ -47,8 +46,6 @@ end
 local dap = require "dap"
 
 if not dap then return print "dap is not installed" end
-
-dap.set_log_level("TRACE")
 
 dap.adapters.godot = {
     type = "server",
