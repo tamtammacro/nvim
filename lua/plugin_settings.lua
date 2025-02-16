@@ -34,7 +34,7 @@ local defaults = {
     },
 
     lualine = {
-        enabled = true,
+        enabled = false,
         module = "plugin_conf.status_line"
     },
 

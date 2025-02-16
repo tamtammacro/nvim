@@ -1,5 +1,8 @@
 xpcall(function()
     local wk = require("which-key")
+
+    if not wk.add then return print("INFO: which-key 'add' function is missing") end
+
     wk.add({"<Space>f",group = "Find"}) 
     wk.add({"<Space>fs",group = "Symbol"}) 
 

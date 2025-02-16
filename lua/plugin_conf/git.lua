@@ -9,10 +9,20 @@ function isDiffviewOpen()
 end
 
 function isGitRepo()
-  local handle = io.popen('git rev-parse --is-inside-work-tree 2>/dev/null')
-  local result = handle:read('*a')
-  handle:close()
-  return result:match('true') ~= nil
+    local handle = nil
+    local osType = os.getenv("OS")
+
+    if osType == "Windows_NT" then
+        handle = io.popen('git rev-parse --is-inside-work-tree 2>nul')
+    else
+        handle = io.popen('git rev-parse --is-inside-work-tree 2>/dev/null')
+    end
+
+    if not handle then return false end
+
+    local result = handle:read('*a')
+    handle:close()
+    return result:match('true') ~= nil
 end
 
 function toggleGitDiffview()
@@ -25,6 +35,9 @@ function toggleGitDiffview()
             if not notify then
                 notify = require "notify"
             end
+
+            if not notify then return end
+
             notify("This workspace does not have a git repo","error")
         end
     end

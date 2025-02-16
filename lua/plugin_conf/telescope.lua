@@ -7,11 +7,11 @@ require("telescope.themes").get_dropdown {}
 telescope.setup({
     defaults = {
         file_ignore_patterns = {
+            ".git/*",
+            "node_modules/*",
             "cache",
             "CMakeFiles",
             "out",
-            "vs",
-            "vscode",
             "class",
             "pdf",
             "dll",

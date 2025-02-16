@@ -1,13 +1,14 @@
-local choice = "oil"
+local choice = "netrw"
+
+if choice == "netrw" then
+    vim.keymap.set('n', '<Space>fm',":NvimTreeToggle<cr>", { desc = 'Find file explorer' })
+    return
+end
+
 local success, oil = pcall(require, "oil")
 
 if not success then
 	return print("oil is not installed")
-end
-
-if choice == "netrw" then
-    vim.keymap.set('n', '<Space>fm',":Ex<cr>", { desc = 'Find file explorer' })
-    return
 end
 
 if choice ~= "netrw" then

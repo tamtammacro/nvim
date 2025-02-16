@@ -11,7 +11,10 @@ function M.setup()
       end
     })
 
-    local success,error_message = pcall(vim.cmd.colorscheme, "rose-pine-main")
+    -- local color_name = "rose-pine-main"
+    local color_name = "default"
+
+    local success,error_message = pcall(vim.cmd.colorscheme, color_name)
 
     if not success then
         print(error_message)
